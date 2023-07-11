@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.21.14",
     "@planetscale/database": "^1.8.0",
+    "@radix-ui/react-popover": "^1.0.6",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
