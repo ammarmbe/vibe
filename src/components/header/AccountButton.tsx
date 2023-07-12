@@ -15,12 +15,12 @@ export default function AccountButton() {
   if (user)
     return (
       <Popover>
-        <PopoverTrigger className="border font-medium hover:bg-accent flex gap-1.5 items-center hover:border-ring transition-colors px-2.5 py-1.5 rounded-md">
+        <PopoverTrigger className="border font-medium text-sm hover:bg-accent flex gap-[5px] items-center hover:border-ring transition-colors px-2.5 py-1.5 rounded-md">
           <Image
             src={user.imageUrl}
             alt={`Account options`}
-            width={19}
-            height={19}
+            width={17}
+            height={17}
             className="rounded-full"
           />
           <p>{user.fullName}</p>
@@ -32,7 +32,7 @@ export default function AccountButton() {
             href={user.id}
             onMouseEnter={() => setBorder("profile")}
             onMouseLeave={() => setBorder("")}
-            className="rounded-t-md border-b-0 text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
+            className="rounded-t-md border-b-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
           >
             View profile
           </a>
@@ -45,7 +45,7 @@ export default function AccountButton() {
             <button
               onMouseEnter={() => setBorder("signOut")}
               onMouseLeave={() => setBorder("")}
-              className="text-danger hover:bg-danger/5 rounded-b-md border-t-0 transition-colors hover:border-danger/50 border p-2.5"
+              className="text-danger hover:bg-danger/5 text-sm rounded-b-md border-t-0 transition-colors hover:border-danger/50 border p-2.5"
             >
               Sign out
             </button>

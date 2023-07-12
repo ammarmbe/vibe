@@ -5,12 +5,13 @@ import AccountButton from "./AccountButton";
 
 export default async function Header() {
   const user = await currentUser();
+
   return (
     <header className="py-3 flex items-center justify-between">
       <h1
-        className={`${jetBrains.className} text-main italic font-extrabold text-3xl tracking-tighter`}
+        className={`${jetBrains.className} text-main select-none italic font-extrabold text-3xl tracking-tighter`}
       >
-        Vibe
+        <a href="/">Vibe</a>
       </h1>
       <nav className="flex gap-2.5 items-center">
         {!user ? (
