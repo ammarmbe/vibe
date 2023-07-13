@@ -1,9 +1,23 @@
 "use client";
-import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
 export default function Button() {
   const { pending } = useFormStatus();
+  const [prevPendingState, setPrevPendingState] = useState(false);
+  const client = useQueryClient();
+
+  // Revalidate homeFeed after posting
+  useEffect(() => {
+    if (prevPendingState && !pending) {
+      setTimeout(() => {
+        client.invalidateQueries({ queryKey: ["homeFeed"] });
+      }, 300);
+    }
+
+    setPrevPendingState(pending);
+  }, [pending]);
 
   return (
     <button

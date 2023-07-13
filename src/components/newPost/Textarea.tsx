@@ -1,5 +1,12 @@
 "use client";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
 // Code from WebDevSimplified
 function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
@@ -23,6 +30,19 @@ export default function Textarea() {
   }, [inputValue]);
 
   // TODO: Clear textarea after submit
+  const { pending } = useFormStatus();
+  const [prevPendingState, setPrevPendingState] = useState(false);
+
+  // Clear textarea after submit
+  useEffect(() => {
+    if (prevPendingState && !pending) {
+      setTimeout(() => {
+        setInputValue("");
+      }, 300);
+    }
+
+    setPrevPendingState(pending);
+  }, [pending]);
 
   return (
     <textarea
