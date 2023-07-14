@@ -2,12 +2,13 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
-import { nanoid } from "nanoid";
-import { Post } from "@/lib/types";
+import type { Post } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
+import PostCard from "./post/PostCard";
+import Spinner from "./Spinner";
 
 export default function HomeFeed() {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["homeFeed"],
     queryFn: async ({ pageParam }) =>
       (await axios.get(`/api/home-feed?postId=${pageParam}`)).data,
@@ -20,6 +21,13 @@ export default function HomeFeed() {
     },
   });
 
+  if (isLoading)
+    return (
+      <div className="w-full flex items-center justify-center">
+        <Spinner size="xl" />
+      </div>
+    );
+
   if (data && data?.pages[0].length > 0)
     return (
       <>
@@ -28,16 +36,11 @@ export default function HomeFeed() {
           hasMore={hasNextPage || false}
           loader={<h4>Loading...</h4>}
           next={fetchNextPage}
+          className="flex flex-col gap-2.5 pb-2.5"
         >
           {data.pages.map((page) => {
             return page.map((post: Post) => {
-              return (
-                <div key={nanoid()}>
-                  <p>
-                    {post.content} {post.postId}
-                  </p>
-                </div>
-              );
+              return <PostCard key={post.postId} post={post} />;
             });
           })}
         </InfiniteScroll>

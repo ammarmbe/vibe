@@ -3,7 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import { Inter } from "next/font/google";
-import Providers from "@/lib/reactQueryProvider";
+import ReactQueryProvider from "@/lib/reactQueryProvider";
 
 export const inter = Inter({ subsets: ["latin"] });
 export const jetBrains = JetBrains_Mono({
@@ -23,11 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Providers>
+      <ReactQueryProvider>
         <ClerkProvider appearance={{ variables: { colorPrimary: "#cd002b" } }}>
           <body className={inter.className}>{children}</body>
         </ClerkProvider>
-      </Providers>
+      </ReactQueryProvider>
     </html>
   );
 }

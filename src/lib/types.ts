@@ -1,13 +1,15 @@
 export type Post = {
-  postId: String;
-  nanoId: String;
-  content: String;
-  createdAt: String;
+  postId: number;
+  nanoId: string;
+  content: string;
+  createdAt: number;
 
-  name: String;
-  username: String;
-  image: URL;
-  userId: String;
+  name: string;
+  username: string;
+  image: string;
+  userId: string;
 
-  likes: Number;
+  likes: number;
+  comments: number;
+  likedByUser: number;
 };

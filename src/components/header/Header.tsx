@@ -1,10 +1,10 @@
 import React from "react";
 import { jetBrains } from "@/app/layout";
-import { SignInButton, SignUpButton, currentUser } from "@clerk/nextjs";
-import AccountButton from "./AccountButton";
+import { auth } from "@clerk/nextjs";
+import HeaderButtons from "./HeaderButtons";
 
-export default async function Header() {
-  const user = await currentUser();
+export default function Header() {
+  const clerk = auth();
 
   return (
     <header className="py-3 flex items-center justify-between">
@@ -14,22 +14,7 @@ export default async function Header() {
         <a href="/">Vibe</a>
       </h1>
       <nav className="flex gap-2.5 items-center">
-        {!user ? (
-          <>
-            <SignInButton>
-              <button className="border rounded-md hover:border-ring hover:bg-accent transition-colors px-2.5 py-1">
-                Sign in
-              </button>
-            </SignInButton>
-            <SignUpButton>
-              <button className="border rounded-md border-main/20 hover:bg-main/5 hover:border-main/50 text-main transition-colors px-2.5 py-1">
-                Sign up
-              </button>
-            </SignUpButton>
-          </>
-        ) : (
-          <AccountButton />
-        )}
+        <HeaderButtons />
       </nav>
     </header>
   );
