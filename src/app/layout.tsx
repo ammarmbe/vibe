@@ -1,8 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
-import { Inter } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import ReactQueryProvider from "@/lib/reactQueryProvider";
 
 export const inter = Inter({ subsets: ["latin"] });

@@ -8,7 +8,7 @@ export default function Button() {
   const [prevPendingState, setPrevPendingState] = useState(false);
   const client = useQueryClient();
 
-  // Revalidate homeFeed after posting
+  // Revalidate feed after posting
   useEffect(() => {
     if (prevPendingState && !pending) {
       setTimeout(() => {

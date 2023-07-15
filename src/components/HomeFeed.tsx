@@ -11,7 +11,7 @@ export default function HomeFeed() {
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["homeFeed"],
     queryFn: async ({ pageParam }) =>
-      (await axios.get(`/api/home-feed?postId=${pageParam}`)).data,
+      (await axios.get(`/api/posts?postId=${pageParam}`)).data,
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;
@@ -34,7 +34,12 @@ export default function HomeFeed() {
         <InfiniteScroll
           dataLength={data.pages.flatMap((page) => page).length}
           hasMore={hasNextPage || false}
-          loader={<h4>Loading...</h4>}
+          loader={
+            <div className="flex w-full justify-center">
+              <Spinner size="md" />
+            </div>
+          }
+          endMessage={<p className="text-ring/70 text-center">No more posts</p>}
           next={fetchNextPage}
           className="flex flex-col gap-2.5 pb-2.5"
         >
@@ -46,5 +51,5 @@ export default function HomeFeed() {
         </InfiniteScroll>
       </>
     );
-  else return <div>no posts yet...</div>;
+  else return <p className="text-ring/70 text-center">No posts yet...</p>;
 }

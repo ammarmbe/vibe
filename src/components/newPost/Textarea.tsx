@@ -29,7 +29,6 @@ export default function Textarea() {
     updateTextAreaSize(textAreaRef.current);
   }, [inputValue]);
 
-  // TODO: Clear textarea after submit
   const { pending } = useFormStatus();
   const [prevPendingState, setPrevPendingState] = useState(false);
 

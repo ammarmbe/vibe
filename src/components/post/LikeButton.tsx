@@ -8,35 +8,53 @@ export default function LikeButton({
   count,
   liked,
   postId,
+  nanoId,
 }: {
   count: number;
   liked: boolean;
   postId: number;
+  nanoId?: string;
 }) {
   const likeMutation = useMutation({
     mutationFn: async () => {
-      await axios.post(`/api/toggle-like?postId=${postId}&liked=${liked}`);
+      await axios.post(`/api/like?postId=${postId}&liked=${liked}`);
     },
     onSuccess: () => {
-      client.setQueryData(["homeFeed"], (data: any) => {
-        return {
-          pages: data.pages.map((page: any) => {
-            return page.map((post: Post) => {
-              if (post.postId == postId) {
-                return {
-                  ...post,
-                  likedByUser: liked ? 0 : 1,
-                  likes: liked
-                    ? // without parseInt, the number of likes will be concatenated, I have no idea why
-                      parseInt(post.likes) - 1
-                    : parseInt(post.likes) + 1,
-                };
-              } else {
-                return post;
-              }
-            });
-          }),
-        };
+      function updater(data: any) {
+        if (data)
+          return {
+            pages: data.pages.map((page: any) => {
+              return page.map((post: Post) => {
+                if (post.postId == postId) {
+                  return {
+                    ...post,
+                    likedByUser: liked ? 0 : 1,
+                    likes: liked
+                      ? // without parseInt, the number of likes will be concatenated, I have no idea why
+                        parseInt(post.likes) - 1
+                      : parseInt(post.likes) + 1,
+                  };
+                } else {
+                  return post;
+                }
+              });
+            }),
+          };
+      }
+
+      client.setQueryData(["homeFeed"], updater);
+      client.setQueryData(["comments"], updater);
+      client.setQueryData(["post", nanoId], (data?: Post) => {
+        if (data) {
+          return {
+            ...data,
+            likedByUser: liked ? 0 : 1,
+            likes: liked
+              ? // without parseInt, the number of likes will be concatenated, I have no idea why
+                parseInt(data.likes) - 1
+              : parseInt(data.likes) + 1,
+          };
+        }
       });
     },
   });

@@ -1,11 +1,8 @@
 import React from "react";
 import { jetBrains } from "@/app/layout";
-import { auth } from "@clerk/nextjs";
 import HeaderButtons from "./HeaderButtons";
 
 export default function Header() {
-  const clerk = auth();
-
   return (
     <header className="py-3 flex items-center justify-between">
       <h1

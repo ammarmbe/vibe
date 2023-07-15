@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import React from "react";
 import Textarea from "./Textarea";
-import Button from "./Button";
+import Button from "./PostButton";
 import { db } from "@/lib/db";
 import { nanoid } from "nanoid";
 

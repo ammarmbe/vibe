@@ -3,6 +3,7 @@ export type Post = {
   nanoId: string;
   content: string;
   createdAt: number;
+  parentId: number | null;
 
   name: string;
   username: string;
@@ -12,4 +13,13 @@ export type Post = {
   likes: number;
   comments: number;
   likedByUser: number;
+};
+
+export type User = {
+  id: string;
+  name: string;
+  bio: string;
+  username: string;
+  email: string;
+  image: string;
 };
