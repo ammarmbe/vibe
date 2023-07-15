@@ -29,7 +29,7 @@ export default function HeaderTitle() {
 
   // Run animation when feed changes
   useEffect(() => {
-    if (!isSignedIn) return;
+    if (!isSignedIn || location.pathname != "/") return;
 
     setPopoverDisabled(true);
     containerRef.current?.classList.add(style.animateLetters);
