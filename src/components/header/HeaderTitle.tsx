@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 
 const jetBrains = JetBrains_Mono({
   subsets: ["latin"],
@@ -23,10 +24,13 @@ export default function HeaderTitle() {
   const popoverClose = React.useRef<HTMLButtonElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [popoverDisabled, setPopoverDisabled] = useState(false);
-  const { push, refresh } = useRouter();
+  const { push } = useRouter();
+  const { isSignedIn } = useAuth();
 
   // Run animation when feed changes
   useEffect(() => {
+    if (!isSignedIn) return;
+
     setPopoverDisabled(true);
     containerRef.current?.classList.add(style.animateLetters);
 
@@ -49,11 +53,11 @@ export default function HeaderTitle() {
         <a href="/">
           <div
             ref={containerRef}
-            className={`flex w-[66px] h-[36px] flex-wrap overflow-y-hidden`}
+            className={`flex w-[66px] h-[36px] flex-wrap overflow-y-hidden will-change-contents`}
           >
             <span>
               <div>V</div>
-              <div>{feed[0]}</div>
+              <div>{feed ? feed[0] : "H"}</div>
             </span>
             <span style={{ animationDelay: "75ms" }}>
               <div>i</div>
@@ -61,11 +65,11 @@ export default function HeaderTitle() {
             </span>
             <span style={{ animationDelay: "150ms" }}>
               <div>b</div>
-              <div>{feed[2]}</div>
+              <div>{feed ? feed[2] : "m"}</div>
             </span>
             <span style={{ animationDelay: "225ms" }}>
               <div>e</div>
-              <div>{feed[3]}</div>
+              <div>{feed ? feed[3] : "e"}</div>
             </span>
             <span style={{ animationDelay: "300ms" }}>
               <div>&nbsp;</div>
@@ -90,61 +94,63 @@ export default function HeaderTitle() {
           </div>
         </a>
       </h1>
-      <Popover>
-        <PopoverTrigger disabled={popoverDisabled}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="ml-2 h-4 w-4"
-          >
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </PopoverTrigger>
-        <PopoverContent className="p-1 flex flex-col text-center h-auto w-auto">
-          <button
-            onClick={() => {
-              setFeed("Home");
-              localStorage.setItem("feed", "Home");
-              popoverClose.current?.click();
-              if (location.pathname == "/") {
-                location.reload();
-              } else {
-                push("/");
-              }
-            }}
-            className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-              feed === "Home" && "bg-secondary"
-            }`}
-          >
-            Home
-          </button>
-          <button
-            onClick={() => {
-              setFeed("Following");
-              localStorage.setItem("feed", "Following");
-              popoverClose.current?.click();
-              if (location.pathname == "/") {
-                location.reload();
-              } else {
-                push("/");
-              }
-            }}
-            className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-              feed === "Following" && "bg-secondary"
-            }`}
-          >
-            Following
-          </button>
-          <PopoverClose ref={popoverClose} />
-        </PopoverContent>
-      </Popover>
+      {isSignedIn && (
+        <Popover>
+          <PopoverTrigger disabled={popoverDisabled}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="ml-2 h-4 w-4"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </PopoverTrigger>
+          <PopoverContent className="p-1 flex flex-col text-center h-auto w-auto">
+            <button
+              onClick={() => {
+                setFeed("Home");
+                localStorage.setItem("feed", "Home");
+                popoverClose.current?.click();
+                if (location.pathname == "/") {
+                  location.reload();
+                } else {
+                  push("/");
+                }
+              }}
+              className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
+                feed === "Home" && "bg-secondary"
+              }`}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => {
+                setFeed("Following");
+                localStorage.setItem("feed", "Following");
+                popoverClose.current?.click();
+                if (location.pathname == "/") {
+                  location.reload();
+                } else {
+                  push("/");
+                }
+              }}
+              className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
+                feed === "Following" && "bg-secondary"
+              }`}
+            >
+              Following
+            </button>
+            <PopoverClose ref={popoverClose} />
+          </PopoverContent>
+        </Popover>
+      )}
     </div>
   );
 }

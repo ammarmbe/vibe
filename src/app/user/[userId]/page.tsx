@@ -71,14 +71,10 @@ export default function Page({ params }: Props) {
             <h2 className="font-semibold text-lg leading-none">{user.name}</h2>
             <p className="leading-none text-black/70">@{user.username}</p>
           </div>
-          {!isSignedIn ? (
-            <div></div>
-          ) : (
-            <FollowButton
-              userId={user.id}
-              followed={parseInt(user.followedByUser) == 1}
-            />
-          )}
+          <FollowButton
+            userId={user.id}
+            followed={parseInt(user.followedByUser) == 1}
+          />
           <div></div>
           <p className="text-sm">{user.bio} test test test</p>
         </div>

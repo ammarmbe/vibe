@@ -1,7 +1,9 @@
 "use client";
 import { client } from "@/lib/reactQueryProvider";
+import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function FollowButton({
@@ -11,6 +13,8 @@ export default function FollowButton({
   userId: string;
   followed: boolean;
 }) {
+  const { isSignedIn } = useAuth();
+  const { push } = useRouter();
   const followMutation = useMutation({
     mutationFn: async () =>
       await axios.post(`/api/follow?userId=${userId}&followed=${followed}`),
@@ -36,7 +40,9 @@ export default function FollowButton({
           ? `bg-main text-white border-main/50 hover:bg-main/90`
           : `border-main/20 hover:bg-main/5 hover:border-main/50 text-main`
       }`}
-      onClick={() => followMutation.mutate()}
+      onClick={
+        isSignedIn ? () => followMutation.mutate() : () => push("/sign-up")
+      }
     >
       {followed ? "Following" : "Follow"}
     </button>

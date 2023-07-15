@@ -1,8 +1,10 @@
 "use client";
 import { client } from "@/lib/reactQueryProvider";
 import { Post } from "@/lib/types";
+import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LikeButton({
   count,
@@ -17,6 +19,9 @@ export default function LikeButton({
   nanoId?: string;
   userId: string;
 }) {
+  const { isSignedIn } = useAuth();
+  const { push } = useRouter();
+
   const likeMutation = useMutation({
     mutationFn: async () => {
       await axios.post(`/api/like?postId=${postId}&liked=${liked}`);
@@ -72,7 +77,7 @@ export default function LikeButton({
           ? `bg-main text-white border-main/50 hover:bg-main/90`
           : `border-main/20 hover:bg-main/5 hover:border-main/50 text-main`
       }`}
-      onClick={toggleLike}
+      onClick={isSignedIn ? toggleLike : () => push("/sign-up")}
     >
       {count} {liked ? "liked" : likesOrLike}
     </button>

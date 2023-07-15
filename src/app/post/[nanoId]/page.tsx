@@ -133,10 +133,10 @@ export default function Page({ params }: Props) {
                 </a>
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
-                    <h2 className="leading-none text-lg font-medium">
+                    <h2 className="leading-tight text-lg font-medium truncate inline-block max-w-[200px]">
                       <a href={`/user/${mainPost.userId}`}>{mainPost.name}</a>
                     </h2>
-                    <p className="leading-none text-sm text-black/70">
+                    <p className="leading-none text-sm flex-none text-black/70">
                       {dayjs(new Date(mainPost.createdAt * 1000)).format(
                         "DD/MM/YYYY, HH:mm A"
                       )}
