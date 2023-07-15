@@ -58,7 +58,7 @@ export default function Page({ params }: Props) {
             gridTemplateColumns: "auto 1fr auto",
             gridTemplateRows: "auto auto",
           }}
-          className="rounded-md grid gap-x-2.5 border p-2.5 mb-2.5"
+          className="rounded-md grid gap-x-2.5 border p-2.5 mb-2.5 shadow-sm"
         >
           <Image
             src={user.image}
