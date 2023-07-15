@@ -39,6 +39,7 @@ export default function Page({ params }: Props) {
     data: comments,
     fetchNextPage,
     hasNextPage,
+    isLoading: commentsLoading,
   } = useInfiniteQuery({
     queryKey: ["comments"],
     queryFn: async ({ pageParam }) =>
@@ -88,7 +89,9 @@ export default function Page({ params }: Props) {
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
                     <h2 className="leading-none font-medium">
-                      {parentPost.name}
+                      <a href={`/user/${parentPost.userId}`}>
+                        {parentPost.name}
+                      </a>
                     </h2>
                     <p className="text-sm leading-none text-black/70">
                       {dayjs(new Date(parentPost.createdAt * 1000)).fromNow()}
@@ -131,7 +134,7 @@ export default function Page({ params }: Props) {
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
                     <h2 className="leading-none text-lg font-medium">
-                      {mainPost.name}
+                      <a href={`/user/${mainPost.userId}`}>{mainPost.name}</a>
                     </h2>
                     <p className="leading-none text-sm text-black/70">
                       {dayjs(new Date(mainPost.createdAt * 1000)).format(
@@ -152,6 +155,7 @@ export default function Page({ params }: Props) {
                       liked={mainPost.likedByUser == 0 ? false : true}
                       postId={mainPost.postId}
                       nanoId={mainPost.nanoId}
+                      userId={mainPost.userId}
                     />
                     <a
                       href={`/post/${mainPost.nanoId}`}
@@ -163,11 +167,19 @@ export default function Page({ params }: Props) {
                 </div>
               </article>
               <NewComment parentId={mainPost.postId} nanoId={mainPost.nanoId} />
-              {comments && comments.pages[0].length > 0 ? (
+              {commentsLoading ? (
+                <div className="w-full flex items-center justify-center">
+                  <Spinner size="xl" />
+                </div>
+              ) : comments && comments.pages[0].length > 0 ? (
                 <InfiniteScroll
                   dataLength={comments.pages.flatMap((page) => page).length}
                   hasMore={hasNextPage || false}
-                  loader={<Spinner size="md" />}
+                  loader={
+                    <div className="w-full flex items-center justify-center">
+                      <Spinner size="xl" />
+                    </div>
+                  }
                   endMessage={
                     <p className="text-ring/70 text-center">No more replies</p>
                   }

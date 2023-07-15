@@ -1,18 +1,18 @@
 export type Post = {
-  postId: number;
+  postId: string;
   nanoId: string;
   content: string;
-  createdAt: number;
-  parentId: number | null;
+  createdAt: string;
+  parentId: string | null;
 
   name: string;
   username: string;
   image: string;
   userId: string;
 
-  likes: number;
-  comments: number;
-  likedByUser: number;
+  likes: string;
+  comments: string;
+  likedByUser: string;
 };
 
 export type User = {
@@ -20,6 +20,7 @@ export type User = {
   name: string;
   bio: string;
   username: string;
-  email: string;
   image: string;
+  followers: string;
+  followedByUser: string;
 };

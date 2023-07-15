@@ -9,11 +9,13 @@ export default function LikeButton({
   liked,
   postId,
   nanoId,
+  userId,
 }: {
-  count: number;
+  count: string;
   liked: boolean;
-  postId: number;
+  postId: string;
   nanoId?: string;
+  userId: string;
 }) {
   const likeMutation = useMutation({
     mutationFn: async () => {
@@ -30,8 +32,7 @@ export default function LikeButton({
                     ...post,
                     likedByUser: liked ? 0 : 1,
                     likes: liked
-                      ? // without parseInt, the number of likes will be concatenated, I have no idea why
-                        parseInt(post.likes) - 1
+                      ? parseInt(post.likes) - 1
                       : parseInt(post.likes) + 1,
                   };
                 } else {
@@ -43,16 +44,14 @@ export default function LikeButton({
       }
 
       client.setQueryData(["homeFeed"], updater);
+      client.setQueryData(["userPosts", userId], updater);
       client.setQueryData(["comments"], updater);
-      client.setQueryData(["post", nanoId], (data?: Post) => {
+      client.setQueryData(["post", nanoId], (data: any) => {
         if (data) {
           return {
             ...data,
             likedByUser: liked ? 0 : 1,
-            likes: liked
-              ? // without parseInt, the number of likes will be concatenated, I have no idea why
-                parseInt(data.likes) - 1
-              : parseInt(data.likes) + 1,
+            likes: liked ? parseInt(data.likes) - 1 : parseInt(data.likes) + 1,
           };
         }
       });
@@ -63,8 +62,7 @@ export default function LikeButton({
     likeMutation.mutate();
   };
 
-  // return "likes" if count is 0 or 1, otherwise return "like"
-  const likesOrLike = count == 1 ? "like" : "likes";
+  const likesOrLike = parseInt(count) == 1 ? "like" : "likes";
 
   return (
     <button

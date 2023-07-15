@@ -1,14 +1,10 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import ReactQueryProvider from "@/lib/reactQueryProvider";
 
-export const inter = Inter({ subsets: ["latin"] });
-export const jetBrains = JetBrains_Mono({
-  subsets: ["latin"],
-  style: ["italic", "normal"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",

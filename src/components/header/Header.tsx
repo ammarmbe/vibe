@@ -1,6 +1,11 @@
 import React from "react";
-import { jetBrains } from "@/app/layout";
 import HeaderButtons from "./HeaderButtons";
+import { JetBrains_Mono } from "next/font/google";
+
+const jetBrains = JetBrains_Mono({
+  subsets: ["latin"],
+  style: ["italic", "normal"],
+});
 
 export default function Header() {
   return (
