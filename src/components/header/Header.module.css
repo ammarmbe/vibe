@@ -1,0 +1,47 @@
+.animateLetters > span {
+  animation-name: titleAnimation;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+}
+
+.animateWidth {
+  animation-name: containerAnimation;
+  animation-duration: 2.7s;
+  animation-timing-function: ease-in-out;
+}
+
+.reset {
+  animation-name: none;
+  animation-duration: 0s;
+  animation-timing-function: none;
+}
+
+@keyframes titleAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  15% {
+    transform: translateY(-50%);
+  }
+  85% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes containerAnimation {
+  0% {
+    width: 66px;
+  }
+  10% {
+    width: 148.5px;
+  }
+  90% {
+    width: 148.5px;
+  }
+  100% {
+    width: 66px;
+  }
+}

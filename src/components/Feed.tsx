@@ -8,10 +8,12 @@ import PostCard from "./post/PostCard";
 import Spinner from "./Spinner";
 
 export default function HomeFeed() {
+  const feed = localStorage.getItem("feed") as "Home" | "Following";
+
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["homeFeed"],
     queryFn: async ({ pageParam }) =>
-      (await axios.get(`/api/posts?postId=${pageParam}`)).data,
+      (await axios.get(`/api/posts?postId=${pageParam}&feed=${feed}`)).data,
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;
@@ -19,6 +21,7 @@ export default function HomeFeed() {
         return undefined;
       }
     },
+    enabled: !!feed,
   });
 
   if (isLoading)
