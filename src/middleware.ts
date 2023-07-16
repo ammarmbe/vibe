@@ -20,7 +20,7 @@ async function middleware(auth: AuthObject, request: NextRequest) {
     await db.execute("SELECT * FROM users WHERE id = :userId", { userId })
   ).rows[0] as User;
 
-  if (!user.username) {
+  if (user && !user.username) {
     const url = request.nextUrl.clone();
     if (url.pathname == "/new-user" || url.pathname == "/api/user/username")
       return;
