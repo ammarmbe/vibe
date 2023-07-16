@@ -17,6 +17,8 @@ export default function NewComment({
   userId: string;
 }) {
   const { user } = useUser();
+  const textAreaRef = useRef<HTMLTextAreaElement>();
+  const [inputValue, setInputValue] = useState("");
 
   const notificationMutation = useMutation({
     mutationFn: async () =>
@@ -29,13 +31,11 @@ export default function NewComment({
   });
 
   const commentMutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      const content = data.get("content") as string;
-      if (content == "") return;
+    mutationFn: async () => {
       const nanoId = nanoid(12);
 
       await axios.post(
-        `/api/post?content=${content}&nanoId=${nanoId}&parentId=${parentId}`
+        `/api/post?content=${inputValue}&nanoId=${nanoId}&parentId=${parentId}`
       );
     },
     onSuccess: () => {
@@ -46,7 +46,7 @@ export default function NewComment({
         if (data) {
           return {
             ...data,
-            comments: data.comments + 1,
+            comments: String(parseInt(data.comments) + 1),
           };
         }
       });
@@ -55,20 +55,12 @@ export default function NewComment({
     },
   });
 
-  function handleSubmit(data: React.FormEvent<HTMLFormElement>) {
-    data.preventDefault();
-    commentMutation.mutate(new FormData(data.target as HTMLFormElement));
-  }
-
   // Textarea code
   function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
     if (textArea == null) return;
     textArea.style.height = "0";
     textArea.style.height = `${textArea.scrollHeight + 2}px`;
   }
-
-  const [inputValue, setInputValue] = useState("");
-  const textAreaRef = useRef<HTMLTextAreaElement>();
 
   const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
     updateTextAreaSize(textArea);
@@ -82,7 +74,11 @@ export default function NewComment({
   if (!!user?.id) {
     return (
       <form
-        onSubmit={(data) => handleSubmit(data)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (inputValue == "") return;
+          commentMutation.mutate();
+        }}
         className="relative flex mb-2.5"
       >
         <textarea
@@ -96,7 +92,7 @@ export default function NewComment({
         ></textarea>
         <button
           disabled={commentMutation.isLoading}
-          className="border disabled:cursor-wait disabled:hover:border-border disabled:hover:bg-white disabled:text-ring rounded-sm text-sm px-1.5 py-0.5 hover:bg-accent hover:border-ring transition-colors absolute top-[6px] right-[6px]"
+          className="border disabled:cursor-wait disabled:!opacity-50 rounded-sm text-sm px-1.5 py-0.5 hover:bg-accent hover:border-ring transition-colors absolute top-[6px] right-[6px]"
         >
           Reply
         </button>

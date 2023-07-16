@@ -12,7 +12,7 @@ import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../Spinner";
 import { Notification } from "@/lib/types";
-import NotificationCard from "../NotificationCard";
+import NotificationCard from "./NotificationCard";
 import { client } from "@/lib/reactQueryProvider";
 
 export default function NotificationButton() {
@@ -70,7 +70,7 @@ export default function NotificationButton() {
       <PopoverTrigger
         className={`hover:bg-accent border hover:border-ring ${
           !unread && `after:content-none`
-        } rounded-md relative after:-top-[3px] after:-right-[3px] after:bg-main after:absolute after:rounded-full after:aspect-square after:p-1.5 shadow-sm h-[34px] w-[34px] flex items-center justify-center after:transition-all`}
+        } rounded-md relative after:-top-[3px] after:-right-[3px] after:bg-main after:absolute after:rounded-full after:aspect-square after:p-1.5 shadow-sm h-[34px] w-[34px] flex items-center justify-center after:transition-all transition-colors`}
         onClick={() => {
           readNotifications.mutate();
         }}

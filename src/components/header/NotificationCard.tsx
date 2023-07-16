@@ -13,10 +13,10 @@ export default function NotificationCard({
 
   return (
     <div
-      className={`rounded-md border transition-colors hover:border-ring hover:bg-accent cursor-pointer
-      p-2.5 flex gap-1.5 ${notification.read && "bg-ring/10"} ${
-        notification.type == "followedUser" && "items-center"
-      }`}
+      className={`rounded-md border transition-colors dark:bg-foreground/5 hover:border-ring hover:bg-accent cursor-pointer
+      p-2.5 flex gap-1.5 ${
+        notification.read && "bg-ring/10 dark:bg-transparent"
+      } ${notification.type == "followedUser" && "items-center"}`}
       onClick={() => {
         notification.type == "likedPost" &&
           push(`/post/${notification.nanoId}`);
