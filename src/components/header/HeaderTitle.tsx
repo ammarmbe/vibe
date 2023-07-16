@@ -17,15 +17,16 @@ const jetBrains = JetBrains_Mono({
 });
 
 export default function HeaderTitle() {
-  const [feed, setFeed] =
-    useState<"Home" | "Following">(
-      localStorage.getItem("feed") as "Home" | "Following"
-    ) ?? "Home";
+  const [feed, setFeed] = useState<"Home" | "Following">("Home");
   const popoverClose = React.useRef<HTMLButtonElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [popoverDisabled, setPopoverDisabled] = useState(false);
   const { push } = useRouter();
   const { isSignedIn } = useAuth();
+
+  useEffect(() => {
+    setFeed(localStorage.getItem("feed") as "Home" | "Following");
+  });
 
   // Run animation when feed changes
   useEffect(() => {

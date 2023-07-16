@@ -1,7 +1,7 @@
 "use client";
 import { client } from "@/lib/reactQueryProvider";
 import { Post } from "@/lib/types";
-import { useAuth } from "@clerk/nextjs";
+import { currentUser, useAuth, useUser } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -12,21 +12,54 @@ export default function LikeButton({
   postId,
   nanoId,
   userId,
+  content,
 }: {
   count: string;
   liked: boolean;
   postId: string;
   nanoId?: string;
   userId: string;
+  content: string;
 }) {
-  const { isSignedIn } = useAuth();
+  const { user } = useUser();
   const { push } = useRouter();
+
+  const notificationMutation = useMutation({
+    mutationFn: async () =>
+      await axios.post(
+        `/api/notification/likedPost?postId=${postId}&userId=${userId}`
+      ),
+    onSuccess: () => {
+      client.setQueryData(["notifications", userId], (oldData: any) => {
+        return {
+          pages: [
+            [
+              {
+                notifier: user?.id,
+                notified: userId,
+                notifierName: user?.fullName,
+                notifierImage: user?.imageUrl,
+                type: "likedPost",
+                content: content,
+                read: false,
+                postId: postId,
+              },
+              ...oldData.pages[0],
+            ],
+            ...oldData.pages.slice(1),
+          ],
+        };
+      });
+    },
+  });
 
   const likeMutation = useMutation({
     mutationFn: async () => {
       await axios.post(`/api/like?postId=${postId}&liked=${liked}`);
     },
     onSuccess: () => {
+      !liked && notificationMutation.mutate();
+
       function updater(data: any) {
         if (data)
           return {
@@ -77,7 +110,7 @@ export default function LikeButton({
           ? `bg-main text-white border-main/50 hover:bg-main/90`
           : `border-main/20 hover:bg-main/5 hover:border-main/50 text-main`
       }`}
-      onClick={isSignedIn ? toggleLike : () => push("/sign-up")}
+      onClick={!!user ? toggleLike : () => push("/sign-up")}
     >
       {count} {liked ? "liked" : likesOrLike}
     </button>

@@ -24,3 +24,15 @@ export type User = {
   followers: string;
   followedByUser: string;
 };
+
+export type Notification = {
+  id: string;
+  type: "likedPost" | "commentedOnPost" | "followedUser";
+  createdAt: string;
+  notifier: string;
+  postId: string;
+  notifierImage: string;
+  notifierName: string;
+  content: string;
+  read: string;
+};
