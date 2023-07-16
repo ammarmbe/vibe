@@ -58,7 +58,7 @@ export default function AccountButton() {
                 className={`flex group flex-col p-0 border-0 w-[150px]`}
               >
                 <a
-                  href={user.id}
+                  href={`/user/${user.id}`}
                   onMouseEnter={() => setBorder("profile")}
                   onMouseLeave={() => setBorder("")}
                   className="rounded-t-md border-b-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"

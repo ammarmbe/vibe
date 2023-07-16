@@ -1,14 +1,17 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import type { Post } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./post/PostCard";
 import Spinner from "./Spinner";
 
-export default function HomeFeed() {
-  const feed = localStorage.getItem("feed") as "Home" | "Following";
+export default function Feed() {
+  let feed: "Home" | "Following" = "Home";
+  useEffect(() => {
+    feed = localStorage.getItem("feed") as "Home" | "Following";
+  });
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["homeFeed"],

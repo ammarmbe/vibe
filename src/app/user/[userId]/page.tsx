@@ -83,7 +83,9 @@ export default function Page({ params }: Props) {
                 <h2 className="font-semibold text-lg leading-none">
                   {user.name}
                 </h2>
-                <p className="leading-none text-black/70">@{user.username}</p>
+                <p className="leading-none text-foreground/70">
+                  @{user.username}
+                </p>
                 <p className={`text-sm mt-1.5 empty:mt-0`}>{user.bio}</p>
               </div>
               <div className="flex flex-col h-full justify-between items-center">

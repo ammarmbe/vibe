@@ -26,12 +26,12 @@ export default function PostCard({ post }: { post: Post }) {
           <h2 className="leading-none font-medium">
             <a href={`/user/${post.userId}`}>{post.name}</a>
           </h2>
-          <p className="text-sm leading-none text-black/70">
+          <p className="text-sm leading-none text-foreground/70">
             {dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
           </p>
         </div>
         <a
-          className="text-sm hover:underline text-black/70 leading-none w-fit"
+          className="text-sm hover:underline text-foreground/70 leading-none w-fit"
           href={`/user/${post.userId}`}
         >
           @{post.username}

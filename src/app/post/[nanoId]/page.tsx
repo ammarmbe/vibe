@@ -95,12 +95,12 @@ export default function Page({ params }: Props) {
                         {parentPost.name}
                       </a>
                     </h2>
-                    <p className="text-sm leading-none text-black/70">
+                    <p className="text-sm leading-none text-foreground/70">
                       {dayjs(new Date(parentPost.createdAt * 1000)).fromNow()}
                     </p>
                   </div>
                   <a
-                    className="text-sm hover:underline text-black/70 leading-none w-fit"
+                    className="text-sm hover:underline text-foreground/70 leading-none w-fit"
                     href={`/user/${parentPost.userId}`}
                   >
                     @{parentPost.username}
@@ -138,14 +138,14 @@ export default function Page({ params }: Props) {
                     <h2 className="leading-tight text-lg font-medium truncate inline-block max-w-[200px]">
                       <a href={`/user/${mainPost.userId}`}>{mainPost.name}</a>
                     </h2>
-                    <p className="leading-none text-sm flex-none text-black/70">
+                    <p className="leading-none text-sm flex-none text-foreground/70">
                       {dayjs(new Date(mainPost.createdAt * 1000)).format(
                         "DD/MM/YYYY, HH:mm A"
                       )}
                     </p>
                   </div>
                   <a
-                    className="hover:underline text-black/70 leading-none w-fit"
+                    className="hover:underline text-foreground/70 leading-none w-fit"
                     href={`/user/${mainPost.userId}`}
                   >
                     @{mainPost.username}
