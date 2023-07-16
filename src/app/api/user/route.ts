@@ -1,8 +1,6 @@
 import { db } from "@/lib/db";
 import { User } from "@/lib/types";
-import { Webhook } from "@clerk/backend/dist/types/api/resources/Webhooks";
 import { auth } from "@clerk/nextjs";
-import { UserJSON } from "@clerk/nextjs/dist/types/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -23,7 +21,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as Webhook<"user.created", UserJSON>;
+  const body = (await request.json()) as any;
 
   await db.execute(
     "INSERT INTO `users` (id, name, email, image) VALUES (:id, :name, :email, :image)",
