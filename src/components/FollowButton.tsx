@@ -28,7 +28,7 @@ export default function FollowButton({
     mutationFn: async () =>
       await axios.post(`/api/follow?userId=${userId}&followed=${followed}`),
     onSuccess: () => {
-      notificationMutation.mutate();
+      !followed && notificationMutation.mutate();
 
       client.setQueryData(["user", userId], (data: any) => {
         if (data) {
@@ -46,7 +46,7 @@ export default function FollowButton({
 
   return (
     <button
-      className={`py-1 px-2.5 border mb-4 rounded-md text-sm ${
+      className={`py-1 px-2.5 border w-fit h-fit rounded-md text-xs ${
         followed
           ? `bg-main text-white border-main/50 hover:bg-main/90`
           : `border-main/20 hover:bg-main/5 hover:border-main/50 text-main`

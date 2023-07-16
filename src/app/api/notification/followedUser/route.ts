@@ -8,10 +8,11 @@ export async function POST(request: Request) {
 
   if (!!userId && !!currentUserId) {
     await db.execute(
-      "INSERT INTO notifications (type, notifier, notified) VALUES ('followedUser', :currentUserId, :userId)",
+      "INSERT INTO notifications (type, notifier, notified, postId) VALUES ('followedUser', :currentUserId, :userId, :postId)",
       {
         userId,
         currentUserId,
+        postId: 0, // used for unique key constraint
       }
     );
   } else {

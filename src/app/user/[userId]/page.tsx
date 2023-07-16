@@ -49,34 +49,54 @@ export default function Page({ params }: Props) {
     enabled: !!user,
   });
 
+  function formatFollowerCount() {
+    if (user) {
+      const followerCount = parseInt(user.followers);
+      if (followerCount >= 1000000) {
+        return `${("00" + followerCount / 1000000).slice(-3)}M`;
+      } else if (followerCount >= 1000) {
+        return `${("00" + followerCount / 1000).slice(-3)}K`;
+      } else {
+        return ("000" + followerCount).slice(-4);
+      }
+    }
+  }
+
   return (
     <main className="max-w-3xl w-full mx-auto px-2.5">
       <Header />
       {user && (
         <div
-          style={{
-            gridTemplateColumns: "auto 1fr auto",
-            gridTemplateRows: "auto auto",
-          }}
+          style={{ gridTemplateColumns: "auto 1fr" }}
           className="rounded-md grid gap-x-2.5 border p-2.5 mb-2.5 shadow-sm"
         >
           <Image
             src={user.image}
             alt={`${user.name}'s profile picture`}
-            width={40}
-            height={40}
-            className="rounded-full"
+            width={34}
+            height={34}
+            className={`rounded-full ${!user.bio && `self-center`}`}
           />
-          <div className="flex flex-col self-center">
-            <h2 className="font-semibold text-lg leading-none">{user.name}</h2>
-            <p className="leading-none text-black/70">@{user.username}</p>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2.5">
+              <div className={`flex-grow ${!user.bio && `self-center`}`}>
+                <h2 className="font-semibold text-lg leading-none">
+                  {user.name}
+                </h2>
+                <p className="leading-none text-black/70">@{user.username}</p>
+                <p className={`text-sm mt-1.5 empty:mt-0`}>{user.bio}</p>
+              </div>
+              <div className="flex flex-col h-full justify-between items-center">
+                <p className="font-bold !h-[34px] flex items-center text-center text-lg leading-none">
+                  {formatFollowerCount()}
+                </p>
+                <FollowButton
+                  userId={user.id}
+                  followed={parseInt(user.followedByUser) == 1}
+                />
+              </div>
+            </div>
           </div>
-          <FollowButton
-            userId={user.id}
-            followed={parseInt(user.followedByUser) == 1}
-          />
-          <div></div>
-          <p className="text-sm">{user.bio} test test test</p>
         </div>
       )}
       {postsLoading ? (
