@@ -1,17 +1,32 @@
+"use client";
 import React from "react";
 import type { Notification } from "@/lib/types";
 import Image from "next/image";
+import { redirect, useRouter } from "next/navigation";
 
 export default function NotificationCard({
   notification,
 }: {
   notification: Notification;
 }) {
+  const { push } = useRouter();
+
   return (
     <div
-      className={`rounded-md border transition-colors ${
-        notification.read && "bg-ring/10"
-      } p-2.5 flex gap-1.5`}
+      className={`rounded-md border transition-colors hover:border-ring hover:bg-accent cursor-pointer
+      p-2.5 flex gap-1.5 ${notification.read && "bg-ring/10"} ${
+        notification.type == "followedUser" && "items-center"
+      }`}
+      onClick={() => {
+        notification.type == "likedPost" &&
+          push(`/post/${notification.nanoId}`);
+
+        notification.type == "commentedOnPost" &&
+          push(`/post/${notification.nanoId}`);
+
+        notification.type == "followedUser" &&
+          push(`/user/${notification.notifier}`);
+      }}
     >
       <a className="flex-none" href={`/user/${notification.notifier}`}>
         <Image

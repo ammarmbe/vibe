@@ -12,6 +12,7 @@ import Spinner from "@/components/Spinner";
 import { Post } from "@/lib/types";
 import PostCard from "@/components/post/PostCard";
 import NewComment from "@/components/NewComment";
+import { useRouter } from "next/navigation";
 dayjs.extend(relativeTime);
 
 interface Props {
@@ -27,6 +28,7 @@ export default function Page({ params }: Props) {
     queryFn: async () =>
       (await axios.get(`/api/post/nanoid?nanoId=${nanoId}`)).data,
   });
+  const { push } = useRouter();
 
   const { data: parentPost, isLoading } = useQuery({
     queryKey: ["post", mainPost?.parentId],
@@ -73,9 +75,9 @@ export default function Page({ params }: Props) {
         <>
           {parentPost && (
             <>
-              <a
-                href={`/post/${parentPost.nanoId}`}
-                className="border peer hover:border-ring transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
+              <button
+                onClick={() => push(`/post/${parentPost.nanoId}`)}
+                className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
               >
                 <a className="flex-none" href={`/user/${parentPost.userId}`}>
                   <Image
@@ -105,7 +107,7 @@ export default function Page({ params }: Props) {
                   </a>
                   <p className="mt-2.5 text-sm">{parentPost.content}</p>
                 </div>
-              </a>
+              </button>
               <div className="border-t w-full border-dashed peer-hover:border-solid peer-hover:border-ring transition-colors"></div>
             </>
           )}
@@ -156,6 +158,7 @@ export default function Page({ params }: Props) {
                       postId={mainPost.postId}
                       nanoId={mainPost.nanoId}
                       userId={mainPost.userId}
+                      content={mainPost.content}
                     />
                     <a
                       href={`/post/${mainPost.nanoId}`}
@@ -166,7 +169,11 @@ export default function Page({ params }: Props) {
                   </div>
                 </div>
               </article>
-              <NewComment parentId={mainPost.postId} nanoId={mainPost.nanoId} />
+              <NewComment
+                parentId={mainPost.postId}
+                nanoId={mainPost.nanoId}
+                userId={mainPost.userId}
+              />
               {commentsLoading ? (
                 <div className="w-full flex items-center justify-center">
                   <Spinner size="xl" />

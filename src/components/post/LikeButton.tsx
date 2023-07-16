@@ -30,26 +30,7 @@ export default function LikeButton({
         `/api/notification/likedPost?postId=${postId}&userId=${userId}`
       ),
     onSuccess: () => {
-      client.setQueryData(["notifications", userId], (oldData: any) => {
-        return {
-          pages: [
-            [
-              {
-                notifier: user?.id,
-                notified: userId,
-                notifierName: user?.fullName,
-                notifierImage: user?.imageUrl,
-                type: "likedPost",
-                content: content,
-                read: false,
-                postId: postId,
-              },
-              ...oldData.pages[0],
-            ],
-            ...oldData.pages.slice(1),
-          ],
-        };
-      });
+      client.invalidateQueries(["notifications", userId]);
     },
   });
 

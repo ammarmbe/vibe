@@ -15,10 +15,21 @@ export default function FollowButton({
 }) {
   const { isSignedIn } = useAuth();
   const { push } = useRouter();
+
+  const notificationMutation = useMutation({
+    mutationFn: async () =>
+      await axios.post(`/api/notification/followedUser?userId=${userId}`),
+    onSuccess: () => {
+      client.invalidateQueries(["notifications", userId]);
+    },
+  });
+
   const followMutation = useMutation({
     mutationFn: async () =>
       await axios.post(`/api/follow?userId=${userId}&followed=${followed}`),
     onSuccess: () => {
+      notificationMutation.mutate();
+
       client.setQueryData(["user", userId], (data: any) => {
         if (data) {
           return {

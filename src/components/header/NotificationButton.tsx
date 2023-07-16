@@ -25,7 +25,7 @@ export default function NotificationButton() {
       (await axios.get(`/api/notifications?notificationId=${pageParam}`)).data,
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
-        return lastPage[lastPage.length - 1].postId;
+        return lastPage[lastPage.length - 1].id;
       } else {
         return undefined;
       }
@@ -77,7 +77,7 @@ export default function NotificationButton() {
       >
         <Bell size={16} color="#4c4c4c" />
       </PopoverTrigger>
-      <PopoverContent className="p-2.5">
+      <PopoverContent className="p-0">
         {data && data?.pages[0].length > 0 ? (
           <>
             <InfiniteScroll
@@ -94,7 +94,8 @@ export default function NotificationButton() {
                 </p>
               }
               next={fetchNextPage}
-              className="flex flex-col gap-2.5 max-h-[300px]"
+              height={300}
+              className="flex flex-col p-2.5 gap-2.5"
             >
               {data.pages.map((page) => {
                 return page.map((notification: Notification) => {
@@ -109,7 +110,7 @@ export default function NotificationButton() {
             </InfiniteScroll>
           </>
         ) : (
-          <p className="text-ring/70 text-center text-sm">
+          <p className="text-ring/70 text-center p-2.5 text-sm">
             No notifications yet...
           </p>
         )}

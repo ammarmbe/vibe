@@ -35,4 +35,5 @@ export type Notification = {
   notifierName: string;
   content: string;
   read: string;
+  nanoId: string;
 };
