@@ -6,6 +6,10 @@ export async function POST(request: Request) {
   const userId = searchParams.get("userId");
   const { userId: currentUserId } = auth();
 
+  if (currentUserId === userId) {
+    return new Response("Not allowed", { status: 400 });
+  }
+
   if (!!userId && !!currentUserId) {
     await db.execute(
       "INSERT INTO notifications (type, notifier, notified, postId) VALUES ('followedUser', :currentUserId, :userId, :postId)",
