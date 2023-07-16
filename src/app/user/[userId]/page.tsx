@@ -18,7 +18,7 @@ interface Props {
 
 export default function Page({ params }: Props) {
   const userId = params.userId;
-  const { isSignedIn } = useAuth();
+  const { userId: currentUserId } = useAuth();
 
   const { data: user } = useQuery({
     queryKey: ["user", userId],
@@ -92,10 +92,19 @@ export default function Page({ params }: Props) {
                 <p className="font-bold !h-[34px] flex items-center text-center text-lg leading-none">
                   {formatFollowerCount()}
                 </p>
-                <FollowButton
-                  userId={user.id}
-                  followed={parseInt(user.followedByUser) == 1}
-                />
+                {currentUserId == userId ? (
+                  <a
+                    href="/edit-user"
+                    className="py-1 px-3.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors"
+                  >
+                    Edit
+                  </a>
+                ) : (
+                  <FollowButton
+                    userId={user.id}
+                    followed={parseInt(user.followedByUser) == 1}
+                  />
+                )}
               </div>
             </div>
           </div>

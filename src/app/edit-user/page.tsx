@@ -1,6 +1,5 @@
 "use client";
-import { SignOutButton } from "@clerk/nextjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -10,19 +9,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import type { User } from "@/lib/types";
+import Spinner from "@/components/Spinner";
 
 export default function Page() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [showUsernameTaken, setShowUsernameTaken] = useState(false);
   const { push } = useRouter();
+  const { user } = useUser();
 
   const usernameMutation = useMutation({
     mutationFn: async () =>
-      await axios.post(`/api/user/username?username=${username}&bio=${bio}`),
+      await axios.post(
+        `/api/user/username?username=${username}&bio=${bio}&userId=${user?.id}`
+      ),
     onError(error: AxiosError) {
       if (error.response?.status === 409) {
         setShowUsernameTaken(true);
@@ -33,7 +38,27 @@ export default function Page() {
     },
   });
 
-  return (
+  const { data } = useQuery({
+    queryKey: ["user", user?.id],
+    queryFn: async () =>
+      (await axios.get(`/api/user?userId=${user?.id}`)).data as User,
+  });
+
+  useEffect(() => {
+    if (data && data.username) {
+      setUsername(data.username);
+    }
+
+    if (data && data.bio) {
+      setBio(data.bio);
+    }
+  }, [data]);
+
+  return !data || !user ? (
+    <main className="flex items-center justify-center w-full h-full">
+      <Spinner size="xl" />
+    </main>
+  ) : (
     <main className="flex items-center justify-center w-full h-full">
       <form
         onSubmit={(e) => {
@@ -43,11 +68,15 @@ export default function Page() {
         }}
         className="flex gap-2.5 flex-col"
       >
-        <Card>
+        <Card className="max-w-[300px]">
           <CardHeader>
-            <CardTitle>Add your details</CardTitle>
+            <CardTitle>Update your details</CardTitle>
             <CardDescription>
-              You'll be able to change these later.
+              You're signed in as{" "}
+              <a className="hover:underline" href={`/user/${user?.id}`}>
+                {user?.fullName}
+              </a>
+              .
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col">
@@ -63,7 +92,7 @@ export default function Page() {
                     setUsername(e.target.value);
                     setShowUsernameTaken(false);
                   }}
-                  className="border focus:border-ring outline-none rounded-sm px-2 py-1"
+                  className="border dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1"
                 />
                 <p
                   className={`text-sm text-danger ${
@@ -82,25 +111,17 @@ export default function Page() {
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   rows={3}
-                  className="border !h-fit focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
+                  className="border !h-fit dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
               </div>
             </div>
           </CardContent>
-          <CardFooter className="w-full flex items-end justify-between">
-            <SignOutButton>
-              <button
-                type="button"
-                className="rounded-md border text-danger hover:bg-danger/5 border-danger/30 hover:border-danger/50 py-1.5 px-2.5"
-              >
-                Sign out
-              </button>
-            </SignOutButton>
+          <CardFooter className="w-full flex items-end justify-end">
             <button
               type="submit"
               className="rounded-md border border-main/20 hover:bg-main/10 dark:border-main/30 hover:border-main/50 text-main py-1.5 px-2.5"
             >
-              Submit
+              Save
             </button>
           </CardFooter>
         </Card>

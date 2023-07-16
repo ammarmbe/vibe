@@ -4,13 +4,18 @@ import { auth } from "@clerk/nextjs";
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const username = searchParams.get("username");
+  const currentUserId = searchParams.get("userId");
   let bio = searchParams.get("bio");
   const { userId } = auth();
 
   const existingUser = (
-    await db.execute("SELECT * FROM users WHERE username = :username", {
-      username,
-    })
+    await db.execute(
+      "SELECT * FROM users WHERE username = :username AND id != :userId",
+      {
+        username,
+        userId: currentUserId,
+      }
+    )
   ).rows;
 
   console.log(existingUser);
