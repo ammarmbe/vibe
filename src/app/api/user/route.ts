@@ -32,4 +32,6 @@ export async function POST(request: Request) {
       image: body.data.image_url,
     }
   );
+
+  return new Response("OK");
 }
