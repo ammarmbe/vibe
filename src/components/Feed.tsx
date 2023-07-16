@@ -11,6 +11,7 @@ export default function Feed() {
   let feed: "Home" | "Following" = "Home";
   useEffect(() => {
     feed = localStorage.getItem("feed") as "Home" | "Following";
+    if (!feed) localStorage.setItem("feed", "Home");
   });
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
