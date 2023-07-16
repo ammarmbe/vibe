@@ -48,9 +48,8 @@ export default function Textarea() {
       ref={inputRef}
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
-      rows={1}
       name="content"
-      className="outline-none resize-none overflow-hidden w-full border bg-transparent focus:shadow-none transition-colors shadow-sm rounded-md px-2.5 py-1.5 pr-[55px] focus:border-ring"
+      className="outline-none resize-none overflow-hidden w-full border bg-transparent focus:shadow-none transition-colors shadow-sm rounded-md px-2.5 py-1.5 pr-[55px] focus:border-ring h-[38px] dark:focus:border-foreground/25"
       placeholder="What's on your mind?"
     ></textarea>
   );

@@ -82,17 +82,18 @@ export default function Page() {
           <CardContent className="flex flex-col">
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Username</Label>
+                <Label htmlFor="username">Username</Label>
                 <input
                   type="text"
                   placeholder="Username"
-                  name="username"
+                  id="username"
                   value={username}
+                  autoComplete="off"
                   onChange={(e) => {
                     setUsername(e.target.value);
                     setShowUsernameTaken(false);
                   }}
-                  className="border dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1"
+                  className="border dark:bg-ring/10 dark:focus:border-foreground/25 focus:border-ring outline-none rounded-sm px-2 py-1"
                 />
                 <p
                   className={`text-sm text-danger ${
@@ -104,22 +105,30 @@ export default function Page() {
               </div>
 
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Bio</Label>
+                <Label htmlFor="bio">Bio</Label>
                 <textarea
                   placeholder="Bio"
-                  name="bio"
+                  id="bio"
+                  autoComplete="off"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   rows={3}
-                  className="border !h-fit dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
+                  className="border !h-fit dark:focus:border-foreground/25 dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
               </div>
             </div>
           </CardContent>
-          <CardFooter className="w-full flex items-end justify-end">
+          <CardFooter className="w-full flex items-end justify-between">
+            <button
+              type="button"
+              onClick={() => push("/")}
+              className="rounded-md border text-danger hover:bg-danger/5 border-danger/30 hover:border-danger/50 transition-colors py-1.5 px-2.5"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
-              className="rounded-md border border-main/20 hover:bg-main/10 dark:border-main/30 hover:border-main/50 text-main py-1.5 px-2.5"
+              className="rounded-md border border-main/20 hover:bg-main/10 transition-colors dark:border-main/30 hover:border-main/50 text-main py-1.5 px-2.5"
             >
               Save
             </button>

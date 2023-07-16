@@ -85,9 +85,8 @@ export default function NewComment({
           ref={inputRef}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          rows={1}
           name="content"
-          className="outline-none bg-transparent resize-none overflow-hidden w-full border focus:shadow-none transition-colors shadow-sm rounded-md px-2.5 py-1.5 pr-[55px] focus:border-ring"
+          className="outline-none bg-transparent h-[38px] resize-none overflow-hidden w-full border focus:shadow-none transition-colors shadow-sm rounded-md px-2.5 py-1.5 pr-[55px] focus:border-ring dark:focus:border-foreground/25"
           placeholder="Add a comment"
         ></textarea>
         <button

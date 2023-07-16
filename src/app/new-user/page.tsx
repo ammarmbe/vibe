@@ -53,17 +53,18 @@ export default function Page() {
           <CardContent className="flex flex-col">
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Username</Label>
+                <Label htmlFor="username">Username</Label>
                 <input
                   type="text"
                   placeholder="Username"
-                  name="username"
+                  id="username"
                   value={username}
+                  autoComplete="off"
                   onChange={(e) => {
                     setUsername(e.target.value);
                     setShowUsernameTaken(false);
                   }}
-                  className="border focus:border-ring outline-none rounded-sm px-2 py-1"
+                  className="border dark:focus:border-foreground/25 focus:border-ring outline-none rounded-sm px-2 py-1"
                 />
                 <p
                   className={`text-sm text-danger ${
@@ -75,14 +76,15 @@ export default function Page() {
               </div>
 
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Bio</Label>
+                <Label htmlFor="bio">Bio</Label>
                 <textarea
                   placeholder="Bio"
-                  name="bio"
+                  autoComplete="off"
+                  id="bio"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   rows={3}
-                  className="border !h-fit focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
+                  className="border dark:focus:border-foreground/25 !h-fit focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
               </div>
             </div>
