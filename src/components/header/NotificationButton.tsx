@@ -75,7 +75,7 @@ export default function NotificationButton() {
           readNotifications.mutate();
         }}
       >
-        <Bell size={16} color="#4c4c4c" />
+        <Bell size={16} color="grey" />
       </PopoverTrigger>
       <PopoverContent className="p-0">
         {data && data?.pages[0].length > 0 ? (
@@ -89,7 +89,7 @@ export default function NotificationButton() {
                 </div>
               }
               endMessage={
-                <p className="text-ring/70 text-center text-sm">
+                <p className="text-foreground/30 text-center text-sm">
                   No more notifications
                 </p>
               }
@@ -110,7 +110,7 @@ export default function NotificationButton() {
             </InfiniteScroll>
           </>
         ) : (
-          <p className="text-ring/70 text-center p-2.5 text-sm">
+          <p className="text-foreground/30 text-center p-2.5 text-sm">
             No notifications yet...
           </p>
         )}

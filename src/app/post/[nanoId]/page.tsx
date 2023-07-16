@@ -188,7 +188,9 @@ export default function Page({ params }: Props) {
                     </div>
                   }
                   endMessage={
-                    <p className="text-ring/70 text-center">No more replies</p>
+                    <p className="text-foreground/30 text-center">
+                      No more replies
+                    </p>
                   }
                   next={fetchNextPage}
                   className="flex flex-col gap-2.5 pb-2.5"
@@ -200,7 +202,9 @@ export default function Page({ params }: Props) {
                   })}
                 </InfiniteScroll>
               ) : (
-                <p className="text-ring/70 text-center">No replies yet...</p>
+                <p className="text-foreground/30 text-center">
+                  No replies yet...
+                </p>
               )}
             </>
           )}
