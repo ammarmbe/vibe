@@ -19,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ReactQueryProvider>
-        <ClerkProvider appearance={{ variables: { colorPrimary: "#cd002b" } }}>
+        <ClerkProvider
+          appearance={{ variables: { colorPrimary: "#cd002b" } }}
+          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        >
           <body className={inter.className}>{children}</body>
         </ClerkProvider>
       </ReactQueryProvider>
