@@ -34,7 +34,7 @@ export default function Textarea() {
 
   // Clear textarea after submit
   useEffect(() => {
-    if (prevPendingState && !pending) {
+    if (prevPendingState && !pending && inputValue.length < 513) {
       setTimeout(() => {
         setInputValue("");
       }, 300);
@@ -44,13 +44,28 @@ export default function Textarea() {
   }, [pending]);
 
   return (
-    <textarea
-      ref={inputRef}
-      value={inputValue}
-      onChange={(e) => setInputValue(e.target.value)}
-      name="content"
-      className="outline-none resize-none overflow-hidden w-full border bg-transparent focus:shadow-none transition-colors shadow-sm rounded-md px-2.5 py-1.5 pr-[55px] focus:border-ring h-[38px] dark:focus:border-foreground/25"
-      placeholder="What's on your mind?"
-    ></textarea>
+    <>
+      <textarea
+        ref={inputRef}
+        value={inputValue}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+        }}
+        name="content"
+        className="outline-none resize-none overflow-hidden w-full border bg-transparent focus:shadow-none transition-colors shadow-sm rounded-md px-2.5 py-1.5 pr-[55px] focus:border-ring h-[38px] dark:focus:border-foreground/25"
+        placeholder="What's on your mind?"
+      ></textarea>
+      <p
+        className={`absolute transition-colors text-xs text-foreground/60 right-[6px] text-right px-1.5 w-[43px] top-[40px] ${
+          inputValue.length < 412 && `hidden`
+        } ${
+          inputValue.length > 481 &&
+          inputValue.length < 513 &&
+          `!text-yellow-500/90`
+        } ${inputValue.length > 512 && `!text-danger`}`}
+      >
+        {512 - inputValue.length}
+      </p>
+    </>
   );
 }

@@ -18,8 +18,6 @@ export async function POST(request: Request) {
     )
   ).rows;
 
-  console.log(existingUser);
-
   if (existingUser.length > 0) {
     return new Response(JSON.stringify({ error: "Username already taken" }), {
       status: 409,

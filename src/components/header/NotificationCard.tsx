@@ -2,7 +2,7 @@
 import React from "react";
 import type { Notification } from "@/lib/types";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function NotificationCard({
   notification,

@@ -20,6 +20,8 @@ export default function Page() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [showUsernameTaken, setShowUsernameTaken] = useState(false);
+  const [usernameTooLong, setUsernameTooLong] = useState(false);
+  const [bioTooLong, setBioTooLong] = useState(false);
   const { push } = useRouter();
   const { user } = useUser();
 
@@ -68,7 +70,7 @@ export default function Page() {
         }}
         className="flex gap-2.5 flex-col"
       >
-        <Card className="max-w-[300px]">
+        <Card className="w-[360px]">
           <CardHeader>
             <CardTitle>Update your details</CardTitle>
             <CardDescription>
@@ -92,6 +94,8 @@ export default function Page() {
                   onChange={(e) => {
                     setUsername(e.target.value);
                     setShowUsernameTaken(false);
+                    if (e.target.value.length > 32) setUsernameTooLong(true);
+                    else setUsernameTooLong(false);
                   }}
                   className="border dark:bg-ring/10 dark:focus:border-foreground/25 focus:border-ring outline-none rounded-sm px-2 py-1"
                 />
@@ -102,6 +106,13 @@ export default function Page() {
                 >
                   Username already exists.
                 </p>
+                <p
+                  className={`text-sm text-danger ${
+                    !usernameTooLong && "hidden"
+                  }`}
+                >
+                  Username can't be longer than 32 characters.
+                </p>
               </div>
 
               <div className="flex flex-col space-y-1.5">
@@ -111,10 +122,17 @@ export default function Page() {
                   id="bio"
                   autoComplete="off"
                   value={bio}
-                  onChange={(e) => setBio(e.target.value)}
+                  onChange={(e) => {
+                    setBio(e.target.value);
+                    if (e.target.value.length > 250) setBioTooLong(true);
+                    else setBioTooLong(false);
+                  }}
                   rows={3}
                   className="border !h-fit dark:focus:border-foreground/25 dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
+                <p className={`text-sm text-danger ${!bioTooLong && "hidden"}`}>
+                  Your bio can't be longer than 250 characters.
+                </p>
               </div>
             </div>
           </CardContent>

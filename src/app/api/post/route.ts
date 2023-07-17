@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const content = searchParams.get("content");
   const nanoId = searchParams.get("nanoId");
 
-  if (parentId && userId && content && nanoId) {
+  if (parentId && userId && content && nanoId && content.length < 513) {
     await db.execute(
       "INSERT INTO posts (userId, content, parentId, nanoId) VALUES (:userId, :content, :parentId, :nanoId)",
       {
@@ -18,6 +18,8 @@ export async function POST(request: Request) {
         nanoId,
       }
     );
+  } else {
+    return new Response("Invalid request", { status: 400 });
   }
 
   return new Response("OK");

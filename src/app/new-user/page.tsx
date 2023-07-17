@@ -1,5 +1,5 @@
 "use client";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutButton, useAuth } from "@clerk/nextjs";
 import React, { useState } from "react";
 import {
   Card,
@@ -18,7 +18,14 @@ export default function Page() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [showUsernameTaken, setShowUsernameTaken] = useState(false);
+  const [usernameTooLong, setUsernameTooLong] = useState(false);
+  const [bioTooLong, setBioTooLong] = useState(false);
   const { push } = useRouter();
+  const { isSignedIn } = useAuth();
+
+  if (isSignedIn) {
+    push("/edit-user");
+  }
 
   const usernameMutation = useMutation({
     mutationFn: async () =>
@@ -38,12 +45,13 @@ export default function Page() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (username === "") return;
+          if (username === "" || username.length > 32 || bio.length > 250)
+            return;
           usernameMutation.mutate();
         }}
         className="flex gap-2.5 flex-col"
       >
-        <Card>
+        <Card className="w-[360px]">
           <CardHeader>
             <CardTitle>Add your details</CardTitle>
             <CardDescription>
@@ -63,8 +71,10 @@ export default function Page() {
                   onChange={(e) => {
                     setUsername(e.target.value);
                     setShowUsernameTaken(false);
+                    if (e.target.value.length > 32) setUsernameTooLong(true);
+                    else setUsernameTooLong(false);
                   }}
-                  className="border dark:focus:border-foreground/25 focus:border-ring outline-none rounded-sm px-2 py-1"
+                  className="border dark:bg-ring/10 dark:focus:border-foreground/25 focus:border-ring outline-none rounded-sm px-2 py-1"
                 />
                 <p
                   className={`text-sm text-danger ${
@@ -73,19 +83,33 @@ export default function Page() {
                 >
                   Username already exists.
                 </p>
+                <p
+                  className={`text-sm text-danger ${
+                    !usernameTooLong && "hidden"
+                  }`}
+                >
+                  Username can't be longer than 32 characters.
+                </p>
               </div>
 
-              <div className="flex flex-col space-y-1.5">
+              <div className="flex flex-col relative space-y-1.5">
                 <Label htmlFor="bio">Bio</Label>
                 <textarea
                   placeholder="Bio"
                   autoComplete="off"
                   id="bio"
                   value={bio}
-                  onChange={(e) => setBio(e.target.value)}
+                  onChange={(e) => {
+                    setBio(e.target.value);
+                    if (e.target.value.length > 250) setBioTooLong(true);
+                    else setBioTooLong(false);
+                  }}
                   rows={3}
-                  className="border dark:focus:border-foreground/25 !h-fit focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
+                  className="border !h-fit dark:focus:border-foreground/25 dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
+                <p className={`text-sm text-danger ${!bioTooLong && "hidden"}`}>
+                  Your bio can't be longer than 250 characters.
+                </p>
               </div>
             </div>
           </CardContent>

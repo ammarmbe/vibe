@@ -11,7 +11,7 @@ export default async function NewPost() {
   async function NewPost(data: FormData) {
     "use server";
     const content = data.get("content") as string;
-    if (content == "") return;
+    if (content == "" || content.length > 512) return;
     const nanoId = nanoid(12);
 
     if (!!userId)
