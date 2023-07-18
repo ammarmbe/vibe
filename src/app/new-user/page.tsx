@@ -70,10 +70,11 @@ export default function Page() {
                   type="text"
                   placeholder="Username"
                   id="username"
+                  required={true}
                   value={username}
                   autoComplete="off"
                   onChange={(e) => {
-                    setUsername(e.target.value);
+                    setUsername(e.target.value.toLocaleLowerCase());
                     setShowUsernameTaken(false);
                     if (e.target.value.length > 16) setUsernameTooLong(true);
                     else setUsernameTooLong(false);
