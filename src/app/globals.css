@@ -4,6 +4,12 @@
 
 @layer base {
   :root {
+    --main: #cd002b;
+    --main-dark: #ad0528;
+    --red-border: hsl(0 100% 89.8%);
+    --red-ring: hsl(0 100% 63.9%);
+    --danger: #e63913;
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
 
@@ -39,6 +45,12 @@
   @media (prefers-color-scheme: dark) {
     :root {
       color-scheme: dark;
+
+      --main: #e01d47;
+      --main-dark: #d11138;
+      --red-border: hsl(0 100% 89.8%);
+      --red-ring: hsl(0 100% 63.9%);
+      --danger: #e63913;
 
       --background: 0 0% 5.9%;
       --foreground: 0 0% 88%;
