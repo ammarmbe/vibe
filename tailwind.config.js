@@ -11,11 +11,11 @@ module.exports = {
     },
     extend: {
       colors: {
-        main: "#cd002b",
-        mainDark: "#ad0528",
-        redBorder: "hsl(0 100% 89.8%)",
-        redRing: "hsl(0 100% 63.9%)",
-        danger: "#e63913",
+        main: "hsl(var(--main))",
+        mainDark: "hsl(var(--main-dark))",
+        redBorder: "hsl(var(--red-border))",
+        redRing: "hsl(var(--red-ring))",
+        danger: "hsl(var(--danger))",
 
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
