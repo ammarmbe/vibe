@@ -4,7 +4,7 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
 import axios from "axios";
-import { client } from "@/lib/reactQueryProvider";
+import { client } from "@/lib/ReactQueryProvider";
 import { Post } from "@/lib/types";
 
 export default function NewComment({

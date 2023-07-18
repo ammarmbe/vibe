@@ -1,5 +1,5 @@
 "use client";
-import { client } from "@/lib/reactQueryProvider";
+import { client } from "@/lib/ReactQueryProvider";
 import { Post } from "@/lib/types";
 import { useUser } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";

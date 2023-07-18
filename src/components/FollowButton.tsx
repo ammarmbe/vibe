@@ -1,5 +1,5 @@
 "use client";
-import { client } from "@/lib/reactQueryProvider";
+import { client } from "@/lib/ReactQueryProvider";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

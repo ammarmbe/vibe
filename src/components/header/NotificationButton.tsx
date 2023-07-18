@@ -13,7 +13,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../Spinner";
 import { Notification } from "@/lib/types";
 import NotificationCard from "./NotificationCard";
-import { client } from "@/lib/reactQueryProvider";
+import { client } from "@/lib/ReactQueryProvider";
 
 export default function NotificationButton() {
   const { userId } = useAuth();
