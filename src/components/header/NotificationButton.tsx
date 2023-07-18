@@ -74,6 +74,7 @@ export default function NotificationButton() {
         onClick={() => {
           readNotifications.mutate();
         }}
+        name="Notifications"
       >
         <Bell size={16} color="grey" />
       </PopoverTrigger>

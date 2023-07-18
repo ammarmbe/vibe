@@ -95,7 +95,7 @@ export default function HeaderTitle() {
       </h1>
       {isSignedIn && (
         <Popover>
-          <PopoverTrigger disabled={popoverDisabled}>
+          <PopoverTrigger disabled={popoverDisabled} name="Change feed">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
