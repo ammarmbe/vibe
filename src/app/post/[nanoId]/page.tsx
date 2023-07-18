@@ -79,7 +79,7 @@ export default function Page({ params }: Props) {
                 onClick={() => push(`/post/${parentPost.nanoId}`)}
                 className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
               >
-                <a className="flex-none" href={`/user/${parentPost.userId}`}>
+                <a className="flex-none" href={`/user/${parentPost.username}`}>
                   <Image
                     src={parentPost.image}
                     width={33}
@@ -91,7 +91,7 @@ export default function Page({ params }: Props) {
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
                     <h2 className="leading-none font-medium">
-                      <a href={`/user/${parentPost.userId}`}>
+                      <a href={`/user/${parentPost.username}`}>
                         {parentPost.name}
                       </a>
                     </h2>
@@ -101,7 +101,7 @@ export default function Page({ params }: Props) {
                   </div>
                   <a
                     className="text-sm hover:underline text-foreground/70 leading-none w-fit"
-                    href={`/user/${parentPost.userId}`}
+                    href={`/user/${parentPost.username}`}
                   >
                     @{parentPost.username}
                   </a>
@@ -124,7 +124,7 @@ export default function Page({ params }: Props) {
                     : `rounded-md border`
                 } p-2.5 gap-1.5 flex shadow-sm`}
               >
-                <a className="flex-none" href={`/user/${mainPost.userId}`}>
+                <a className="flex-none" href={`/user/${mainPost.username}`}>
                   <Image
                     src={mainPost.image}
                     width={33}
@@ -136,7 +136,7 @@ export default function Page({ params }: Props) {
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
                     <h2 className="leading-tight text-lg font-medium truncate inline-block max-w-[200px]">
-                      <a href={`/user/${mainPost.userId}`}>{mainPost.name}</a>
+                      <a href={`/user/${mainPost.username}`}>{mainPost.name}</a>
                     </h2>
                     <p className="leading-none text-sm flex-none text-foreground/70">
                       {dayjs(new Date(mainPost.createdAt * 1000)).format(
@@ -146,7 +146,7 @@ export default function Page({ params }: Props) {
                   </div>
                   <a
                     className="hover:underline text-foreground/70 leading-none w-fit"
-                    href={`/user/${mainPost.userId}`}
+                    href={`/user/${mainPost.username}`}
                   >
                     @{mainPost.username}
                   </a>

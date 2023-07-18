@@ -12,7 +12,7 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <article className="border rounded-md p-2.5 gap-1.5 flex shadow-sm">
-      <a className="flex-none" href={`/user/${post.userId}`}>
+      <a className="flex-none" href={`/user/${post.username}`}>
         <Image
           src={post.image}
           width={33}
@@ -24,7 +24,7 @@ export default function PostCard({ post }: { post: Post }) {
       <div className="flex flex-col flex-grow">
         <div className="flex justify-between items-baseline w-full">
           <h2 className="leading-none font-medium">
-            <a href={`/user/${post.userId}`}>{post.name}</a>
+            <a href={`/user/${post.username}`}>{post.name}</a>
           </h2>
           <p className="text-sm leading-none text-foreground/70">
             {dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
@@ -32,7 +32,7 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
         <a
           className="text-sm hover:underline text-foreground/70 leading-none w-fit"
-          href={`/user/${post.userId}`}
+          href={`/user/${post.username}`}
         >
           @{post.username}
         </a>

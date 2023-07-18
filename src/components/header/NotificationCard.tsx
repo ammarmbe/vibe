@@ -25,10 +25,10 @@ export default function NotificationCard({
           push(`/post/${notification.nanoId}`);
 
         notification.type == "followedUser" &&
-          push(`/user/${notification.notifier}`);
+          push(`/user/${notification.notifierUsername}`);
       }}
     >
-      <a className="flex-none" href={`/user/${notification.notifier}`}>
+      <a className="flex-none" href={`/user/${notification.notifierUsername}`}>
         <Image
           src={notification.notifierImage}
           alt={`${notification.notifierName}'s profile picture`}
@@ -38,7 +38,10 @@ export default function NotificationCard({
         />
       </a>
       <p className="text-sm line-clamp-2">
-        <a href={`/user/${notification.notifier}`} className="font-medium">
+        <a
+          href={`/user/${notification.notifierUsername}`}
+          className="font-medium"
+        >
           {notification.notifierName}
         </a>{" "}
         {notification.type == "likedPost"

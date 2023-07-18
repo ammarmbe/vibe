@@ -10,7 +10,7 @@ export async function GET(request: Request) {
 
   const notifications = (
     await db.execute(
-      "SELECT notifications.id, notifications.read, posts.nanoId, notifications.type, notifications.notifier, notifications.postId, UNIX_TIMESTAMP(notifications.createdAt) AS createdAt, users.image AS notifierImage, users.name AS notifierName, posts.content FROM notifications JOIN users ON users.id = notifications.notifier LEFT JOIN posts ON posts.id = notifications.postId WHERE notifications.id < :notificationId AND notifications.notified = :userId ORDER BY createdAt DESC LIMIT 11",
+      "SELECT notifications.id, notifications.read, posts.nanoId, notifications.type, notifications.notifier, notifications.postId, UNIX_TIMESTAMP(notifications.createdAt) AS createdAt, users.image AS notifierImage, users.username AS notifierUsername, users.name AS notifierName, posts.content FROM notifications JOIN users ON users.id = notifications.notifier LEFT JOIN posts ON posts.id = notifications.postId WHERE notifications.id < :notificationId AND notifications.notified = :userId ORDER BY createdAt DESC LIMIT 11",
       { notificationId, userId }
     )
   ).rows as Notification[];

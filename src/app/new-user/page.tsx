@@ -1,5 +1,5 @@
 "use client";
-import { SignOutButton, useAuth } from "@clerk/nextjs";
+import { SignOutButton, useAuth, useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
 import {
   Card,
@@ -21,9 +21,9 @@ export default function Page() {
   const [usernameTooLong, setUsernameTooLong] = useState(false);
   const [bioTooLong, setBioTooLong] = useState(false);
   const { push } = useRouter();
-  const { isSignedIn } = useAuth();
+  const { user } = useUser();
 
-  if (isSignedIn) {
+  if (!!user && !!user.unsafeMetadata.username) {
     push("/edit-user");
   }
 
@@ -35,7 +35,11 @@ export default function Page() {
         setShowUsernameTaken(true);
       }
     },
-    onSuccess() {
+    onSuccess: async () => {
+      await user?.update({
+        unsafeMetadata: { username: username },
+      });
+
       push("/");
     },
   });

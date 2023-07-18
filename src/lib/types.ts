@@ -32,6 +32,7 @@ export type Notification = {
   notifier: string;
   postId: string;
   notifierImage: string;
+  notifierUsername: string;
   notifierName: string;
   content: string;
   read: string;

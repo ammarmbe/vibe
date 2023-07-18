@@ -12,18 +12,18 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Props {
   params: {
-    userId: string;
+    username: string;
   };
 }
 
 export default function Page({ params }: Props) {
-  const userId = params.userId;
+  const username = params.username;
   const { userId: currentUserId } = useAuth();
 
   const { data: user } = useQuery({
-    queryKey: ["user", userId],
+    queryKey: ["user", username],
     queryFn: async () =>
-      (await axios.get(`/api/user?userId=${userId}`)).data as User,
+      (await axios.get(`/api/user?username=${username}`)).data as User,
   });
 
   const {
@@ -32,7 +32,7 @@ export default function Page({ params }: Props) {
     fetchNextPage,
     isLoading: postsLoading,
   } = useInfiniteQuery({
-    queryKey: ["userPosts", userId],
+    queryKey: ["userPosts", username],
     queryFn: async ({ pageParam }) =>
       (
         await axios.get(
@@ -92,7 +92,7 @@ export default function Page({ params }: Props) {
                 <p className="font-bold !h-[34px] flex items-center text-center text-lg leading-none">
                   {formatFollowerCount()}
                 </p>
-                {currentUserId == userId ? (
+                {currentUserId == user.id ? (
                   <a
                     href="/edit-user"
                     className="py-1 px-3.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors"

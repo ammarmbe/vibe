@@ -35,13 +35,17 @@ export default function Page() {
         setShowUsernameTaken(true);
       }
     },
-    onSuccess() {
+    onSuccess: async () => {
+      await user?.update({
+        unsafeMetadata: { username: username },
+      });
+
       push("/");
     },
   });
 
   const { data } = useQuery({
-    queryKey: ["user", user?.id],
+    queryKey: ["user", user?.username],
     queryFn: async () =>
       (await axios.get(`/api/user?userId=${user?.id}`)).data as User,
   });
@@ -75,7 +79,10 @@ export default function Page() {
             <CardTitle>Update your details</CardTitle>
             <CardDescription>
               You're signed in as{" "}
-              <a className="hover:underline" href={`/user/${user?.id}`}>
+              <a
+                className="hover:underline"
+                href={`/user/${user?.unsafeMetadata.username}`}
+              >
                 {user?.fullName}
               </a>
               .
