@@ -90,12 +90,12 @@ export default function Page({ params }: Props) {
                 </a>
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
-                    <h2 className="leading-none font-medium">
+                    <h2 className="leading-tight font-medium">
                       <a href={`/user/${parentPost.username}`}>
                         {parentPost.name}
                       </a>
                     </h2>
-                    <p className="text-sm leading-none text-foreground/70">
+                    <p className="text-sm leading-tight text-foreground/70">
                       {dayjs(new Date(parentPost.createdAt * 1000)).fromNow()}
                     </p>
                   </div>
@@ -135,12 +135,12 @@ export default function Page({ params }: Props) {
                 </a>
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline w-full">
-                    <h2 className="leading-tight text-lg font-medium truncate inline-block max-w-[200px]">
+                    <h2 className="leading-tight text-lg font-medium truncate inline-block">
                       <a href={`/user/${mainPost.username}`}>{mainPost.name}</a>
                     </h2>
                     <p className="leading-none text-sm flex-none text-foreground/70">
                       {dayjs(new Date(mainPost.createdAt * 1000)).format(
-                        "DD/MM/YYYY, HH:mm A"
+                        "D/M/YY, H:m A"
                       )}
                     </p>
                   </div>

@@ -9,9 +9,11 @@ import React from "react";
 export default function FollowButton({
   userId,
   followed,
+  username,
 }: {
   userId: string;
   followed: boolean;
+  username: string;
 }) {
   const { isSignedIn } = useAuth();
   const { push } = useRouter();
@@ -30,7 +32,7 @@ export default function FollowButton({
     onSuccess: () => {
       !followed && notificationMutation.mutate();
 
-      client.setQueryData(["user", userId], (data: any) => {
+      client.setQueryData(["user", username], (data: any) => {
         if (data) {
           return {
             ...data,

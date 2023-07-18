@@ -102,6 +102,7 @@ export default function Page({ params }: Props) {
                 ) : (
                   <FollowButton
                     userId={user.id}
+                    username={user.username}
                     followed={parseInt(user.followedByUser) == 1}
                   />
                 )}

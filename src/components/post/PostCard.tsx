@@ -23,10 +23,10 @@ export default function PostCard({ post }: { post: Post }) {
       </a>
       <div className="flex flex-col flex-grow">
         <div className="flex justify-between items-baseline w-full">
-          <h2 className="leading-none font-medium">
+          <h2 className="leading-tight font-medium">
             <a href={`/user/${post.username}`}>{post.name}</a>
           </h2>
-          <p className="text-sm leading-none text-foreground/70">
+          <p className="text-sm leading-tight text-foreground/70">
             {dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
           </p>
         </div>
