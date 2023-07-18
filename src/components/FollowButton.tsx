@@ -49,7 +49,7 @@ export default function FollowButton({
       className={`py-1 px-2.5 border w-fit h-fit rounded-md text-xs ${
         followed
           ? `bg-main text-white border-main/50 hover:bg-main/90`
-          : `border-main/20 hover:bg-main/10 dark:border-main/30 hover:border-main/50 text-main`
+          : `border-main/20 hover:bg-main/10 dark:border-main/50 hover:border-main/50 text-main`
       }`}
       onClick={
         isSignedIn ? () => followMutation.mutate() : () => push("/sign-up")

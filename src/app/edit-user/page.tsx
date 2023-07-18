@@ -47,7 +47,9 @@ export default function Page() {
   const { data } = useQuery({
     queryKey: ["user", user?.username],
     queryFn: async () =>
-      (await axios.get(`/api/user?userId=${user?.id}`)).data as User,
+      (await axios.get(`/api/user?username=${user?.unsafeMetadata.username}`))
+        .data as User,
+    enabled: !!user,
   });
 
   useEffect(() => {
@@ -147,13 +149,13 @@ export default function Page() {
             <button
               type="button"
               onClick={() => push("/")}
-              className="rounded-md border text-danger hover:bg-danger/5 border-danger/30 hover:border-danger/50 transition-colors py-1.5 px-2.5"
+              className="rounded-md border text-danger hover:bg-danger/5 border-danger/50 hover:border-danger/50 transition-colors py-1.5 px-2.5"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded-md border border-main/20 hover:bg-main/10 transition-colors dark:border-main/30 hover:border-main/50 text-main py-1.5 px-2.5"
+              className="rounded-md border border-main/20 hover:bg-main/10 transition-colors dark:border-main/50 hover:border-main/50 text-main py-1.5 px-2.5"
             >
               Save
             </button>

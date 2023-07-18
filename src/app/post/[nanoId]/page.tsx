@@ -162,7 +162,7 @@ export default function Page({ params }: Props) {
                     />
                     <a
                       href={`/post/${mainPost.nanoId}`}
-                      className="text-xs px-2.5 py-1 border rounded-md hover:border-ring hover:bg-accent"
+                      className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
                     >
                       {mainPost.comments} {commentOrComments}
                     </a>

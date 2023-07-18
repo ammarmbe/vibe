@@ -47,7 +47,7 @@ export default function PostCard({ post }: { post: Post }) {
           />
           <a
             href={`/post/${post.nanoId}`}
-            className="text-xs px-2.5 py-1 border rounded-md hover:border-ring hover:bg-accent"
+            className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
           >
             {post.comments} {commentOrComments}
           </a>

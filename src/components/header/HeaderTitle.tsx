@@ -124,7 +124,7 @@ export default function HeaderTitle() {
                 }
               }}
               className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-                feed === "Home" && "bg-secondary"
+                feed === "Home" ? "bg-secondary" : !feed && "hover:bg-secondary"
               }`}
             >
               Home
@@ -141,7 +141,9 @@ export default function HeaderTitle() {
                 }
               }}
               className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-                feed === "Following" && "bg-secondary"
+                feed === "Following"
+                  ? "bg-secondary"
+                  : !feed && "hover:bg-secondary"
               }`}
             >
               Following

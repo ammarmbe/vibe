@@ -121,14 +121,14 @@ export default function Page() {
             <SignOutButton>
               <button
                 type="button"
-                className="rounded-md border text-danger hover:bg-danger/5 border-danger/30 hover:border-danger/50 py-1.5 px-2.5"
+                className="rounded-md border transition-colors text-danger hover:bg-danger/5 border-danger/30 hover:border-danger/50 py-1.5 px-2.5"
               >
                 Sign out
               </button>
             </SignOutButton>
             <button
               type="submit"
-              className="rounded-md border border-main/20 hover:bg-main/10 dark:border-main/30 hover:border-main/50 text-main py-1.5 px-2.5"
+              className="rounded-md border transition-colors border-main/20 hover:bg-main/10 dark:border-main/30 hover:border-main/50 text-main py-1.5 px-2.5"
             >
               Submit
             </button>
