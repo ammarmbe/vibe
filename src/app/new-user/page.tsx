@@ -49,7 +49,7 @@ export default function Page() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (username === "" || username.length > 32 || bio.length > 250)
+          if (username === "" || username.length > 16 || bio.length > 250)
             return;
           usernameMutation.mutate();
         }}
@@ -75,7 +75,7 @@ export default function Page() {
                   onChange={(e) => {
                     setUsername(e.target.value);
                     setShowUsernameTaken(false);
-                    if (e.target.value.length > 32) setUsernameTooLong(true);
+                    if (e.target.value.length > 16) setUsernameTooLong(true);
                     else setUsernameTooLong(false);
                   }}
                   className="border dark:bg-ring/10 dark:focus:border-foreground/25 focus:border-ring outline-none rounded-sm px-2 py-1"
@@ -92,7 +92,7 @@ export default function Page() {
                     !usernameTooLong && "hidden"
                   }`}
                 >
-                  Username can't be longer than 32 characters.
+                  Username can't be longer than 16 characters.
                 </p>
               </div>
 
