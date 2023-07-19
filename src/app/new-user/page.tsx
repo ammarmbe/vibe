@@ -1,5 +1,5 @@
 "use client";
-import { SignOutButton, useAuth, useUser } from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
 import {
   Card,
@@ -17,9 +17,10 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
-  const [showUsernameTaken, setShowUsernameTaken] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState(false);
   const [usernameTooLong, setUsernameTooLong] = useState(false);
   const [bioTooLong, setBioTooLong] = useState(false);
+  const [invalidUsername, setInvalidUsername] = useState(false);
   const { push } = useRouter();
   const { user } = useUser();
 
@@ -32,7 +33,7 @@ export default function Page() {
       await axios.post(`/api/user/username?username=${username}&bio=${bio}`),
     onError(error: AxiosError) {
       if (error.response?.status === 409) {
-        setShowUsernameTaken(true);
+        setUsernameTaken(true);
       }
     },
     onSuccess: async () => {
@@ -74,8 +75,13 @@ export default function Page() {
                   value={username}
                   autoComplete="off"
                   onChange={(e) => {
+                    if (!e.target.value.match(/^\w*$/g)) {
+                      setInvalidUsername(true);
+                      return;
+                    } else setInvalidUsername(false);
+
                     setUsername(e.target.value.toLocaleLowerCase());
-                    setShowUsernameTaken(false);
+                    setUsernameTaken(false);
                     if (e.target.value.length > 16) setUsernameTooLong(true);
                     else setUsernameTooLong(false);
                   }}
@@ -83,7 +89,7 @@ export default function Page() {
                 />
                 <p
                   className={`text-sm text-danger ${
-                    !showUsernameTaken && "hidden"
+                    !usernameTaken && "hidden"
                   }`}
                 >
                   Username already exists.
@@ -94,6 +100,14 @@ export default function Page() {
                   }`}
                 >
                   Username can't be longer than 16 characters.
+                </p>
+                <p
+                  className={`text-sm text-danger ${
+                    !invalidUsername && "hidden"
+                  }`}
+                >
+                  Username can only include alphanumeric characters (a-z, 0-9)
+                  and underscores.
                 </p>
               </div>
 

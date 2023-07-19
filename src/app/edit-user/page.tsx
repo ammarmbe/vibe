@@ -22,6 +22,7 @@ export default function Page() {
   const [showUsernameTaken, setShowUsernameTaken] = useState(false);
   const [usernameTooLong, setUsernameTooLong] = useState(false);
   const [bioTooLong, setBioTooLong] = useState(false);
+  const [invalidUsername, setInvalidUsername] = useState(false);
   const { push } = useRouter();
   const { user } = useUser();
 
@@ -103,6 +104,11 @@ export default function Page() {
                   value={username}
                   autoComplete="off"
                   onChange={(e) => {
+                    if (!e.target.value.match(/^\w*$/g)) {
+                      setInvalidUsername(true);
+                      return;
+                    } else setInvalidUsername(false);
+
                     setUsername(e.target.value.toLocaleLowerCase());
                     setShowUsernameTaken(false);
                     if (e.target.value.length > 16) setUsernameTooLong(true);
@@ -123,6 +129,14 @@ export default function Page() {
                   }`}
                 >
                   Username can't be longer than 16 characters.
+                </p>
+                <p
+                  className={`text-sm text-danger ${
+                    !invalidUsername && "hidden"
+                  }`}
+                >
+                  Username can only include alphanumeric characters (a-z, 0-9)
+                  and underscores.
                 </p>
               </div>
 

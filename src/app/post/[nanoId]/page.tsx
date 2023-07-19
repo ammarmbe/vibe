@@ -146,7 +146,7 @@ export default function Page({ params }: Props) {
                   </div>
                   <a
                     className="hover:underline text-foreground/70 leading-none w-fit"
-                    href={`/user/${mainPost.username}`}
+                    href={`/user/${mainPost.username.toLocaleLowerCase()}`}
                   >
                     @{mainPost.username}
                   </a>

@@ -32,7 +32,7 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
         <a
           className="text-sm hover:underline text-foreground/70 leading-none w-fit"
-          href={`/user/${post.username}`}
+          href={`/user/${post.username.toLocaleLowerCase()}`}
         >
           @{post.username}
         </a>
