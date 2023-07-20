@@ -18,8 +18,6 @@ export async function POST(request: Request) {
         nanoId,
       }
     );
-  } else {
-    return new Response("Invalid request", { status: 400 });
   }
 
   return new Response("OK");

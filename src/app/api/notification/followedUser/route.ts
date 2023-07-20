@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const { userId: currentUserId } = auth();
 
   if (currentUserId === userId) {
-    return new Response("Not allowed", { status: 400 });
+    return;
   }
 
   if (!!userId && !!currentUserId) {
@@ -19,8 +19,6 @@ export async function POST(request: Request) {
         postId: 0, // used for unique key constraint
       }
     );
-  } else {
-    return new Response("Missing parameters", { status: 400 });
   }
 
   return new Response("OK");

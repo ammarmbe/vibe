@@ -1,6 +1,5 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
 import React, { useEffect } from "react";
 import type { Post } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -17,7 +16,7 @@ export default function Feed() {
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["homeFeed"],
     queryFn: async ({ pageParam }) =>
-      (await axios.get(`/api/posts?postId=${pageParam}&feed=${feed}`)).data,
+      await (await fetch(`/api/posts?postId=${pageParam}&feed=${feed}`)).json(),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;

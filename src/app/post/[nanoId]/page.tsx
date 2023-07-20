@@ -1,7 +1,6 @@
 "use client";
 import LikeButton from "@/components/post/LikeButton";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import React from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
@@ -26,14 +25,14 @@ export default function Page({ params }: Props) {
   const { data: mainPost } = useQuery({
     queryKey: ["post", nanoId],
     queryFn: async () =>
-      (await axios.get(`/api/post/nanoid?nanoId=${nanoId}`)).data,
+      await (await fetch(`/api/post/nanoid?nanoId=${nanoId}`)).json(),
   });
   const { push } = useRouter();
 
   const { data: parentPost, isLoading } = useQuery({
     queryKey: ["post", mainPost?.parentId],
     queryFn: async () =>
-      (await axios.get(`/api/post/id?postId=${mainPost.parentId}`)).data,
+      await (await fetch(`/api/post/id?postId=${mainPost.parentId}`)).json(),
     enabled: !!mainPost && !!mainPost.parentId,
   });
 
@@ -45,11 +44,11 @@ export default function Page({ params }: Props) {
   } = useInfiniteQuery({
     queryKey: ["comments"],
     queryFn: async ({ pageParam }) =>
-      (
-        await axios.get(
+      await (
+        await fetch(
           `/api/posts/parentId?postId=${pageParam}&parentId=${mainPost.postId}`
         )
-      ).data,
+      ).json(),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;
@@ -158,7 +157,6 @@ export default function Page({ params }: Props) {
                       postId={mainPost.postId}
                       nanoId={mainPost.nanoId}
                       userId={mainPost.userId}
-                      content={mainPost.content}
                     />
                     <a
                       href={`/post/${mainPost.nanoId}`}

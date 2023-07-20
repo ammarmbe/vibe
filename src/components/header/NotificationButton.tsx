@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/popover";
 import { useAuth } from "@clerk/nextjs";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../Spinner";
 import { Notification } from "@/lib/types";
@@ -22,7 +21,9 @@ export default function NotificationButton() {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ["notifications", userId],
     queryFn: async ({ pageParam }) =>
-      (await axios.get(`/api/notifications?notificationId=${pageParam}`)).data,
+      await (
+        await fetch(`/api/notifications?notificationId=${pageParam}`)
+      ).json(),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].id;
@@ -35,7 +36,8 @@ export default function NotificationButton() {
   });
 
   const readNotifications = useMutation({
-    mutationFn: async () => await axios.post(`/api/notifications/read`),
+    mutationFn: async () =>
+      await fetch(`/api/notifications/read`, { method: "POST" }),
     onSuccess: () => {
       setTimeout(() => {
         setUnread(false);

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { User } from "@/lib/types";
@@ -27,12 +26,20 @@ export default function Page() {
   const { user } = useUser();
 
   const usernameMutation = useMutation({
-    mutationFn: async () =>
-      await axios.post(
-        `/api/user/username?username=${username}&bio=${bio}&userId=${user?.id}`
-      ),
-    onError(error: AxiosError) {
-      if (error.response?.status === 409) {
+    mutationFn: async () => {
+      const status = (
+        await fetch(
+          `/api/user/username?username=${username}&bio=${bio}&userId=${user?.id}`,
+          { method: "POST" }
+        )
+      ).status;
+
+      if (status == 409) {
+        throw new Error("Username already exists");
+      } else return;
+    },
+    onError(error: Error) {
+      if (error.message === "Username already exists") {
         setShowUsernameTaken(true);
       }
     },
@@ -41,15 +48,16 @@ export default function Page() {
         unsafeMetadata: { username: username },
       });
 
-      push("/");
+      // push("/");
     },
   });
 
   const { data } = useQuery({
     queryKey: ["user", user?.username],
     queryFn: async () =>
-      (await axios.get(`/api/user?username=${user?.unsafeMetadata.username}`))
-        .data as User,
+      (await (
+        await fetch(`/api/user?username=${user?.unsafeMetadata.username}`)
+      ).json()) as User,
     enabled: !!user,
   });
 

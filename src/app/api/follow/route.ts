@@ -19,8 +19,6 @@ export async function POST(request: Request) {
         { currentUserId, userId }
       );
     }
-  } else {
-    return new Response("Missing userId or currentUserId", { status: 400 });
   }
 
   return new Response("OK");

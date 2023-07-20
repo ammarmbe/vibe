@@ -1,9 +1,8 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
-import axios from "axios";
 import { client } from "@/lib/ReactQueryProvider";
 import { Post } from "@/lib/types";
 
@@ -16,14 +15,15 @@ export default function NewComment({
   nanoId: string;
   userId: string;
 }) {
-  const { user } = useUser();
+  const { userId: currentUserId, isSignedIn } = useAuth();
   const textAreaRef = useRef<HTMLTextAreaElement>();
   const [inputValue, setInputValue] = useState("");
 
   const notificationMutation = useMutation({
     mutationFn: async () =>
-      await axios.post(
-        `/api/notification/commentedOnPost?postId=${parentId}&userId=${user?.id}`
+      await fetch(
+        `/api/notification/commentedOnPost?postId=${parentId}&userId=${currentUserId}`,
+        { method: "POST" }
       ),
     onSuccess: () => {
       client.invalidateQueries(["notifications", userId]);
@@ -34,12 +34,13 @@ export default function NewComment({
     mutationFn: async () => {
       const nanoId = nanoid(12);
 
-      await axios.post(
-        `/api/post?content=${inputValue}&nanoId=${nanoId}&parentId=${parentId}`
+      await fetch(
+        `/api/post?content=${inputValue}&nanoId=${nanoId}&parentId=${parentId}`,
+        { method: "POST" }
       );
     },
     onSuccess: () => {
-      notificationMutation.mutate();
+      if (userId != currentUserId) notificationMutation.mutate();
 
       client.invalidateQueries(["comments"]);
       client.setQueryData(["post", nanoId], (data?: Post) => {
@@ -71,7 +72,7 @@ export default function NewComment({
     updateTextAreaSize(textAreaRef.current);
   }, [inputValue]);
 
-  if (!!user?.id) {
+  if (!!currentUserId) {
     return (
       <form
         onSubmit={(e) => {

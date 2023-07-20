@@ -43,7 +43,6 @@ export default function PostCard({ post }: { post: Post }) {
             liked={parseInt(post.likedByUser) == 0 ? false : true}
             postId={post.postId}
             userId={post.userId}
-            content={post.content}
           />
           <a
             href={`/post/${post.nanoId}`}

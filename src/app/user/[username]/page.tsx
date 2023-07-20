@@ -6,7 +6,6 @@ import PostCard from "@/components/post/PostCard";
 import { Post, User } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Image from "next/image";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -23,7 +22,7 @@ export default function Page({ params }: Props) {
   const { data: user } = useQuery({
     queryKey: ["user", username],
     queryFn: async () =>
-      (await axios.get(`/api/user?username=${username}`)).data as User,
+      (await (await fetch(`/api/user?username=${username}`)).json()) as User,
   });
 
   const {
@@ -34,11 +33,9 @@ export default function Page({ params }: Props) {
   } = useInfiniteQuery({
     queryKey: ["userPosts", username],
     queryFn: async ({ pageParam }) =>
-      (
-        await axios.get(
-          `/api/posts/userId?userId=${user?.id}&postId=${pageParam}`
-        )
-      ).data,
+      await (
+        await fetch(`/api/posts/userId?userId=${user?.id}&postId=${pageParam}`)
+      ).json(),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;

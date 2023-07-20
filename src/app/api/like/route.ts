@@ -25,9 +25,6 @@ export async function POST(request: Request) {
         }
       );
     }
-  else {
-    return new Response("Unauthorized", { status: 401 });
-  }
 
   return new Response("OK");
 }

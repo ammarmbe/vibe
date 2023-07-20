@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const { userId: currentUserId } = auth();
 
   if (currentUserId === userId) {
-    return new Response("Not allowed", { status: 400 });
+    return;
   }
 
   if (!!userId && !!postId && !!currentUserId) {
@@ -20,8 +20,6 @@ export async function POST(request: Request) {
         currentUserId,
       }
     );
-  } else {
-    return new Response("Missing parameters", { status: 400 });
   }
 
   return new Response("OK");

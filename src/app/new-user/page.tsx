@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -29,10 +28,19 @@ export default function Page() {
   }
 
   const usernameMutation = useMutation({
-    mutationFn: async () =>
-      await axios.post(`/api/user/username?username=${username}&bio=${bio}`),
-    onError(error: AxiosError) {
-      if (error.response?.status === 409) {
+    mutationFn: async () => {
+      const status = (
+        await fetch(`/api/user/username?username=${username}&bio=${bio}`, {
+          method: "POST",
+        })
+      ).status;
+
+      if (status == 409) {
+        throw new Error("Username already exists");
+      } else return;
+    },
+    onError(error: Error) {
+      if (error.message === "Username already exists") {
         setUsernameTaken(true);
       }
     },

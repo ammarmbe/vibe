@@ -1,9 +1,8 @@
 "use client";
 import { client } from "@/lib/ReactQueryProvider";
 import { Post } from "@/lib/types";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function LikeButton({
@@ -12,22 +11,21 @@ export default function LikeButton({
   postId,
   nanoId,
   userId,
-  content,
 }: {
   count: string;
   liked: boolean;
   postId: string;
   nanoId?: string;
   userId: string;
-  content: string;
 }) {
-  const { user } = useUser();
+  const { userId: currentUserId, isSignedIn } = useAuth();
   const { push } = useRouter();
 
   const notificationMutation = useMutation({
     mutationFn: async () =>
-      await axios.post(
-        `/api/notification/likedPost?postId=${postId}&userId=${userId}`
+      await fetch(
+        `/api/notification/likedPost?postId=${postId}&userId=${userId}`,
+        { method: "POST" }
       ),
     onSuccess: () => {
       client.invalidateQueries(["notifications", userId]);
@@ -36,10 +34,12 @@ export default function LikeButton({
 
   const likeMutation = useMutation({
     mutationFn: async () => {
-      await axios.post(`/api/like?postId=${postId}&liked=${liked}`);
+      await fetch(`/api/like?postId=${postId}&liked=${liked}`, {
+        method: "POST",
+      });
     },
     onSuccess: () => {
-      !liked && notificationMutation.mutate();
+      if (!liked && userId != currentUserId) notificationMutation.mutate();
 
       function updater(data: any) {
         if (data)
@@ -91,7 +91,7 @@ export default function LikeButton({
           ? `bg-main text-white border-main/50 hover:bg-main/90`
           : `border-main/20 hover:bg-main/10 dark:border-main/40 hover:border-main/50 text-main`
       }`}
-      onClick={!!user ? toggleLike : () => push("/sign-up")}
+      onClick={isSignedIn ? toggleLike : () => push("/sign-up")}
     >
       {count} {liked ? "liked" : likesOrLike}
     </button>

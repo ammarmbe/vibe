@@ -2,7 +2,6 @@
 import { client } from "@/lib/ReactQueryProvider";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -17,10 +16,13 @@ export default function FollowButton({
 }) {
   const { isSignedIn } = useAuth();
   const { push } = useRouter();
+  const { userId: currentUserId } = useAuth();
 
   const notificationMutation = useMutation({
     mutationFn: async () =>
-      await axios.post(`/api/notification/followedUser?userId=${userId}`),
+      await fetch(`/api/notification/followedUser?userId=${userId}`, {
+        method: "POST",
+      }),
     onSuccess: () => {
       client.invalidateQueries(["notifications", userId]);
     },
@@ -28,9 +30,11 @@ export default function FollowButton({
 
   const followMutation = useMutation({
     mutationFn: async () =>
-      await axios.post(`/api/follow?userId=${userId}&followed=${followed}`),
+      await fetch(`/api/follow?userId=${userId}&followed=${followed}`, {
+        method: "POST",
+      }),
     onSuccess: () => {
-      !followed && notificationMutation.mutate();
+      if (userId != currentUserId && !followed) notificationMutation.mutate();
 
       client.setQueryData(["user", username], (data: any) => {
         if (data) {
