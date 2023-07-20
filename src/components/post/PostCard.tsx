@@ -12,7 +12,7 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <article className="border rounded-md p-2.5 gap-1.5 flex shadow-sm">
-      <a className="flex-none" href={`/user/${post.username}`}>
+      <a className="flex-none h-fit" href={`/user/${post.username}`}>
         <Image
           src={post.image}
           width={33}

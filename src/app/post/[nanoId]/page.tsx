@@ -78,7 +78,10 @@ export default function Page({ params }: Props) {
                 onClick={() => push(`/post/${parentPost.nanoId}`)}
                 className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
               >
-                <a className="flex-none" href={`/user/${parentPost.username}`}>
+                <a
+                  className="flex-none h-fit"
+                  href={`/user/${parentPost.username}`}
+                >
                   <Image
                     src={parentPost.image}
                     width={33}
