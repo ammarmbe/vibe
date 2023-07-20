@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     return;
   }
 
-  if (!!userId && !!currentUserId) {
+  if (userId && currentUserId) {
     await db.execute(
       "INSERT INTO notifications (type, notifier, notified, postId) VALUES ('followedUser', :currentUserId, :userId, :postId)",
       {

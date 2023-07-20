@@ -17,7 +17,7 @@ export default function Button() {
     }
 
     setPrevPendingState(pending);
-  }, [pending]);
+  }, [pending, prevPendingState, client]);
 
   return (
     <button

@@ -3,7 +3,7 @@ export type Post = {
   nanoId: string;
   content: string;
   createdAt: string;
-  parentId: string | null;
+  parentNanoId: string | null;
 
   name: string;
   username: string;
@@ -13,6 +13,8 @@ export type Post = {
   likes: string;
   comments: string;
   likedByUser: string;
+
+  deleted: string;
 };
 
 export type User = {
@@ -37,4 +39,5 @@ export type Notification = {
   content: string;
   read: string;
   nanoId: string;
+  deleted: string;
 };

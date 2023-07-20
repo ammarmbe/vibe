@@ -1,22 +1,26 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import type { Post } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./post/PostCard";
 import Spinner from "./Spinner";
 
 export default function Feed() {
-  let feed: "Home" | "Following" = "Home";
+  let feed = useRef<"Home" | "Following">("Home");
   useEffect(() => {
-    feed = localStorage.getItem("feed") as "Home" | "Following";
-    if (!feed) localStorage.setItem("feed", "Home");
+    const localFeed = localStorage.getItem("feed") as "Home" | "Following";
+    if (!localFeed) localStorage.setItem("feed", "Home");
+    else feed.current = localFeed;
   });
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["homeFeed"],
     queryFn: async ({ pageParam }) =>
-      await (await fetch(`/api/posts?postId=${pageParam}&feed=${feed}`)).json(),
+      await (
+        await fetch(`/api/posts?postId=${pageParam}&feed=${feed.current}`)
+      ).json(),
+    // eslint-disable-next-line no-unused-vars
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;
@@ -24,7 +28,7 @@ export default function Feed() {
         return undefined;
       }
     },
-    enabled: !!feed,
+    enabled: Boolean(feed),
   });
 
   if (isLoading)

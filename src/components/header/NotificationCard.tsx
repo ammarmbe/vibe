@@ -13,11 +13,18 @@ export default function NotificationCard({
 
   return (
     <div
-      className={`rounded-md border transition-colors dark:bg-foreground/5 hover:border-ring hover:bg-accent cursor-pointer
+      className={`rounded-md border transition-colors ${
+        !notification.deleted &&
+        `hover:border-ring hover:bg-accent cursor-pointer`
+      } dark:bg-foreground/5
       p-2.5 flex gap-1.5 ${
         notification.read && "bg-ring/10 dark:bg-transparent"
       } ${notification.type == "followedUser" && "items-center"}`}
       onClick={() => {
+        if (notification.deleted) {
+          return;
+        }
+
         notification.type == "likedPost" &&
           push(`/post/${notification.nanoId}`);
 
@@ -45,11 +52,17 @@ export default function NotificationCard({
           {notification.notifierName}
         </a>{" "}
         {notification.type == "likedPost"
-          ? "liked your post: "
+          ? notification.deleted
+            ? "liked your deleted post"
+            : "liked your post: "
           : notification.type == "commentedOnPost"
-          ? "commented on your post: "
+          ? notification.deleted
+            ? "commented on your deleted post"
+            : "commented on your post: "
           : "followed you"}{" "}
-        {notification.content && `"${notification.content}"`}
+        {notification.content &&
+          !notification.deleted &&
+          `"${notification.content}"`}
       </p>
     </div>
   );

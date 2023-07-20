@@ -1,7 +1,7 @@
 "use client";
 import LikeButton from "@/components/post/LikeButton";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import React from "react";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -12,6 +12,13 @@ import { Post } from "@/lib/types";
 import PostCard from "@/components/post/PostCard";
 import NewComment from "@/components/NewComment";
 import { useRouter } from "next/navigation";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { MoreHorizontal } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 dayjs.extend(relativeTime);
 
 interface Props {
@@ -22,18 +29,24 @@ interface Props {
 
 export default function Page({ params }: Props) {
   const nanoId = params.nanoId;
+  const { userId } = useAuth();
+  const [border, setBorder] = useState<"delete" | "edit" | "">("");
+
   const { data: mainPost } = useQuery({
     queryKey: ["post", nanoId],
     queryFn: async () =>
-      await (await fetch(`/api/post/nanoid?nanoId=${nanoId}`)).json(),
+      (await (await fetch(`/api/post?nanoId=${nanoId}`)).json()) as Post,
   });
+
   const { push } = useRouter();
 
   const { data: parentPost, isLoading } = useQuery({
-    queryKey: ["post", mainPost?.parentId],
+    queryKey: ["post", mainPost?.parentNanoId],
     queryFn: async () =>
-      await (await fetch(`/api/post/id?postId=${mainPost.parentId}`)).json(),
-    enabled: !!mainPost && !!mainPost.parentId,
+      (await (
+        await fetch(`/api/post?nanoId=${mainPost?.parentNanoId}`)
+      ).json()) as Post,
+    enabled: Boolean(mainPost && mainPost.parentNanoId),
   });
 
   const {
@@ -46,9 +59,10 @@ export default function Page({ params }: Props) {
     queryFn: async ({ pageParam }) =>
       await (
         await fetch(
-          `/api/posts/parentId?postId=${pageParam}&parentId=${mainPost.postId}`
+          `/api/posts/parentNanoId?postId=${pageParam}&parentNanoId=${mainPost?.nanoId}`
         )
       ).json(),
+    // eslint-disable-next-line no-unused-vars
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;
@@ -56,12 +70,24 @@ export default function Page({ params }: Props) {
         return undefined;
       }
     },
-    enabled: !!mainPost,
+    enabled: Boolean(mainPost),
   });
 
-  const commentOrComments = mainPost?.comments == 1 ? "Comment" : "Comments";
+  const deleteMuatation = useMutation({
+    mutationFn: async () => {
+      await fetch(`/api/post?postId=${mainPost?.postId}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      window.location.reload();
+    },
+  });
+
+  const commentOrComments =
+    parseInt(mainPost?.comments || "") == 1 ? "Comment" : "Comments";
   // isLoading will always be true if the query is disabled
-  const parentLoading = isLoading && mainPost?.parentId;
+  const parentLoading = isLoading && mainPost?.parentNanoId;
 
   return (
     <main className="max-w-3xl w-full mx-auto px-2.5">
@@ -72,109 +98,182 @@ export default function Page({ params }: Props) {
         </div>
       ) : (
         <>
-          {parentPost && (
-            <>
-              <button
-                onClick={() => push(`/post/${parentPost.nanoId}`)}
-                className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
-              >
-                <a
-                  className="flex-none h-fit"
-                  href={`/user/${parentPost.username}`}
+          {parentPost && parentPost.deleted ? (
+            <div
+              className={`border rounded-t-md p-2.5 text-center text-foreground/30`}
+            >
+              This post has been deleted
+            </div>
+          ) : (
+            parentPost && (
+              <>
+                <button
+                  onClick={() => push(`/post/${parentPost.nanoId}`)}
+                  className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
                 >
-                  <Image
-                    src={parentPost.image}
-                    width={33}
-                    height={33}
-                    className="rounded-full"
-                    alt={`${parentPost.name}'s profile picture}`}
-                  />
-                </a>
-                <div className="flex flex-col flex-grow">
-                  <div className="flex justify-between items-baseline w-full">
-                    <h2 className="leading-tight font-medium">
-                      <a href={`/user/${parentPost.username}`}>
-                        {parentPost.name}
-                      </a>
-                    </h2>
-                    <p className="text-sm leading-tight text-foreground/70">
-                      {dayjs(new Date(parentPost.createdAt * 1000)).fromNow()}
-                    </p>
-                  </div>
                   <a
-                    className="text-sm hover:underline text-foreground/70 leading-none w-fit"
+                    className="flex-none h-fit"
                     href={`/user/${parentPost.username}`}
                   >
-                    @{parentPost.username}
+                    <Image
+                      src={parentPost.image}
+                      width={33}
+                      height={33}
+                      className="rounded-full"
+                      alt={`${parentPost.name}'s profile picture}`}
+                    />
                   </a>
-                  <p className="mt-2.5 text-sm">{parentPost.content}</p>
-                </div>
-              </button>
-              <div className="border-t w-full border-dashed peer-hover:border-solid peer-hover:border-ring transition-colors"></div>
-            </>
+                  <div className="flex flex-col flex-grow">
+                    <div className="flex justify-between items-baseline w-full">
+                      <h2 className="leading-tight font-medium">
+                        <a href={`/user/${parentPost.username}`}>
+                          {parentPost.name}
+                        </a>
+                      </h2>
+                      <p className="text-sm leading-tight text-foreground/70">
+                        {dayjs(
+                          new Date(parseInt(parentPost.createdAt) * 1000)
+                        ).fromNow()}
+                      </p>
+                    </div>
+                    <a
+                      className="text-sm hover:underline text-foreground/70 leading-none w-fit"
+                      href={`/user/${parentPost.username}`}
+                    >
+                      @{parentPost.username}
+                    </a>
+                    <p className="mt-2.5 text-sm">{parentPost.content}</p>
+                  </div>
+                </button>
+                <div className="border-t w-full border-dashed peer-hover:border-solid peer-hover:border-ring transition-colors"></div>
+              </>
+            )
           )}
+
           {!mainPost ? (
             <div className="w-full justify-center flex">
               <Spinner size="xl" />
             </div>
           ) : (
             <>
-              <article
-                className={`mb-2.5 ${
-                  parentPost
-                    ? `rounded-b-md border border-t-0 z-10 relative`
-                    : `rounded-md border`
-                } p-2.5 gap-1.5 flex shadow-sm`}
-              >
-                <a className="flex-none" href={`/user/${mainPost.username}`}>
-                  <Image
-                    src={mainPost.image}
-                    width={33}
-                    height={33}
-                    className="rounded-full"
-                    alt={`${mainPost.name}'s profile picture}`}
-                  />
-                </a>
-                <div className="flex flex-col flex-grow">
-                  <div className="flex justify-between items-baseline w-full">
-                    <h2 className="leading-tight text-lg font-medium truncate inline-block">
-                      <a href={`/user/${mainPost.username}`}>{mainPost.name}</a>
-                    </h2>
-                    <p className="leading-none text-sm flex-none text-foreground/70">
-                      {dayjs(new Date(mainPost.createdAt * 1000)).format(
-                        "D/M/YY, H:m A"
-                      )}
-                    </p>
-                  </div>
-                  <a
-                    className="hover:underline text-foreground/70 leading-none w-fit"
-                    href={`/user/${mainPost.username.toLocaleLowerCase()}`}
-                  >
-                    @{mainPost.username}
-                  </a>
-                  <p className="mt-2.5 mb-4">{mainPost.content}</p>
-                  <div className="flex gap-1.5">
-                    <LikeButton
-                      count={mainPost.likes}
-                      liked={mainPost.likedByUser == 0 ? false : true}
-                      postId={mainPost.postId}
-                      nanoId={mainPost.nanoId}
-                      userId={mainPost.userId}
-                    />
-                    <a
-                      href={`/post/${mainPost.nanoId}`}
-                      className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
-                    >
-                      {mainPost.comments} {commentOrComments}
-                    </a>
-                  </div>
+              {mainPost.deleted ? (
+                <div
+                  className={`${
+                    !parentPost ? `rounded-md` : `rounded-b-md border-t-0`
+                  } border p-2.5 text-center text-lg text-foreground/30 mb-2.5`}
+                >
+                  This post has been deleted
                 </div>
-              </article>
-              <NewComment
-                parentId={mainPost.postId}
-                nanoId={mainPost.nanoId}
-                userId={mainPost.userId}
-              />
+              ) : (
+                <>
+                  <article
+                    className={`mb-2.5 ${
+                      parentPost
+                        ? `rounded-b-md border border-t-0 z-10 relative`
+                        : `rounded-md border`
+                    } p-2.5 gap-1.5 flex shadow-sm`}
+                  >
+                    <a
+                      className="flex-none"
+                      href={`/user/${mainPost.username}`}
+                    >
+                      <Image
+                        src={mainPost.image}
+                        width={33}
+                        height={33}
+                        className="rounded-full"
+                        alt={`${mainPost.name}'s profile picture}`}
+                      />
+                    </a>
+                    <div className="flex flex-col flex-grow">
+                      <div className="flex justify-between items-baseline w-full">
+                        <h2 className="leading-tight text-lg font-medium truncate inline-block">
+                          <a href={`/user/${mainPost.username}`}>
+                            {mainPost.name}
+                          </a>
+                        </h2>
+                        <p className="leading-none text-sm flex-none text-foreground/70">
+                          {dayjs(
+                            new Date(parseInt(mainPost.createdAt) * 1000)
+                          ).format("D/M/YY, H:mm A")}
+                        </p>
+                      </div>
+                      <a
+                        className="hover:underline text-foreground/70 leading-none w-fit"
+                        href={`/user/${mainPost.username.toLocaleLowerCase()}`}
+                      >
+                        @{mainPost.username}
+                      </a>
+                      <p className="mt-2.5 mb-4">{mainPost.content}</p>
+                      <div className="flex justify-between w-full">
+                        <div className="flex gap-1.5">
+                          <LikeButton
+                            count={mainPost.likes}
+                            liked={
+                              parseInt(mainPost.likedByUser) == 0 ? false : true
+                            }
+                            postId={mainPost.postId}
+                            nanoId={mainPost.nanoId}
+                            userId={mainPost.userId}
+                          />
+                          <a
+                            href={`/post/${mainPost.nanoId}`}
+                            className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
+                          >
+                            {mainPost.comments} {commentOrComments}
+                          </a>
+                        </div>
+                        {userId == mainPost.userId && (
+                          <Popover>
+                            <PopoverTrigger className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center">
+                              <MoreHorizontal size={18} />
+                            </PopoverTrigger>
+                            <PopoverContent
+                              align={"end"}
+                              side={"top"}
+                              className="flex flex-col p-0 border-0 w-[100px]"
+                            >
+                              <button
+                                onMouseEnter={() => {
+                                  setBorder("edit");
+                                }}
+                                onMouseLeave={() => {
+                                  setBorder("");
+                                }}
+                                className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
+                              >
+                                Edit
+                              </button>
+                              <div
+                                className={`border-b border-dashed transition-all ${
+                                  border == "delete" &&
+                                  `border-danger/50 !border-solid`
+                                } ${
+                                  border == "edit" &&
+                                  `border-ring !border-solid`
+                                }`}
+                              ></div>
+                              <button
+                                onMouseEnter={() => setBorder("delete")}
+                                onMouseLeave={() => setBorder("")}
+                                onClick={() => deleteMuatation.mutate()}
+                                className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
+                              >
+                                Delete
+                              </button>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                  <NewComment
+                    parentNanoId={mainPost.nanoId}
+                    nanoId={mainPost.nanoId}
+                    userId={mainPost.userId}
+                  />
+                </>
+              )}
               {commentsLoading ? (
                 <div className="w-full flex items-center justify-center">
                   <Spinner size="xl" />
@@ -198,14 +297,22 @@ export default function Page({ params }: Props) {
                 >
                   {comments.pages.map((page) => {
                     return page.map((post: Post) => {
-                      return <PostCard key={post.postId} post={post} />;
+                      return (
+                        <PostCard
+                          key={post.postId}
+                          post={post}
+                          parentNanoId={mainPost.nanoId}
+                        />
+                      );
                     });
                   })}
                 </InfiniteScroll>
               ) : (
-                <p className="text-foreground/30 text-center">
-                  No replies yet...
-                </p>
+                !mainPost.deleted && (
+                  <p className="text-foreground/30 text-center">
+                    No replies yet...
+                  </p>
+                )
               )}
             </>
           )}

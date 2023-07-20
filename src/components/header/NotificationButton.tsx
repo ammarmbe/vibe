@@ -24,6 +24,7 @@ export default function NotificationButton() {
       await (
         await fetch(`/api/notifications?notificationId=${pageParam}`)
       ).json(),
+    // eslint-disable-next-line no-unused-vars
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].id;
@@ -32,7 +33,7 @@ export default function NotificationButton() {
       }
     },
     cacheTime: 0,
-    enabled: !!userId,
+    enabled: Boolean(userId),
   });
 
   const readNotifications = useMutation({

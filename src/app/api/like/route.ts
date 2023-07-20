@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const postId = searchParams.get("postId");
   const liked = searchParams.get("liked") === "true";
 
-  if (!!userId)
+  if (userId)
     if (liked) {
       await db.execute(
         "DELETE FROM likes WHERE likes.postId = :postId AND likes.userId = :userId",

@@ -58,7 +58,7 @@ export default function Page() {
       (await (
         await fetch(`/api/user?username=${user?.unsafeMetadata.username}`)
       ).json()) as User,
-    enabled: !!user,
+    enabled: Boolean(user),
   });
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function Page() {
           <CardHeader>
             <CardTitle>Update your details</CardTitle>
             <CardDescription>
-              You're signed in as{" "}
+              You&apos;re signed in as{" "}
               <a
                 className="hover:underline"
                 href={`/user/${user?.unsafeMetadata.username}`}
@@ -136,7 +136,7 @@ export default function Page() {
                     !usernameTooLong && "hidden"
                   }`}
                 >
-                  Username can't be longer than 16 characters.
+                  Username can&apos;t be longer than 16 characters.
                 </p>
                 <p
                   className={`text-sm text-danger ${
@@ -164,7 +164,7 @@ export default function Page() {
                   className="border !h-fit dark:focus:border-foreground/25 dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
                 <p className={`text-sm text-danger ${!bioTooLong && "hidden"}`}>
-                  Your bio can't be longer than 250 characters.
+                  Your bio can&apos;t be longer than 250 characters.
                 </p>
               </div>
             </div>

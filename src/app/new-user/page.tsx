@@ -23,7 +23,7 @@ export default function Page() {
   const { push } = useRouter();
   const { user } = useUser();
 
-  if (!!user && !!user.unsafeMetadata.username) {
+  if (user && user.unsafeMetadata.username) {
     push("/edit-user");
   }
 
@@ -68,7 +68,7 @@ export default function Page() {
           <CardHeader>
             <CardTitle>Add your details</CardTitle>
             <CardDescription>
-              You'll be able to change these later.
+              You&apos;ll be able to change these later.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col">
@@ -107,7 +107,7 @@ export default function Page() {
                     !usernameTooLong && "hidden"
                   }`}
                 >
-                  Username can't be longer than 16 characters.
+                  Username can&apos;t be longer than 16 characters.
                 </p>
                 <p
                   className={`text-sm text-danger ${
@@ -135,7 +135,7 @@ export default function Page() {
                   className="border !h-fit dark:focus:border-foreground/25 dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                 />
                 <p className={`text-sm text-danger ${!bioTooLong && "hidden"}`}>
-                  Your bio can't be longer than 250 characters.
+                  Your bio can&apos;t be longer than 250 characters.
                 </p>
               </div>
             </div>

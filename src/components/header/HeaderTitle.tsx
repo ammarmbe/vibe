@@ -42,7 +42,7 @@ export default function HeaderTitle() {
       containerRef.current?.classList.remove(style.animateWidth);
       setPopoverDisabled(false);
     }, 3000);
-  }, []);
+  }, [isSignedIn]);
 
   return (
     <div className="flex">

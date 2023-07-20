@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const { userId: currentUserId } = auth();
 
   if (userId && currentUserId) {
-    if (!!followed) {
+    if (followed) {
       await db.execute(
         "DELETE FROM follower_relation WHERE follower = :currentUserId AND following = :userId",
         { currentUserId, userId }

@@ -36,6 +36,7 @@ export default function Page({ params }: Props) {
       await (
         await fetch(`/api/posts/userId?userId=${user?.id}&postId=${pageParam}`)
       ).json(),
+    // eslint-disable-next-line no-unused-vars
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length == 11) {
         return lastPage[lastPage.length - 1].postId;
@@ -43,7 +44,7 @@ export default function Page({ params }: Props) {
         return undefined;
       }
     },
-    enabled: !!user,
+    enabled: Boolean(user),
   });
 
   function formatFollowerCount() {
@@ -132,7 +133,9 @@ export default function Page({ params }: Props) {
           })}
         </InfiniteScroll>
       ) : (
-        <p className="text-ring/70 text-center">This user hasn't posted yet</p>
+        <p className="text-ring/70 text-center">
+          This user hasn&apos;t posted yet
+        </p>
       )}
     </main>
   );

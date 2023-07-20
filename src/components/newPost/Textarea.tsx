@@ -41,7 +41,7 @@ export default function Textarea() {
     }
 
     setPrevPendingState(pending);
-  }, [pending]);
+  }, [pending, inputValue.length, prevPendingState]);
 
   return (
     <>

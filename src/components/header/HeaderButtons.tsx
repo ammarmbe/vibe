@@ -18,7 +18,8 @@ import NotificationButton from "./NotificationButton";
 
 export default function AccountButton() {
   const { user } = useUser();
-  const [border, setBorder] = useState<"signOut" | "profile" | "">("");
+  const [showBorderTop, setShowBorderTop] = useState(false);
+  const [borderBottom, setBorderBottom] = useState<"signOut" | "edit" | "">("");
 
   return !user ? (
     <>
@@ -49,26 +50,43 @@ export default function AccountButton() {
             />
             <p>{user.fullName}</p>
           </PopoverTrigger>
-          <PopoverContent
-            className={`flex group flex-col p-0 border-0 w-[150px]`}
-          >
+          <PopoverContent className={`flex flex-col p-0 border-0 w-[150px]`}>
             <a
               href={`/user/${user.unsafeMetadata.username}`}
-              onMouseEnter={() => setBorder("profile")}
-              onMouseLeave={() => setBorder("")}
+              onMouseEnter={() => setShowBorderTop(true)}
+              onMouseLeave={() => setShowBorderTop(false)}
               className="rounded-t-md border-b-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
             >
               View profile
             </a>
             <div
               className={`border-b border-dashed transition-all ${
-                border == "signOut" && `border-danger/50 !border-solid`
-              } ${border == "profile" && `border-ring !border-solid`}`}
+                showBorderTop && `border-ring !border-solid`
+              }`}
+            ></div>
+            <a
+              href={`/edit-user`}
+              onMouseEnter={() => {
+                setShowBorderTop(true);
+                setBorderBottom("edit");
+              }}
+              onMouseLeave={() => {
+                setShowBorderTop(false);
+                setBorderBottom("");
+              }}
+              className="border-y-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
+            >
+              Edit profile
+            </a>
+            <div
+              className={`border-b border-dashed transition-all ${
+                borderBottom == "signOut" && `border-danger/50 !border-solid`
+              } ${borderBottom == "edit" && `border-ring !border-solid`}`}
             ></div>
             <SignOutButton>
               <button
-                onMouseEnter={() => setBorder("signOut")}
-                onMouseLeave={() => setBorder("")}
+                onMouseEnter={() => setBorderBottom("signOut")}
+                onMouseLeave={() => setBorderBottom("")}
                 className="text-danger hover:bg-danger/5 text-sm rounded-b-md border-t-0 transition-colors hover:border-danger/50 border p-2.5"
               >
                 Sign out

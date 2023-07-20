@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     return;
   }
 
-  if (!!userId && !!postId && !!currentUserId) {
+  if (userId && postId && currentUserId) {
     await db.execute(
       "INSERT INTO notifications (type, notifier, notified, postId) VALUES ('commentedOnPost', :currentUserId, :userId, :postId)",
       {
