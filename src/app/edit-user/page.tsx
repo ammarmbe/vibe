@@ -48,7 +48,7 @@ export default function Page() {
         unsafeMetadata: { username: username },
       });
 
-      // push("/");
+      push("/");
     },
   });
 
