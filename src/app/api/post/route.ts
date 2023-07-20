@@ -52,12 +52,16 @@ export async function GET(request: Request) {
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const postId = searchParams.get("postId");
-  // const { userId } = auth();
+  const { userId } = auth();
 
-  if (postId) {
-    await db.execute("UPDATE posts SET deleted = 1 WHERE id = :postId", {
-      postId,
-    });
+  if (postId && userId) {
+    await db.execute(
+      "UPDATE posts SET deleted = 1 WHERE id = :postId AND userId = :userId",
+      {
+        postId,
+        userId,
+      }
+    );
   }
 
   return new Response("OK");
