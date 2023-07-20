@@ -18,7 +18,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { MoreHorizontal } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 dayjs.extend(relativeTime);
 
 interface Props {
@@ -29,7 +29,7 @@ interface Props {
 
 export default function Page({ params }: Props) {
   const nanoId = params.nanoId;
-  const { userId } = useAuth();
+  const { user } = useUser();
   const [border, setBorder] = useState<"delete" | "edit" | "">("");
 
   const { data: mainPost } = useQuery({
@@ -223,47 +223,48 @@ export default function Page({ params }: Props) {
                             {mainPost.comments} {commentOrComments}
                           </a>
                         </div>
-                        {userId == mainPost.userId && (
-                          <Popover>
-                            <PopoverTrigger className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center">
-                              <MoreHorizontal size={18} />
-                            </PopoverTrigger>
-                            <PopoverContent
-                              align={"end"}
-                              side={"top"}
-                              className="flex flex-col p-0 border-0 w-[100px]"
-                            >
-                              <button
-                                onMouseEnter={() => {
-                                  setBorder("edit");
-                                }}
-                                onMouseLeave={() => {
-                                  setBorder("");
-                                }}
-                                className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
+                        {user?.id == mainPost.userId ||
+                          (user?.publicMetadata.admin == true && (
+                            <Popover>
+                              <PopoverTrigger className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center">
+                                <MoreHorizontal size={18} />
+                              </PopoverTrigger>
+                              <PopoverContent
+                                align={"end"}
+                                side={"top"}
+                                className="flex flex-col p-0 border-0 w-[100px]"
                               >
-                                Edit
-                              </button>
-                              <div
-                                className={`border-b border-dashed transition-all ${
-                                  border == "delete" &&
-                                  `border-danger/50 !border-solid`
-                                } ${
-                                  border == "edit" &&
-                                  `border-ring !border-solid`
-                                }`}
-                              ></div>
-                              <button
-                                onMouseEnter={() => setBorder("delete")}
-                                onMouseLeave={() => setBorder("")}
-                                onClick={() => deleteMuatation.mutate()}
-                                className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
-                              >
-                                Delete
-                              </button>
-                            </PopoverContent>
-                          </Popover>
-                        )}
+                                <button
+                                  onMouseEnter={() => {
+                                    setBorder("edit");
+                                  }}
+                                  onMouseLeave={() => {
+                                    setBorder("");
+                                  }}
+                                  className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
+                                >
+                                  Edit
+                                </button>
+                                <div
+                                  className={`border-b border-dashed transition-all ${
+                                    border == "delete" &&
+                                    `border-danger/50 !border-solid`
+                                  } ${
+                                    border == "edit" &&
+                                    `border-ring !border-solid`
+                                  }`}
+                                ></div>
+                                <button
+                                  onMouseEnter={() => setBorder("delete")}
+                                  onMouseLeave={() => setBorder("")}
+                                  onClick={() => deleteMuatation.mutate()}
+                                  className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
+                                >
+                                  Delete
+                                </button>
+                              </PopoverContent>
+                            </Popover>
+                          ))}
                       </div>
                     </div>
                   </article>
