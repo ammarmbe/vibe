@@ -31,7 +31,7 @@ export default function Page({ params }: Props) {
     fetchNextPage,
     isLoading: postsLoading,
   } = useInfiniteQuery({
-    queryKey: ["userPosts", username],
+    queryKey: ["userPosts", user?.id],
     queryFn: async ({ pageParam }) =>
       await (
         await fetch(`/api/posts/userId?userId=${user?.id}&postId=${pageParam}`)
