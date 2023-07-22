@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
   const post = (
     await db.execute(
-      "SELECT posts.id AS postId, posts.deleted, posts.nanoId, posts.content, posts.parentNanoId, UNIX_TIMESTAMP(posts.createdAt) as createdAt, users.name, users.username, users.image, users.id AS userId, COUNT(likes.postId) AS likes, (SELECT COUNT(*) FROM posts AS comments WHERE comments.parentNanoId = posts.nanoId AND comments.deleted = 0) AS comments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.id AND likes.userId = :userId) as likedByUser FROM posts JOIN users ON posts.userId = users.id LEFT JOIN likes ON likes.postId = posts.id WHERE posts.nanoId = :nanoId GROUP BY posts.id, createdAt",
+      "SELECT posts.id AS postId, posts.deleted, posts.edited, posts.nanoId, posts.content, posts.parentNanoId, UNIX_TIMESTAMP(posts.createdAt) as createdAt, users.name, users.username, users.image, users.id AS userId, COUNT(likes.postId) AS likes, (SELECT COUNT(*) FROM posts AS comments WHERE comments.parentNanoId = posts.nanoId AND comments.deleted = 0) AS comments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.id AND likes.userId = :userId) as likedByUser FROM posts JOIN users ON posts.userId = users.id LEFT JOIN likes ON likes.postId = posts.id WHERE posts.nanoId = :nanoId GROUP BY posts.id, createdAt",
       { nanoId, userId }
     )
   ).rows[0] as Post;
@@ -75,7 +75,7 @@ export async function PUT(request: Request) {
 
   if (postId && userId && content && content.length < 513) {
     await db.execute(
-      "UPDATE posts SET content = :content WHERE id = :postId AND userId = :userId",
+      "UPDATE posts SET content = :content, edited = 1 WHERE id = :postId AND userId = :userId",
       {
         postId,
         userId,

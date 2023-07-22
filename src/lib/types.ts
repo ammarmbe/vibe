@@ -15,6 +15,7 @@ export type Post = {
   likedByUser: string;
 
   deleted: string;
+  edited: string;
 };
 
 export type User = {

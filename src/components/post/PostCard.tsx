@@ -5,7 +5,8 @@ import LikeButton from "./LikeButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useUser } from "@clerk/nextjs";
-import EditButton from "./OptionsButton";
+import OptionsButton from "./OptionsButton";
+import { Pencil } from "lucide-react";
 dayjs.extend(relativeTime);
 
 export default function PostCard({
@@ -87,13 +88,24 @@ export default function PostCard({
             </a>
           </div>
 
-          {user?.id == post.userId && (
-            <EditButton
-              post={post}
-              postPage={postPage}
-              parentNanoId={parentNanoId}
-            />
-          )}
+          <div
+            className={`flex gap-1.5 ${
+              user?.id == post.userId ? `items-center` : `items-end`
+            } justify-end`}
+          >
+            {parseInt(post.edited) == 1 && (
+              <abbr title="This post has been edited">
+                <Pencil size={12} className="text-foreground/50" />
+              </abbr>
+            )}
+            {user?.id == post.userId && (
+              <OptionsButton
+                post={post}
+                postPage={postPage}
+                parentNanoId={parentNanoId}
+              />
+            )}
+          </div>
         </div>
       </div>
     </article>

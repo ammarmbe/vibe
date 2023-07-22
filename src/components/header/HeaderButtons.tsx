@@ -31,7 +31,7 @@ export default function AccountButton() {
         </button>
       </SignInButton>
       <SignUpButton>
-        <button className="border rounded-md border-main/20 hover:bg-main/5 hover:border-main/50 text-main transition-colors px-2.5 py-1">
+        <button className="border rounded-md hover:bg-main/5 hover:border-main/50 text-main transition-colors px-2.5 py-1">
           Sign up
         </button>
       </SignUpButton>

@@ -30,7 +30,7 @@ function updateTextAreaSize(textarea?: HTMLTextAreaElement) {
   textarea.style.height = `${textarea.scrollHeight + 2}px`;
 }
 
-export default function EditButton({
+export default function OptionsButton({
   post,
   parentNanoId,
   postPage,
@@ -112,6 +112,7 @@ export default function EditButton({
                   return {
                     ...oldPost,
                     content: inputValue,
+                    edited: "1",
                   };
                 } else {
                   return oldPost;
@@ -130,6 +131,7 @@ export default function EditButton({
             return {
               ...oldData,
               content: inputValue,
+              edited: "1",
             };
           }
         });
