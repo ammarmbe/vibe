@@ -84,6 +84,7 @@ export default function OptionsButton({
 
       client.setQueryData(["homeFeed"], updater);
       client.setQueryData(["comments"], updater);
+      client.setQueryData(["userPosts", post.userId], updater);
       parentNanoId &&
         client.setQueryData(["post", parentNanoId], (oldData: any) => {
           if (oldData) {

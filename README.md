@@ -1,34 +1,79 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Vibe 2.0 🚀
 
-## Getting Started
+Vibe is a social media web app created using Next.js 13, PlanetScale's databasejs, and Clerk. Deployed at: [vibe.ammare.live](https://vibe.ammare.live/).
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+- **User registration and login:** users can create an account and login to the website.
+- **Creating, reading, updating, and deleting posts:** users can create posts, read posts from other users, and edit or delete their own posts.
+- **Comments and likes:** users can like and comment on posts.
+- **Profile page:** users can see their own and others' profile page.
+- **Following other users:** users can follow others and see their posts in the "Following" feed.
+- **Notifications:** users get notified when someone likes their post or follows them.
+- **Responsive design**: the website is built with a beautiful mobile first design, which also works on larger desktop monitors.
+
+## Tech Stack
+
+Next.js, PlanetScale's databasejs (MySQL), Clerk, React Query, TailwindCSS. <br> _Shadcn/ui is used for the popover and dialog components and the CSS variables._
+
+Deployed on Vercel and PlanetScale.
+
+## Database Schema (MySQL)
+
+```sql
+CREATE TABLE `posts` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `userId` varchar(200) NOT NULL,
+  `content` varchar(512) NOT NULL,
+  `parentNanoId` varchar(12) DEFAULT NULL,
+  `nanoId` varchar(12) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `edited` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `posts_userId_idx` (`userId`),
+  KEY `posts_parentNanoId_idx` (`parentNanoId`),
+  KEY `posts_createdAt_idx` (`createdAt`),
+  KEY `posts_nanoId_idx` (`nanoId`)
+);
+
+CREATE TABLE `likes` (
+  `userId` varchar(200) NOT NULL,
+  `postId` int NOT NULL,
+  PRIMARY KEY (`userId`,`postId`),
+  KEY `likes_postId_idx` (`postId`),
+  KEY `likes_userId_idx` (`userId`)
+);
+
+CREATE TABLE `users` (
+  `id` varchar(200) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `bio` varchar(250) DEFAULT NULL,
+  `username` varchar(16) DEFAULT NULL,
+  `email` varchar(250) NOT NULL,
+  `image` varchar(250) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_username_idx` (`username`)
+);
+
+CREATE TABLE `notifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` varchar(200) NOT NULL,
+  `notifier` varchar(200) NOT NULL,
+  `notified` varchar(200) NOT NULL,
+  `read` tinyint(1) NOT NULL DEFAULT '0',
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `postId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `postId` (`postId`,`type`,`notifier`),
+  KEY `notifications_notified_idx` (`notified`)
+);
+
+CREATE TABLE `follower_relation` (
+  `follower` varchar(200) NOT NULL,
+  `following` varchar(200) NOT NULL,
+  PRIMARY KEY (`follower`,`following`),
+  KEY `follower_relation_follower_idx` (`follower`),
+  KEY `follower_relation_following_idx` (`following`)
+);
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
