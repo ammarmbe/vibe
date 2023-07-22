@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
 import React from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,10 @@ export default function RootLayout({
           appearance={{ variables: { colorPrimary: "#cd002b" } }}
           publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
         >
-          <body className={inter.className}>{children}</body>
+          <body className={inter.className}>
+            {children}
+            <Analytics />
+          </body>
         </ClerkProvider>
       </ReactQueryProvider>
     </html>
