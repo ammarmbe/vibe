@@ -1,67 +1,35 @@
 import { Post } from "@/lib/types";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import LikeButton from "./LikeButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { MoreHorizontal } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useMutation } from "@tanstack/react-query";
-import { client } from "@/lib/ReactQueryProvider";
 import { useUser } from "@clerk/nextjs";
+import EditButton from "./OptionsButton";
 dayjs.extend(relativeTime);
 
 export default function PostCard({
   post,
   parentNanoId,
+  postPage,
 }: {
   post: Post;
   parentNanoId?: string;
+  postPage?: boolean;
 }) {
   const { user } = useUser();
-  const [border, setBorder] = useState<"delete" | "edit" | "">("");
 
   const commentOrComments =
     parseInt(post.comments) == 1 ? "Comment" : "Comments";
 
-  const deleteMuatation = useMutation({
-    mutationFn: async () => {
-      await fetch(`/api/post?postId=${post.postId}`, {
-        method: "DELETE",
-      });
-    },
-    onSuccess: () => {
-      function updater(oldData: any) {
-        if (oldData)
-          return {
-            pages: oldData.pages.map((page: any) => {
-              return page.filter(
-                (oldPost: Post) => oldPost.postId != post.postId
-              );
-            }),
-          };
-      }
-
-      client.setQueryData(["homeFeed"], updater);
-      client.setQueryData(["comments"], updater);
-      parentNanoId &&
-        client.setQueryData(["post", parentNanoId], (oldData: any) => {
-          if (oldData) {
-            return {
-              ...oldData,
-              comments: parseInt(oldData.comments) - 1,
-            };
-          }
-        });
-    },
-  });
-
   return (
-    <article className="border rounded-md p-2.5 gap-1.5 flex shadow-sm">
+    <article
+      className={`border rounded-md p-2.5 gap-1.5 flex shadow-s ${
+        postPage && parentNanoId
+          ? `mb-2.5 rounded-t-none border-t-0`
+          : postPage && `mb-2.5`
+      }`}
+    >
       <a className="flex-none h-fit" href={`/user/${post.username}`}>
         <Image
           src={post.image}
@@ -71,22 +39,37 @@ export default function PostCard({
           alt={`${post.name}'s profile picture}`}
         />
       </a>
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow w-[calc(100%-39px)]">
         <div className="flex justify-between items-baseline w-full">
-          <h2 className="leading-tight font-medium">
+          <h2
+            className={`leading-tight font-medium ${
+              postPage && `text-lg truncate inline-block`
+            }`}
+          >
             <a href={`/user/${post.username}`}>{post.name}</a>
           </h2>
-          <p className="text-sm leading-tight text-foreground/70">
+          <time
+            dateTime={dayjs(new Date(parseInt(post.createdAt) * 1000)).format(
+              "YYYY-MM-DD HH:MM"
+            )}
+            className="text-sm leading-tight text-foreground/70"
+          >
             {dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
-          </p>
+          </time>
         </div>
         <a
-          className="text-sm hover:underline text-foreground/70 leading-none w-fit"
+          className={` ${
+            !postPage && `text-sm`
+          } hover:underline text-foreground/70 leading-none w-fit`}
           href={`/user/${post.username.toLocaleLowerCase()}`}
         >
           @{post.username}
         </a>
-        <p className="mt-2.5 text-sm mb-4">{post.content}</p>
+        <p
+          className={`mt-2.5 ${!postPage && `text-sm`} break-words w-full mb-4`}
+        >
+          {post.content}
+        </p>
         <div className="flex justify-between w-full">
           <div className="flex gap-1.5">
             <LikeButton
@@ -94,6 +77,7 @@ export default function PostCard({
               liked={parseInt(post.likedByUser) == 0 ? false : true}
               postId={post.postId}
               userId={post.userId}
+              nanoId={post.nanoId}
             />
             <a
               href={`/post/${post.nanoId}`}
@@ -104,41 +88,11 @@ export default function PostCard({
           </div>
 
           {user?.id == post.userId && (
-            <Popover>
-              <PopoverTrigger className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center">
-                <MoreHorizontal size={18} />
-              </PopoverTrigger>
-              <PopoverContent
-                align={"end"}
-                side={"top"}
-                className="flex flex-col p-0 border-0 w-[100px]"
-              >
-                <button
-                  onMouseEnter={() => {
-                    setBorder("edit");
-                  }}
-                  onMouseLeave={() => {
-                    setBorder("");
-                  }}
-                  className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
-                >
-                  Edit
-                </button>
-                <div
-                  className={`border-b border-dashed transition-all ${
-                    border == "delete" && `border-danger/50 !border-solid`
-                  } ${border == "edit" && `border-ring !border-solid`}`}
-                ></div>
-                <button
-                  onMouseEnter={() => setBorder("delete")}
-                  onMouseLeave={() => setBorder("")}
-                  onClick={() => deleteMuatation.mutate()}
-                  className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
-                >
-                  Delete
-                </button>
-              </PopoverContent>
-            </Popover>
+            <EditButton
+              post={post}
+              postPage={postPage}
+              parentNanoId={parentNanoId}
+            />
           )}
         </div>
       </div>

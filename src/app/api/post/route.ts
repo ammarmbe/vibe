@@ -66,3 +66,23 @@ export async function DELETE(request: Request) {
 
   return new Response("OK");
 }
+
+export async function PUT(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const postId = searchParams.get("postId");
+  const content = searchParams.get("content");
+  const { userId } = auth();
+
+  if (postId && userId && content && content.length < 513) {
+    await db.execute(
+      "UPDATE posts SET content = :content WHERE id = :postId AND userId = :userId",
+      {
+        postId,
+        userId,
+        content,
+      }
+    );
+  }
+
+  return new Response("OK");
+}

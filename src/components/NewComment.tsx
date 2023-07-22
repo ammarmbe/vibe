@@ -16,7 +16,7 @@ export default function NewComment({
   userId: string;
 }) {
   const { userId: currentUserId } = useAuth();
-  const textAreaRef = useRef<HTMLTextAreaElement>();
+  const textareaRef = useRef<HTMLTextAreaElement>();
   const [inputValue, setInputValue] = useState("");
 
   const notificationMutation = useMutation({
@@ -57,19 +57,19 @@ export default function NewComment({
   });
 
   // Textarea code
-  function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
-    if (textArea == null) return;
-    textArea.style.height = "0";
-    textArea.style.height = `${textArea.scrollHeight + 2}px`;
+  function updateTextAreaSize(textarea?: HTMLTextAreaElement) {
+    if (textarea == null) return;
+    textarea.style.height = "0";
+    textarea.style.height = `${textarea.scrollHeight + 2}px`;
   }
 
-  const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
-    updateTextAreaSize(textArea);
-    textAreaRef.current = textArea;
+  const inputRef = useCallback((textarea: HTMLTextAreaElement) => {
+    updateTextAreaSize(textarea);
+    textareaRef.current = textarea;
   }, []);
 
   useLayoutEffect(() => {
-    updateTextAreaSize(textAreaRef.current);
+    updateTextAreaSize(textareaRef.current);
   }, [inputValue]);
 
   if (currentUserId) {

@@ -1,7 +1,6 @@
 "use client";
-import LikeButton from "@/components/post/LikeButton";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import React from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -12,13 +11,6 @@ import { Post } from "@/lib/types";
 import PostCard from "@/components/post/PostCard";
 import NewComment from "@/components/NewComment";
 import { useRouter } from "next/navigation";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { MoreHorizontal } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
 dayjs.extend(relativeTime);
 
 interface Props {
@@ -29,8 +21,6 @@ interface Props {
 
 export default function Page({ params }: Props) {
   const nanoId = params.nanoId;
-  const { user } = useUser();
-  const [border, setBorder] = useState<"delete" | "edit" | "">("");
 
   const { data: mainPost } = useQuery({
     queryKey: ["post", nanoId],
@@ -73,20 +63,6 @@ export default function Page({ params }: Props) {
     enabled: Boolean(mainPost),
   });
 
-  const deleteMuatation = useMutation({
-    mutationFn: async () => {
-      await fetch(`/api/post?postId=${mainPost?.postId}`, {
-        method: "DELETE",
-      });
-    },
-    onSuccess: () => {
-      window.location.reload();
-    },
-  });
-
-  const commentOrComments =
-    parseInt(mainPost?.comments || "") == 1 ? "Comment" : "Comments";
-  // isLoading will always be true if the query is disabled
   const parentLoading = isLoading && mainPost?.parentNanoId;
 
   return (
@@ -98,12 +74,14 @@ export default function Page({ params }: Props) {
         </div>
       ) : (
         <>
-          {parentPost && parentPost.deleted ? (
+          {parentPost && parentPost.deleted && !mainPost?.deleted ? (
             <div
               className={`border rounded-t-md p-2.5 text-center text-foreground/30`}
             >
               This post has been deleted
             </div>
+          ) : parentPost && parentPost.deleted && mainPost?.deleted ? (
+            <></>
           ) : (
             parentPost && (
               <>
@@ -130,11 +108,16 @@ export default function Page({ params }: Props) {
                           {parentPost.name}
                         </a>
                       </h2>
-                      <p className="text-sm leading-tight text-foreground/70">
+                      <time
+                        dateTime={dayjs(
+                          new Date(parseInt(parentPost.createdAt) * 1000)
+                        ).format("YYYY-MM-DD HH:MM")}
+                        className="text-sm leading-tight text-foreground/70"
+                      >
                         {dayjs(
                           new Date(parseInt(parentPost.createdAt) * 1000)
                         ).fromNow()}
-                      </p>
+                      </time>
                     </div>
                     <a
                       className="text-sm hover:underline text-foreground/70 leading-none w-fit"
@@ -159,114 +142,20 @@ export default function Page({ params }: Props) {
               {mainPost.deleted ? (
                 <div
                   className={`${
-                    !parentPost ? `rounded-md` : `rounded-b-md border-t-0`
+                    parentPost && !parentPost.deleted
+                      ? `rounded-b-md border-t-0`
+                      : `rounded-md`
                   } border p-2.5 text-center text-lg text-foreground/30 mb-2.5`}
                 >
                   This post has been deleted
                 </div>
               ) : (
                 <>
-                  <article
-                    className={`mb-2.5 ${
-                      parentPost
-                        ? `rounded-b-md border border-t-0 z-10 relative`
-                        : `rounded-md border`
-                    } p-2.5 gap-1.5 flex shadow-sm`}
-                  >
-                    <a
-                      className="flex-none"
-                      href={`/user/${mainPost.username}`}
-                    >
-                      <Image
-                        src={mainPost.image}
-                        width={33}
-                        height={33}
-                        className="rounded-full"
-                        alt={`${mainPost.name}'s profile picture}`}
-                      />
-                    </a>
-                    <div className="flex flex-col flex-grow">
-                      <div className="flex justify-between items-baseline w-full">
-                        <h2 className="leading-tight text-lg font-medium truncate inline-block">
-                          <a href={`/user/${mainPost.username}`}>
-                            {mainPost.name}
-                          </a>
-                        </h2>
-                        <p className="leading-none text-sm flex-none text-foreground/70">
-                          {dayjs(
-                            new Date(parseInt(mainPost.createdAt) * 1000)
-                          ).format("D/M/YY, H:mm A")}
-                        </p>
-                      </div>
-                      <a
-                        className="hover:underline text-foreground/70 leading-none w-fit"
-                        href={`/user/${mainPost.username.toLocaleLowerCase()}`}
-                      >
-                        @{mainPost.username}
-                      </a>
-                      <p className="mt-2.5 mb-4">{mainPost.content}</p>
-                      <div className="flex justify-between w-full">
-                        <div className="flex gap-1.5">
-                          <LikeButton
-                            count={mainPost.likes}
-                            liked={
-                              parseInt(mainPost.likedByUser) == 0 ? false : true
-                            }
-                            postId={mainPost.postId}
-                            nanoId={mainPost.nanoId}
-                            userId={mainPost.userId}
-                          />
-                          <a
-                            href={`/post/${mainPost.nanoId}`}
-                            className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
-                          >
-                            {mainPost.comments} {commentOrComments}
-                          </a>
-                        </div>
-                        {user?.id == mainPost.userId && (
-                          <Popover>
-                            <PopoverTrigger className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center">
-                              <MoreHorizontal size={18} />
-                            </PopoverTrigger>
-                            <PopoverContent
-                              align={"end"}
-                              side={"top"}
-                              className="flex flex-col p-0 border-0 w-[100px]"
-                            >
-                              <button
-                                onMouseEnter={() => {
-                                  setBorder("edit");
-                                }}
-                                onMouseLeave={() => {
-                                  setBorder("");
-                                }}
-                                className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
-                              >
-                                Edit
-                              </button>
-                              <div
-                                className={`border-b border-dashed transition-all ${
-                                  border == "delete" &&
-                                  `border-danger/50 !border-solid`
-                                } ${
-                                  border == "edit" &&
-                                  `border-ring !border-solid`
-                                }`}
-                              ></div>
-                              <button
-                                onMouseEnter={() => setBorder("delete")}
-                                onMouseLeave={() => setBorder("")}
-                                onClick={() => deleteMuatation.mutate()}
-                                className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
-                              >
-                                Delete
-                              </button>
-                            </PopoverContent>
-                          </Popover>
-                        )}
-                      </div>
-                    </div>
-                  </article>
+                  <PostCard
+                    post={mainPost}
+                    parentNanoId={parentPost?.nanoId}
+                    postPage={true}
+                  />
                   <NewComment
                     parentNanoId={mainPost.nanoId}
                     nanoId={mainPost.nanoId}

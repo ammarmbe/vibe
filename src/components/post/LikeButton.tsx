@@ -89,7 +89,7 @@ export default function LikeButton({
       className={`text-xs px-2.5 py-1 border transition-colors rounded-md ${
         liked
           ? `bg-main text-white border-main/50 hover:bg-main/90`
-          : `border-main/20 hover:bg-main/10 dark:border-main/40 hover:border-main/50 text-main`
+          : `hover:bg-main/10 hover:border-main/50 text-main`
       }`}
       onClick={isSignedIn ? toggleLike : () => push("/sign-up")}
     >

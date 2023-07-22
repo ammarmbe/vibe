@@ -1,5 +1,3 @@
-// TODO: Change the spinner to a better one
-
 export default function Spinner({ size }: { size: "sm" | "md" | "lg" | "xl" }) {
   const sizeClasses = {
     sm: "w-5 h-5",
