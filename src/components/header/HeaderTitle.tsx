@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./Header.module.css";
 import { JetBrains_Mono } from "next/font/google";
 import {
@@ -18,8 +18,8 @@ const jetBrains = JetBrains_Mono({
 
 export default function HeaderTitle() {
   const [feed, setFeed] = useState<"Home" | "Following">();
-  const popoverClose = React.useRef<HTMLButtonElement>(null);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const popoverClose = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [popoverDisabled, setPopoverDisabled] = useState(false);
   const { push } = useRouter();
   const { isSignedIn } = useAuth();

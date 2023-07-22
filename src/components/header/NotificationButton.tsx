@@ -66,8 +66,6 @@ export default function NotificationButton() {
     }
   }, [data]);
 
-  if (isLoading) return <></>;
-
   return (
     <Popover>
       <PopoverTrigger
@@ -84,34 +82,40 @@ export default function NotificationButton() {
       <PopoverContent className="p-0">
         {data && data?.pages[0].length > 0 ? (
           <>
-            <InfiniteScroll
-              dataLength={data.pages.flatMap((page) => page).length}
-              hasMore={hasNextPage || false}
-              loader={
-                <div className="flex w-full justify-center">
-                  <Spinner size="md" />
-                </div>
-              }
-              endMessage={
-                <p className="text-foreground/30 text-center text-sm">
-                  No more notifications
-                </p>
-              }
-              next={fetchNextPage}
-              height={300}
-              className="flex flex-col p-2.5 gap-2.5"
-            >
-              {data.pages.map((page) => {
-                return page.map((notification: Notification) => {
-                  return (
-                    <NotificationCard
-                      key={notification.id}
-                      notification={notification}
-                    />
-                  );
-                });
-              })}
-            </InfiniteScroll>
+            {isLoading ? (
+              <div className="w-full h-[300px] flex p-2.5 items-center justify-center">
+                <Spinner size="xl" />
+              </div>
+            ) : (
+              <InfiniteScroll
+                dataLength={data.pages.flatMap((page) => page).length}
+                hasMore={hasNextPage || false}
+                loader={
+                  <div className="flex w-full justify-center">
+                    <Spinner size="md" />
+                  </div>
+                }
+                endMessage={
+                  <p className="text-foreground/30 text-center text-sm">
+                    No more notifications
+                  </p>
+                }
+                next={fetchNextPage}
+                height={300}
+                className="flex flex-col p-2.5 gap-2.5"
+              >
+                {data.pages.map((page) => {
+                  return page.map((notification: Notification) => {
+                    return (
+                      <NotificationCard
+                        key={notification.id}
+                        notification={notification}
+                      />
+                    );
+                  });
+                })}
+              </InfiniteScroll>
+            )}
           </>
         ) : (
           <p className="text-foreground/30 text-center p-2.5 text-sm">

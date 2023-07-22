@@ -66,10 +66,10 @@ export default function Page({ params }: Props) {
   const parentLoading = isLoading && mainPost?.parentNanoId;
 
   return (
-    <main className="max-w-3xl w-full mx-auto px-2.5">
+    <main className="max-w-3xl h-full flex flex-col w-full mx-auto px-2.5">
       <Header />
       {parentLoading ? (
-        <div className="w-full justify-center flex">
+        <div className="w-full h-full justify-center items-center flex">
           <Spinner size="xl" />
         </div>
       ) : (
@@ -134,7 +134,7 @@ export default function Page({ params }: Props) {
           )}
 
           {!mainPost ? (
-            <div className="w-full justify-center flex">
+            <div className="w-full h-full items-center justify-center flex">
               <Spinner size="xl" />
             </div>
           ) : (

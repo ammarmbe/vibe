@@ -33,7 +33,7 @@ export default function Feed() {
 
   if (isLoading)
     return (
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex h-full items-center justify-center">
         <Spinner size="xl" />
       </div>
     );
