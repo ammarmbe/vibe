@@ -15,6 +15,8 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import NotificationButton from "./NotificationButton";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import EditProfile from "../EditProfile";
 
 export default function AccountButton() {
   const { user } = useUser();
@@ -64,20 +66,25 @@ export default function AccountButton() {
                 showBorderTop && `border-ring !border-solid`
               }`}
             ></div>
-            <a
-              href={`/edit-user`}
-              onMouseEnter={() => {
-                setShowBorderTop(true);
-                setBorderBottom("edit");
-              }}
-              onMouseLeave={() => {
-                setShowBorderTop(false);
-                setBorderBottom("");
-              }}
-              className="border-y-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
-            >
-              Edit profile
-            </a>
+
+            <Dialog>
+              <DialogTrigger
+                onMouseEnter={() => {
+                  setShowBorderTop(true);
+                  setBorderBottom("edit");
+                }}
+                onMouseLeave={() => {
+                  setShowBorderTop(false);
+                  setBorderBottom("");
+                }}
+                className="border-y-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
+              >
+                Edit profile
+              </DialogTrigger>
+              <DialogContent className="p-0 border-0 !w-[360px]">
+                <EditProfile newUser={false} />
+              </DialogContent>
+            </Dialog>
             <div
               className={`border-b border-dashed transition-all ${
                 borderBottom == "signOut" && `border-danger/50 !border-solid`

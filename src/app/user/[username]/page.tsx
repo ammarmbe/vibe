@@ -1,8 +1,10 @@
 "use client";
+import EditProfile from "@/components/EditProfile";
 import FollowButton from "@/components/FollowButton";
 import Spinner from "@/components/Spinner";
 import Header from "@/components/header/Header";
 import PostCard from "@/components/post/PostCard";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Post, User } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -91,12 +93,16 @@ export default function Page({ params }: Props) {
                   {formatFollowerCount()}
                 </p>
                 {currentUserId == user.id ? (
-                  <a
-                    href="/edit-user"
-                    className="py-1 px-3.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors"
-                  >
-                    Edit
-                  </a>
+                  <>
+                    <Dialog>
+                      <DialogTrigger className="py-1 px-3.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors">
+                        Edit
+                      </DialogTrigger>
+                      <DialogContent className="p-0 border-0 !w-[360px]">
+                        <EditProfile newUser={false} />
+                      </DialogContent>
+                    </Dialog>
+                  </>
                 ) : (
                   <FollowButton
                     userId={user.id}
