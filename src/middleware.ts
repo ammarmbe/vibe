@@ -13,7 +13,7 @@ async function middleware(auth: AuthObject, request: NextRequest) {
   const userId = auth.userId;
   const url = request.nextUrl.clone();
 
-  if (!userId) return NextResponse.redirect(url);
+  if (!userId) return;
 
   const user = await clerkClient.users.getUser(userId);
 
