@@ -1,6 +1,8 @@
 # Vibe 2.0 🚀
 
-Vibe is a social media web app created using Next.js 13, PlanetScale's databasejs, and Clerk. Deployed at: [vibe.ammare.live](https://vibe.ammare.live/).
+Vibe is a social media web app created using Next.js 13, PlanetScale's databasejs, and Clerk. <br> Deployed at: [vibe.ammare.live](https://vibe.ammare.live/).
+
+![vibe](https://github.com/ammarmbe/vibe-2.0/assets/117791580/a6179611-2513-4b5f-b8fc-d0c853597ef3)
 
 ## Features
 
