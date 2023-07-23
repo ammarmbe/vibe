@@ -5,9 +5,6 @@
 @layer base {
   :root {
     --main: 347 100% 40%;
-    --main-dark: 348 94% 35%;
-    --red-border: 0 100% 89.8%;
-    --red-ring: 0 100% 63.9%;
     --danger: 11 85% 49%;
 
     --background: 0 0% 100%;
@@ -47,9 +44,6 @@
       color-scheme: dark;
 
       --main: 347 73% 48%;
-      --main-dark: 348 73% 45%;
-      --red-border: 0 87% 85%;
-      --red-ring: 0 95% 59%;
       --danger: 11 85% 55%;
 
       --background: 0 0% 5.9%;

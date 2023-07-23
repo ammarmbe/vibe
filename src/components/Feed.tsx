@@ -8,6 +8,7 @@ import Spinner from "./Spinner";
 
 export default function Feed() {
   let feed = useRef<"Home" | "Following">("Home");
+
   useEffect(() => {
     const localFeed = localStorage.getItem("feed") as "Home" | "Following";
     if (!localFeed) localStorage.setItem("feed", "Home");

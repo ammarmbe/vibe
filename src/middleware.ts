@@ -1,6 +1,4 @@
-import { authMiddleware } from "@clerk/nextjs";
-import { db } from "./lib/db";
-import { User } from "./lib/types";
+import { authMiddleware, clerkClient } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { AuthObject } from "@clerk/nextjs/server";
 
@@ -13,15 +11,12 @@ export default authMiddleware({
 
 async function middleware(auth: AuthObject, request: NextRequest) {
   const userId = auth.userId;
+  const url = request.nextUrl.clone();
 
   if (!userId) return;
+  const user = await clerkClient.users.getUser(userId);
 
-  const user = (
-    await db.execute("SELECT * FROM users WHERE id = :userId", { userId })
-  ).rows[0] as User;
-
-  if (user && !user.username) {
-    const url = request.nextUrl.clone();
+  if (userId && !user.unsafeMetadata.username) {
     if (url.pathname == "/new-user" || url.pathname == "/api/user/username")
       return;
     url.pathname = "/new-user";

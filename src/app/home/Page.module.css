@@ -1,0 +1,30 @@
+.title {
+  animation: 4s title forwards cubic-bezier(0.8, 0.06, 0.29, 0.92);
+}
+
+.hero {
+  animation: 2s hero forwards ease-in-out;
+}
+
+@keyframes title {
+  0% {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

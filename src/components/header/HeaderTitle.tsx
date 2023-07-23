@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import style from "./Header.module.css";
-import { JetBrains_Mono } from "next/font/google";
+import { jetBrains } from "./Header";
 import {
   Popover,
   PopoverContent,
@@ -10,11 +10,6 @@ import {
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-
-const jetBrains = JetBrains_Mono({
-  subsets: ["latin"],
-  style: ["italic", "normal"],
-});
 
 export default function HeaderTitle() {
   const [feed, setFeed] = useState<"Home" | "Following">();
