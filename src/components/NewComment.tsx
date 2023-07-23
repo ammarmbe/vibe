@@ -10,10 +10,12 @@ export default function NewComment({
   parentNanoId,
   nanoId,
   userId,
+  parentPostId,
 }: {
   parentNanoId: string;
   nanoId: string;
   userId: string;
+  parentPostId: string;
 }) {
   const { userId: currentUserId } = useAuth();
   const textareaRef = useRef<HTMLTextAreaElement>();
@@ -22,7 +24,7 @@ export default function NewComment({
   const notificationMutation = useMutation({
     mutationFn: async () =>
       await fetch(
-        `/api/notification/commentedOnPost?postId=${parentNanoId}&userId=${currentUserId}`,
+        `/api/notification/commentedOnPost?postId=${parentPostId}&userId=${currentUserId}`,
         { method: "POST" }
       ),
     onSuccess: () => {

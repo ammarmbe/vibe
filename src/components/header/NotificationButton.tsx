@@ -32,7 +32,6 @@ export default function NotificationButton() {
         return undefined;
       }
     },
-    cacheTime: 0,
     enabled: Boolean(userId),
   });
 
@@ -73,7 +72,7 @@ export default function NotificationButton() {
           !unread && `after:content-none`
         } rounded-md relative after:-top-[3px] after:-right-[3px] after:bg-main after:absolute after:rounded-full after:aspect-square after:p-1.5 shadow-sm h-[34px] w-[34px] flex items-center justify-center after:transition-all transition-colors`}
         onClick={() => {
-          readNotifications.mutate();
+          unread && readNotifications.mutate();
         }}
         name="Notifications"
       >
