@@ -3,6 +3,7 @@ import React from "react";
 import type { Notification } from "@/lib/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function NotificationCard({
   notification,
@@ -33,9 +34,10 @@ export default function NotificationCard({
 
         notification.type == "followedUser" &&
           push(`/user/${notification.notifierUsername}`);
-      }}
-    >
-      <a className="flex-none" href={`/user/${notification.notifierUsername}`}>
+      }}>
+      <Link
+        className="flex-none"
+        href={`/user/${notification.notifierUsername}`}>
         <Image
           src={notification.notifierImage}
           alt={`${notification.notifierName}'s profile picture`}
@@ -43,14 +45,13 @@ export default function NotificationCard({
           height={25}
           className="rounded-full"
         />
-      </a>
+      </Link>
       <p className="text-sm line-clamp-2">
-        <a
+        <Link
           href={`/user/${notification.notifierUsername}`}
-          className="font-medium"
-        >
+          className="font-medium">
           {notification.notifierName}
-        </a>{" "}
+        </Link>{" "}
         {notification.type == "likedPost"
           ? notification.deleted
             ? "liked your deleted post"

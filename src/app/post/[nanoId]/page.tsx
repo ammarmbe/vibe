@@ -11,6 +11,7 @@ import { Post } from "@/lib/types";
 import PostCard from "@/components/post/PostCard";
 import NewComment from "@/components/NewComment";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 dayjs.extend(relativeTime);
 
 interface Props {
@@ -76,8 +77,7 @@ export default function Page({ params }: Props) {
         <>
           {parentPost && parentPost.deleted && !mainPost?.deleted ? (
             <div
-              className={`border rounded-t-md p-2.5 text-center text-foreground/30`}
-            >
+              className={`border rounded-t-md p-2.5 text-center text-foreground/30`}>
               This post has been deleted
             </div>
           ) : parentPost && parentPost.deleted && mainPost?.deleted ? (
@@ -87,12 +87,10 @@ export default function Page({ params }: Props) {
               <>
                 <button
                   onClick={() => push(`/post/${parentPost.nanoId}`)}
-                  className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
-                >
-                  <a
+                  className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex">
+                  <Link
                     className="flex-none h-fit"
-                    href={`/user/${parentPost.username}`}
-                  >
+                    href={`/user/${parentPost.username}`}>
                     <Image
                       src={parentPost.image}
                       width={33}
@@ -100,31 +98,29 @@ export default function Page({ params }: Props) {
                       className="rounded-full"
                       alt={`${parentPost.name}'s profile picture}`}
                     />
-                  </a>
+                  </Link>
                   <div className="flex flex-col flex-grow">
                     <div className="flex justify-between items-baseline w-full">
                       <h2 className="leading-tight font-medium">
-                        <a href={`/user/${parentPost.username}`}>
+                        <Link href={`/user/${parentPost.username}`}>
                           {parentPost.name}
-                        </a>
+                        </Link>
                       </h2>
                       <time
                         dateTime={dayjs(
                           new Date(parseInt(parentPost.createdAt) * 1000)
                         ).format("YYYY-MM-DD HH:MM")}
-                        className="text-sm leading-tight text-foreground/70"
-                      >
+                        className="text-sm leading-tight text-foreground/70">
                         {dayjs(
                           new Date(parseInt(parentPost.createdAt) * 1000)
                         ).fromNow()}
                       </time>
                     </div>
-                    <a
+                    <Link
                       className="text-sm hover:underline text-foreground/70 leading-none w-fit"
-                      href={`/user/${parentPost.username}`}
-                    >
+                      href={`/user/${parentPost.username}`}>
                       @{parentPost.username}
-                    </a>
+                    </Link>
                     <p className="mt-2.5 text-sm">{parentPost.content}</p>
                   </div>
                 </button>
@@ -145,8 +141,7 @@ export default function Page({ params }: Props) {
                     parentPost && !parentPost.deleted
                       ? `rounded-b-md border-t-0`
                       : `rounded-md`
-                  } border p-2.5 text-center text-lg text-foreground/30 mb-2.5`}
-                >
+                  } border p-2.5 text-center text-lg text-foreground/30 mb-2.5`}>
                   This post has been deleted
                 </div>
               ) : (
@@ -183,8 +178,7 @@ export default function Page({ params }: Props) {
                     </p>
                   }
                   next={fetchNextPage}
-                  className="flex flex-col gap-2.5 pb-2.5"
-                >
+                  className="flex flex-col gap-2.5 pb-2.5">
                   {comments.pages.map((page) => {
                     return page.map((post: Post) => {
                       return (

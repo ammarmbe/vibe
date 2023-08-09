@@ -9,6 +9,7 @@ import {
   Users2,
 } from "lucide-react";
 import styles from "./Page.module.css";
+import Link from "next/link";
 
 const features = [
   {
@@ -58,8 +59,7 @@ const stack = [
         className="h-full w-full"
         viewBox="0 0 50 50"
         fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_11_135)">
           <path
             d="M24.1073 6.72777e-05C23.7406 6.72777e-05 23.4614 0.00215061 23.3614 0.0146506C23.1088 0.0399046 22.856 0.0628222 22.603 0.0834005C15.5048 0.7209 8.85245 4.55215 4.63978 10.4417C2.31004 13.6741 0.795505 17.4213 0.225009 21.3646C0.025001 22.7375 0 23.1438 0 25.0042C0 26.8646 0.025001 27.2729 0.225009 28.6459C1.5834 38.0334 8.26701 45.9208 17.3278 48.8438C18.9508 49.3646 20.6613 49.7229 22.6072 49.9375C23.3635 50.0208 26.6386 50.0208 27.397 49.9375C30.7534 49.5667 33.5993 48.7354 36.4036 47.3042C36.8349 47.0833 36.9182 47.025 36.8599 46.975C36.8182 46.9479 34.9848 44.4896 32.7868 41.5167L28.7887 36.1167L23.7802 28.7042C22.1138 26.2241 20.4318 23.7546 18.7341 21.2959C18.7154 21.2917 18.6966 24.5855 18.6862 28.6084C18.6716 35.65 18.6654 35.9313 18.5779 36.0979C18.4929 36.2932 18.3406 36.4515 18.1487 36.5438C17.9924 36.6209 17.857 36.6354 17.1174 36.6354H16.2694L16.0444 36.4938C15.9053 36.4066 15.7923 36.2835 15.7173 36.1375L15.6131 35.9167L15.6257 26.1188L15.6402 16.3167L15.7902 16.125C15.8927 16.0052 16.0154 15.9044 16.1528 15.8271C16.3528 15.7292 16.4319 15.7209 17.2778 15.7209C18.2737 15.7209 18.4403 15.7584 18.6987 16.0417C18.7716 16.1209 21.4842 20.2063 24.7302 25.1271C28.0165 30.1076 31.3049 35.0868 34.5952 40.0646L38.5537 46.0625L38.7537 45.9313C40.6595 44.6649 42.3874 43.1494 43.8914 41.425C47.0411 37.8199 49.0839 33.3828 49.775 28.6459C49.975 27.2709 50 26.8667 50 25.0042C50 23.1438 49.975 22.7375 49.775 21.3646C48.4166 11.9771 41.7351 4.08965 32.6743 1.16673C30.9802 0.628156 29.2357 0.263088 27.4678 0.0771505C26.3491 0.0242054 25.2293 -0.00149664 24.1093 6.72777e-05H24.1073ZM32.5847 15.0355C33.3076 15.0355 33.4347 15.0459 33.5972 15.1334C33.7136 15.1921 33.8172 15.2734 33.9019 15.3724C33.9867 15.4715 34.051 15.5864 34.091 15.7105C34.1285 15.8355 34.1389 18.5542 34.1285 24.6771L34.116 33.4646L32.5659 31.0896L31.0117 28.7146V22.3271C31.0117 18.198 31.0325 15.875 31.0596 15.7646C31.0945 15.6343 31.1556 15.5125 31.239 15.4065C31.3225 15.3005 31.4266 15.2125 31.5451 15.148C31.7451 15.0438 31.8159 15.0355 32.5868 15.0355H32.5847Z"
@@ -84,8 +84,7 @@ const stack = [
         viewBox="0 0 54 54"
         fill="currentColor"
         className="h-full w-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_11_130)">
           <path
             d="M27 32.6852C29.8404 32.6852 32.1429 30.3637 32.1429 27.5C32.1429 24.6363 29.8404 22.3148 27 22.3148C24.1597 22.3148 21.8572 24.6363 21.8572 27.5C21.8572 30.3637 24.1597 32.6852 27 32.6852Z"
@@ -121,8 +120,7 @@ const stack = [
         viewBox="0 0 50 50"
         className="h-full w-full"
         fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_11_132)">
           <path
             d="M2.00765e-05 25C2.00765e-05 11.1937 11.1938 0 25 0C35.1521 0 43.8896 6.05 47.8063 14.7437L14.7438 47.8062C13.3319 47.1698 11.9823 46.4033 10.7125 45.5167L31.2292 25H25L7.32293 42.6771C4.99793 40.3583 3.15408 37.603 1.89737 34.5693C0.640654 31.5357 -0.00414777 28.2836 2.00765e-05 25ZM25.0083 50L50 25.0083C49.9958 38.8083 38.8083 49.9958 25.0083 50Z"
@@ -147,8 +145,7 @@ const stack = [
         viewBox="0 0 50 50"
         className="h-full w-full"
         fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <path
           d="M44.6497 6.55636L38.6748 12.5314C38.4871 12.719 38.2417 12.838 37.9783 12.8695C37.7147 12.9011 37.4484 12.8432 37.2217 12.7052C34.8714 11.2873 32.1609 10.5801 29.4174 10.6691C26.6739 10.7581 24.0151 11.6394 21.7616 13.2067C20.3756 14.1715 19.1722 15.3749 18.2075 16.7609C16.6422 19.0159 15.7617 21.6751 15.6721 24.4187C15.5824 27.1624 16.2873 29.8735 17.7021 32.2259C17.8391 32.4522 17.8964 32.7177 17.8649 32.9805C17.8334 33.2431 17.7149 33.4877 17.5283 33.6752L11.5536 39.6501C11.4333 39.7713 11.2882 39.865 11.1283 39.9248C10.9684 39.9847 10.7975 40.0092 10.6272 39.9969C10.457 39.9845 10.2914 39.9355 10.1418 39.8532C9.99228 39.7708 9.86229 39.6572 9.76076 39.5199C6.52804 35.0761 4.85738 29.6872 5.00955 24.1941C5.16171 18.701 7.12813 13.4128 10.6019 9.15488C11.6624 7.85213 12.8532 6.66119 14.1559 5.60066C18.4132 2.12766 23.7004 0.161715 29.1924 0.00954853C34.6844 -0.142618 40.0722 1.52756 44.5153 4.75948C44.6536 4.86068 44.7681 4.99066 44.8511 5.14042C44.9342 5.29018 44.9838 5.45616 44.9967 5.62696C45.0095 5.79776 44.9851 5.9693 44.9251 6.12974C44.8652 6.29019 44.7712 6.43574 44.6497 6.55636Z"
           fill="currentColor"
@@ -168,8 +165,7 @@ const stack = [
             y1="-4.56031"
             x2="-22.4187"
             y2="44.6032"
-            gradientUnits="userSpaceOnUse"
-          >
+            gradientUnits="userSpaceOnUse">
             <stop stop-color="white" />
             <stop offset="0.5" stop-color="white" />
             <stop offset="1" stop-color="white" />
@@ -188,8 +184,7 @@ const stack = [
         viewBox="0 0 60 60"
         fill="currentColor"
         className="h-full w-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <path
           d="M30 12C22 12 17 16 15 24C18 20 21.5 18.5 25.5 19.5C27.7825 20.07 29.4125 21.725 31.22 23.56C34.1625 26.545 37.565 30 45 30C53 30 58 26 60 18C57 22 53.5 23.5 49.5 22.5C47.2175 21.93 45.5875 20.275 43.78 18.44C40.84 15.455 37.4375 12 30 12ZM15 30C7 30 2 34 0 42C3 38 6.5 36.5 10.5 37.5C12.7825 38.07 14.4125 39.725 16.22 41.56C19.1625 44.545 22.565 48 30 48C38 48 43 44 45 36C42 40 38.5 41.5 34.5 40.5C32.2175 39.93 30.5875 38.275 28.78 36.44C25.84 33.455 22.4375 30 15 30Z"
           fill="currentColor"
@@ -207,8 +202,7 @@ const stack = [
         viewBox="0 0 50 50"
         fill="currentColor"
         className="h-full w-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <path
           d="M10.4537 16.591C9.6398 12.6255 9.46513 9.58397 9.99122 7.37542C10.3041 6.0619 10.8761 4.99035 11.7459 4.21724C12.6642 3.40104 13.8253 3.00053 15.1298 3.00053C17.2819 3.00053 19.5443 3.98664 21.962 5.86C22.9482 6.6241 23.9717 7.54511 25.0346 8.62354C25.1192 8.5141 25.2149 8.41087 25.3214 8.31546C28.3266 5.62455 30.8566 3.95266 33.0206 3.30803C34.3073 2.92473 35.5154 2.88821 36.6155 3.26021C37.7767 3.65289 38.702 4.4646 39.3548 5.60156C40.4322 7.47794 40.7163 9.94353 40.3146 12.9879C40.1509 14.2288 39.871 15.5805 39.4756 17.0451C39.6247 17.0632 39.7743 17.0965 39.9224 17.1458C43.7352 18.4154 46.4352 19.7807 48.0697 21.341C49.0423 22.2694 49.6774 23.3029 49.9069 24.447C50.1493 25.6545 49.913 26.8657 49.2609 28.0018C48.1856 29.8755 46.2083 31.3532 43.3915 32.5237C42.2604 32.9937 40.9807 33.4194 39.5509 33.8022C39.6161 33.9502 39.6667 34.1074 39.7006 34.2723C40.5144 38.2378 40.6891 41.2793 40.163 43.4878C39.8501 44.8014 39.2781 45.8729 38.4083 46.646C37.49 47.4622 36.329 47.8627 35.0244 47.8627C32.8723 47.8627 30.61 46.8766 28.1922 45.0033C27.1956 44.231 26.1608 43.2985 25.0856 42.2052C24.975 42.3791 24.8392 42.5407 24.6786 42.6845C21.6734 45.3755 19.1434 47.0473 16.9794 47.692C15.6927 48.0753 14.4846 48.1118 13.3845 47.7398C12.2233 47.3471 11.298 46.5354 10.6452 45.3984C9.56782 43.5221 9.28371 41.0565 9.68537 38.0121C9.85501 36.7263 10.1494 35.3216 10.5678 33.7956C10.4042 33.779 10.24 33.7442 10.0776 33.6901C6.26476 32.4205 3.56485 31.0552 1.93026 29.4949C0.957719 28.5665 0.322639 27.533 0.0930619 26.3889C-0.149257 25.1814 0.0870228 23.9702 0.739066 22.8341C1.81442 20.9604 3.79167 19.4827 6.60853 18.3122C7.77329 17.8282 9.09572 17.3912 10.5774 16.9996C10.5246 16.8698 10.4829 16.7332 10.4537 16.591Z"
           fill="#0F0F0F"
@@ -231,28 +225,23 @@ export default function Home() {
     <>
       <main className="mx-8">
         <section
-          className={`min-h-screen flex items-center justify-center flex-col text-center ${styles.hero}`}
-        >
+          className={`min-h-screen flex items-center justify-center flex-col text-center ${styles.hero}`}>
           <p className="md:text-5xl text-2xl font-medium">Welcome to</p>
           <h1
-            className={`${jetBrains.className} ${styles.title} select-none -z-10 text-[max(30vw,132px)] leading-none font-extrabold italic tracking-tighter bg-gradient-to-t from-main/30 to-main bg-clip-text text-transparent`}
-          >
+            className={`${jetBrains.className} ${styles.title} select-none -z-10 text-[max(30vw,132px)] leading-none font-extrabold italic tracking-tighter bg-gradient-to-t from-main/30 to-main bg-clip-text text-transparent`}>
             Vibe
           </h1>
-          <a
+          <Link
             className="border px-2.5 py-1.5 mt-6 hover:border-main/50 text-lg font-semibold rounded-full hover:shadow-[0px_0px_25px_0px_main] hover:shadow-main/30"
-            href="/"
-          >
+            href="/">
             Visit App
-          </a>
+          </Link>
         </section>
         <section
           id="features"
-          className="min-h-screen flex flex-col items-center justify-center"
-        >
+          className="min-h-screen flex flex-col items-center justify-center">
           <h2
-            className={`md:text-5xl text-4xl text-center ${jetBrains.className} tracking-tighter font-bold my-8`}
-          >
+            className={`md:text-5xl text-4xl text-center ${jetBrains.className} tracking-tighter font-bold my-8`}>
             Features
           </h2>
           <ul className="grid grid-cols-1 grid-rows-6 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-7xl mx-auto">
@@ -260,14 +249,12 @@ export default function Home() {
               return (
                 <li
                   key={feature.title}
-                  className="flex flex-col gap-2.5 p-6 border text-center rounded-md shadow-md"
-                >
+                  className="flex flex-col gap-2.5 p-6 border text-center rounded-md shadow-md">
                   <div className="w-full flex mb-3.5 justify-center">
                     {feature.icon}
                   </div>
                   <h3
-                    className={`md:text-3xl text-2xl ${jetBrains.className} text-main font-bold`}
-                  >
+                    className={`md:text-3xl text-2xl ${jetBrains.className} text-main font-bold`}>
                     {feature.title}
                   </h3>
                   <p className="text-lg">{feature.description}</p>
@@ -278,35 +265,32 @@ export default function Home() {
         </section>
         <section className="min-h-screen flex flex-col items-center justify-center mb-6">
           <h2
-            className={`md:text-5xl text-4xl text-center ${jetBrains.className} tracking-tighter font-bold my-8`}
-          >
+            className={`md:text-5xl text-4xl text-center ${jetBrains.className} tracking-tighter font-bold my-8`}>
             Stack
           </h2>
           <ul className="grid grid-cols-1 grid-rows-6 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-7xl mx-auto">
             {stack.map((stack) => {
               return (
                 <li key={stack.title}>
-                  <a
+                  <Link
                     href={stack.link}
-                    className="flex hover:border-main hover:shadow-main/30 flex-col gap-8 p-6 border text-center items-center rounded-md hover:shadow-[0px_0px_25px_0px_main] transition-all duration-100"
-                  >
+                    className="flex hover:border-main hover:shadow-main/30 flex-col gap-8 p-6 border text-center items-center rounded-md hover:shadow-[0px_0px_25px_0px_main] transition-all duration-100">
                     <div className="md:h-[80px] md:w-[80px] w-[60%] aspect-square">
                       {stack.image}
                     </div>
                     <h3 className={`text-2xl font-semibold`}>{stack.title}</h3>
-                  </a>
+                  </Link>
                 </li>
               );
             })}
           </ul>
           <p className="mt-6">
             <em>
-              <a
+              <Link
                 href="https://ui.shadcn.com/"
-                className="underline hover:text-[#d43232]"
-              >
+                className="underline hover:text-[#d43232]">
                 Shadcn/ui
-              </a>{" "}
+              </Link>{" "}
               is used for the popover and dialog components and the CSS
               variables.
             </em>
@@ -316,33 +300,29 @@ export default function Home() {
       <footer>
         <p className="p-2.5 text-center">
           Built by{" "}
-          <a
+          <Link
             href="https://www.github.com/ammarmbe"
-            className="underline hover:text-[#d43232]"
-          >
+            className="underline hover:text-[#d43232]">
             Ammar Elbehery
-          </a>
+          </Link>
           , deployed on{" "}
-          <a
+          <Link
             href="https://www.vercel.com"
-            className="underline hover:text-[#d43232]"
-          >
+            className="underline hover:text-[#d43232]">
             Vercel
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a
+          <Link
             href="https://www.planetscale.com"
-            className="underline hover:text-[#d43232]"
-          >
+            className="underline hover:text-[#d43232]">
             PlanetScale
-          </a>
+          </Link>
           . Code available on{" "}
-          <a
+          <Link
             href="https://github.com/ammarmbe/vibe-2.0"
-            className="underline hover:text-[#d43232]"
-          >
+            className="underline hover:text-[#d43232]">
             GitHub
-          </a>
+          </Link>
           .
         </p>
       </footer>

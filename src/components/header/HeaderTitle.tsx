@@ -10,6 +10,7 @@ import {
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function HeaderTitle() {
   const [feed, setFeed] = useState<"Home" | "Following">();
@@ -42,13 +43,11 @@ export default function HeaderTitle() {
   return (
     <div className="flex">
       <h1
-        className={`${jetBrains.className} text-main select-none italic font-extrabold text-3xl tracking-tighter`}
-      >
-        <a href="/">
+        className={`${jetBrains.className} text-main select-none italic font-extrabold text-3xl tracking-tighter`}>
+        <Link href="/">
           <div
             ref={containerRef}
-            className={`flex w-[66px] h-[36px] flex-wrap overflow-y-hidden will-change-contents`}
-          >
+            className={`flex w-[66px] h-[36px] flex-wrap overflow-y-hidden will-change-contents`}>
             <span>
               <div>V</div>
               <div>{feed ? feed[0] : "H"}</div>
@@ -86,7 +85,7 @@ export default function HeaderTitle() {
               <div>g</div>
             </span>
           </div>
-        </a>
+        </Link>
       </h1>
       {isSignedIn && (
         <Popover>
@@ -101,8 +100,7 @@ export default function HeaderTitle() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="ml-2 h-4 w-4"
-            >
+              className="ml-2 h-4 w-4">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </PopoverTrigger>
@@ -120,8 +118,7 @@ export default function HeaderTitle() {
               }}
               className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
                 feed === "Home" ? "bg-secondary" : !feed && "hover:bg-secondary"
-              }`}
-            >
+              }`}>
               Home
             </button>
             <button
@@ -139,8 +136,7 @@ export default function HeaderTitle() {
                 feed === "Following"
                   ? "bg-secondary"
                   : !feed && "hover:bg-secondary"
-              }`}
-            >
+              }`}>
               Following
             </button>
             <PopoverClose ref={popoverClose} />

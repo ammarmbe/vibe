@@ -15,6 +15,7 @@ import { User } from "@/lib/types";
 import { client } from "@/lib/ReactQueryProvider";
 import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
+import Link from "next/link";
 
 export default function EditProfile({ newUser }: { newUser: boolean }) {
   const [username, setUsername] = useState("");
@@ -94,8 +95,7 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
         if (username === "" || username.length > 16 || bio.length > 250) return;
         usernameMutation.mutate();
       }}
-      className="flex gap-2.5 flex-col w-fit"
-    >
+      className="flex gap-2.5 flex-col w-fit">
       <Card className={`w-[360px] h-[375px] ${!newUser && `bg-background`}`}>
         {loading ? (
           <div className="justify-center h-[375px] items-center flex">
@@ -113,12 +113,11 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
                 ) : (
                   <>
                     You&apos;re signed in as{" "}
-                    <a
+                    <Link
                       className="hover:underline"
-                      href={`/user/${user?.unsafeMetadata.username}`}
-                    >
+                      href={`/user/${user?.unsafeMetadata.username}`}>
                       {user?.fullName}
-                    </a>
+                    </Link>
                     .
                   </>
                 )}
@@ -151,22 +150,19 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
                   <p
                     className={`text-sm text-danger ${
                       !usernameTaken && "hidden"
-                    }`}
-                  >
+                    }`}>
                     Username already exists.
                   </p>
                   <p
                     className={`text-sm text-danger ${
                       !usernameTooLong && "hidden"
-                    }`}
-                  >
+                    }`}>
                     Username can&apos;t be longer than 16 characters.
                   </p>
                   <p
                     className={`text-sm text-danger ${
                       !invalidUsername && "hidden"
-                    }`}
-                  >
+                    }`}>
                     Username can only include alphanumeric characters (a-z, 0-9)
                     and underscores.
                   </p>
@@ -188,8 +184,9 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
                     className="border !h-fit dark:focus:border-foreground/25 dark:bg-ring/10 focus:border-ring outline-none rounded-sm px-2 py-1 resize-none"
                   />
                   <p
-                    className={`text-sm text-danger ${!bioTooLong && "hidden"}`}
-                  >
+                    className={`text-sm text-danger ${
+                      !bioTooLong && "hidden"
+                    }`}>
                     Your bio can&apos;t be longer than 250 characters.
                   </p>
                 </div>
@@ -201,16 +198,14 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
                   <SignOutButton>
                     <button
                       type="button"
-                      className="rounded-md border transition-colors text-danger hover:bg-danger/5 hover:border-danger/50 py-1.5 px-2.5"
-                    >
+                      className="rounded-md border transition-colors text-danger hover:bg-danger/5 hover:border-danger/50 py-1.5 px-2.5">
                       Sign out
                     </button>
                   </SignOutButton>
                   <button
                     type="submit"
                     onClick={() => usernameMutation.mutate()}
-                    className="rounded-md border transition-colors hover:bg-main/10 hover:border-main/50 text-main py-1.5 px-2.5"
-                  >
+                    className="rounded-md border transition-colors hover:bg-main/10 hover:border-main/50 text-main py-1.5 px-2.5">
                     Submit
                   </button>
                 </>
@@ -218,14 +213,12 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
                 <>
                   <DialogClose
                     type="button"
-                    className="rounded-md border text-danger hover:bg-danger/5 hover:border-danger/50 transition-colors py-1.5 px-2.5"
-                  >
+                    className="rounded-md border text-danger hover:bg-danger/5 hover:border-danger/50 transition-colors py-1.5 px-2.5">
                     Cancel
                   </DialogClose>
                   <DialogClose
                     type="submit"
-                    className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5"
-                  >
+                    className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5">
                     Save
                   </DialogClose>
                 </>

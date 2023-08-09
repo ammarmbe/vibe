@@ -7,6 +7,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useUser } from "@clerk/nextjs";
 import OptionsButton from "./OptionsButton";
 import { Pencil } from "lucide-react";
+import Link from "next/link";
 dayjs.extend(relativeTime);
 
 export default function PostCard({
@@ -29,9 +30,8 @@ export default function PostCard({
         postPage && parentNanoId
           ? `mb-2.5 rounded-t-none border-t-0`
           : postPage && `mb-2.5`
-      }`}
-    >
-      <a className="flex-none h-fit" href={`/user/${post.username}`}>
+      }`}>
+      <Link className="flex-none h-fit" href={`/user/${post.username}`}>
         <Image
           src={post.image}
           width={33}
@@ -39,36 +39,34 @@ export default function PostCard({
           className="rounded-full"
           alt={`${post.name}'s profile picture}`}
         />
-      </a>
+      </Link>
       <div className="flex flex-col flex-grow w-[calc(100%-39px)]">
         <div className="flex justify-between items-baseline w-full">
           <h2
             className={`leading-tight font-medium ${
               postPage && `text-lg truncate inline-block`
-            }`}
-          >
-            <a href={`/user/${post.username}`}>{post.name}</a>
+            }`}>
+            <Link href={`/user/${post.username}`}>{post.name}</Link>
           </h2>
           <time
             dateTime={dayjs(new Date(parseInt(post.createdAt) * 1000)).format(
               "YYYY-MM-DD HH:MM"
             )}
-            className="text-sm leading-tight text-foreground/70"
-          >
+            className="text-sm leading-tight text-foreground/70">
             {dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
           </time>
         </div>
-        <a
+        <Link
           className={` ${
             !postPage && `text-sm`
           } hover:underline text-foreground/70 leading-none w-fit`}
-          href={`/user/${post.username.toLocaleLowerCase()}`}
-        >
+          href={`/user/${post.username.toLocaleLowerCase()}`}>
           @{post.username}
-        </a>
+        </Link>
         <p
-          className={`mt-2.5 ${!postPage && `text-sm`} break-words w-full mb-4`}
-        >
+          className={`mt-2.5 ${
+            !postPage && `text-sm`
+          } break-words w-full mb-4`}>
           {post.content}
         </p>
         <div className="flex justify-between w-full">
@@ -80,19 +78,17 @@ export default function PostCard({
               userId={post.userId}
               nanoId={post.nanoId}
             />
-            <a
+            <Link
               href={`/post/${post.nanoId}`}
-              className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
-            >
+              className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent">
               {post.comments} {commentOrComments}
-            </a>
+            </Link>
           </div>
 
           <div
             className={`flex gap-1.5 ${
               user?.id == post.userId ? `items-center` : `items-end`
-            } justify-end`}
-          >
+            } justify-end`}>
             {parseInt(post.edited) == 1 && (
               <abbr title="This post has been edited">
                 <Pencil size={12} className="text-foreground/50" />

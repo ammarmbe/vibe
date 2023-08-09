@@ -21,6 +21,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Link from "next/link";
 dayjs.extend(relativeTime);
 
 // Textarea code
@@ -147,8 +148,7 @@ export default function OptionsButton({
       <PopoverContent
         align={"end"}
         side={"top"}
-        className="flex flex-col shadow-sm p-0 border-0 w-[100px]"
-      >
+        className="flex flex-col shadow-sm p-0 border-0 w-[100px]">
         <Dialog onOpenChange={(e) => resetTextarea(e)}>
           <DialogTrigger
             onMouseEnter={() => {
@@ -157,13 +157,12 @@ export default function OptionsButton({
             onMouseLeave={() => {
               setBorder("");
             }}
-            className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
-          >
+            className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2">
             Edit
           </DialogTrigger>
           <DialogContent className="p-5 !rounded-md">
             <div className="gap-1.5 flex">
-              <a className="flex-none h-fit" href={`/user/${post.username}`}>
+              <Link className="flex-none h-fit" href={`/user/${post.username}`}>
                 <Image
                   src={post.image}
                   width={33}
@@ -171,17 +170,16 @@ export default function OptionsButton({
                   className="rounded-full"
                   alt={`${post.name}'s profile picture}`}
                 />
-              </a>
+              </Link>
               <div className="flex flex-col flex-grow">
                 <h2 className={`leading-tight font-medium`}>
-                  <a href={`/user/${post.username}`}>{post.name}</a>
+                  <Link href={`/user/${post.username}`}>{post.name}</Link>
                 </h2>
-                <a
+                <Link
                   className={`hover:underline text-foreground/70 leading-none w-fit`}
-                  href={`/user/${post.username.toLocaleLowerCase()}`}
-                >
+                  href={`/user/${post.username.toLocaleLowerCase()}`}>
                   @{post.username}
-                </a>
+                </Link>
                 <textarea
                   ref={inputRef}
                   value={inputValue}
@@ -211,8 +209,7 @@ export default function OptionsButton({
                     inputValue.length > 481 &&
                     inputValue.length < 513 &&
                     `!text-yellow-500/90`
-                  } ${inputValue.length > 512 && `!text-danger`}`}
-                >
+                  } ${inputValue.length > 512 && `!text-danger`}`}>
                   {512 - inputValue.length}
                 </p>
                 <DialogClose
@@ -224,8 +221,7 @@ export default function OptionsButton({
 
                     inputValue.length == 0 && deleteRef.current?.click();
                   }}
-                  className="text-main hover:bg-main/10 hover:border-main/50 text-sm rounded-sm w-fit transition-colors border px-2.5 py-1.5"
-                >
+                  className="text-main hover:bg-main/10 hover:border-main/50 text-sm rounded-sm w-fit transition-colors border px-2.5 py-1.5">
                   Save
                 </DialogClose>
               </div>
@@ -235,15 +231,13 @@ export default function OptionsButton({
         <div
           className={`border-b border-dashed transition-all ${
             border == "delete" && `border-danger/50 !border-solid`
-          } ${border == "edit" && `border-ring !border-solid`}`}
-        ></div>
+          } ${border == "edit" && `border-ring !border-solid`}`}></div>
         <Dialog>
           <DialogTrigger
             onMouseEnter={() => setBorder("delete")}
             onMouseLeave={() => setBorder("")}
             ref={deleteRef}
-            className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
-          >
+            className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2">
             Delete
           </DialogTrigger>
           <DialogContent className="p-5 max-w-[300px] !rounded-md">
@@ -260,8 +254,7 @@ export default function OptionsButton({
               </DialogClose>
               <DialogClose
                 onClick={() => deleteMuatation.mutate()}
-                className="text-danger hover:bg-danger/5 text-sm rounded-sm w-fit transition-colors hover:border-danger/50 border px-2.5 py-1.5"
-              >
+                className="text-danger hover:bg-danger/5 text-sm rounded-sm w-fit transition-colors hover:border-danger/50 border px-2.5 py-1.5">
                 Delete
               </DialogClose>
             </DialogFooter>
