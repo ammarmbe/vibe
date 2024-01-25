@@ -1,8 +1,8 @@
-# Vibe 2.0 🚀
+# Vibe 🚀
 
 Vibe is a social media web app created using Next.js 13, PlanetScale's databasejs, and Clerk. <br> Deployed at: [vibe2.vercel.app](https://vibe2.vercel.app/).
 
-![vibe](https://github.com/ammarmbe/vibe-2.0/assets/117791580/a6179611-2513-4b5f-b8fc-d0c853597ef3)
+![vibe](https://github.com/ammarmbe/vibe/assets/117791580/abeaff9b-621e-4c25-b82b-45dd996dfed2)
 
 ## Features
 
@@ -20,62 +20,6 @@ Next.js, PlanetScale's databasejs (MySQL), Clerk, React Query, TailwindCSS. <br>
 
 Deployed on Vercel and PlanetScale.
 
-## Database Schema (MySQL)
+## License
 
-```sql
-CREATE TABLE `posts` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `userId` varchar(200) NOT NULL,
-  `content` varchar(512) NOT NULL,
-  `parentNanoId` varchar(12) DEFAULT NULL,
-  `nanoId` varchar(12) NOT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `edited` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `posts_userId_idx` (`userId`),
-  KEY `posts_parentNanoId_idx` (`parentNanoId`),
-  KEY `posts_createdAt_idx` (`createdAt`),
-  KEY `posts_nanoId_idx` (`nanoId`)
-);
-
-CREATE TABLE `likes` (
-  `userId` varchar(200) NOT NULL,
-  `postId` int NOT NULL,
-  PRIMARY KEY (`userId`,`postId`),
-  KEY `likes_postId_idx` (`postId`),
-  KEY `likes_userId_idx` (`userId`)
-);
-
-CREATE TABLE `users` (
-  `id` varchar(200) NOT NULL,
-  `name` varchar(250) NOT NULL,
-  `bio` varchar(250) DEFAULT NULL,
-  `username` varchar(16) DEFAULT NULL,
-  `email` varchar(250) NOT NULL,
-  `image` varchar(250) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `users_username_idx` (`username`)
-);
-
-CREATE TABLE `notifications` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(200) NOT NULL,
-  `notifier` varchar(200) NOT NULL,
-  `notified` varchar(200) NOT NULL,
-  `read` tinyint(1) NOT NULL DEFAULT '0',
-  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `postId` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `postId` (`postId`,`type`,`notifier`),
-  KEY `notifications_notified_idx` (`notified`)
-);
-
-CREATE TABLE `follower_relation` (
-  `follower` varchar(200) NOT NULL,
-  `following` varchar(200) NOT NULL,
-  PRIMARY KEY (`follower`,`following`),
-  KEY `follower_relation_follower_idx` (`follower`),
-  KEY `follower_relation_following_idx` (`following`)
-);
-```
+[MIT](https://choosealicense.com/licenses/mit/)
