@@ -1,6 +1,6 @@
 # Vibe 🚀
 
-Vibe is a social media web app created using Next.js 13, PlanetScale's databasejs, and Clerk. <br> Deployed at: [vibe2.vercel.app](https://vibe2.vercel.app/).
+Vibe is a social media web app created using Next.js 13, PlanetScale's databasejs, and Clerk. <br> Deployed at: [vibe.ambe.dev](https://vibe.ambe.dev/).
 
 ![vibe](https://github.com/ammarmbe/vibe/assets/117791580/abeaff9b-621e-4c25-b82b-45dd996dfed2)
 
