@@ -4,13 +4,13 @@ import NewPost from "@/components/newPost/NewPost";
 import { currentUser } from "@clerk/nextjs";
 
 export default async function Home() {
-  const user = await currentUser();
+	const user = await currentUser();
 
-  return (
-    <main className="max-w-3xl h-full flex flex-col w-full mx-auto px-2.5">
-      <Header />
-      {user && <NewPost />}
-      <Feed />
-    </main>
-  );
+	return (
+		<main className="max-w-3xl h-full flex flex-col w-full mx-auto px-2.5">
+			<Header />
+			{user && <NewPost />}
+			<Feed />
+		</main>
+	);
 }
