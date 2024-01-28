@@ -62,7 +62,7 @@ export default function PostCard({
 				<Link
 					className={`${
 						!postPage && "text-sm"
-					} hover:underline text-foreground/70 leading-none w-fit`}
+					} hover:underline text-foreground/70 leading-tight w-fit`}
 					href={`/user/${post.username.toLocaleLowerCase()}`}
 				>
 					@{post.username}
@@ -87,16 +87,10 @@ export default function PostCard({
 						/>
 						<Link
 							href={`/post/${post.nanoId}`}
-							className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent h-full flex items-center"
+							className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent h-full flex items-center order-2"
 						>
 							{post.commentCount} {commentOrComments}
 						</Link>
-						<div className="tracking-[-0.2rem] text-sm">
-							{parseInt(post.heartCount) ? "❤️" : null}
-							{parseInt(post.laughCount) ? "😂" : null}
-							{parseInt(post.surpriseCount) ? "😮" : null}
-							{parseInt(post.cryCount) ? "😭" : null}
-						</div>
 					</div>
 
 					<div

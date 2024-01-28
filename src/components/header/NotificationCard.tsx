@@ -26,7 +26,7 @@ export default function NotificationCard({
 					return;
 				}
 
-				notification.type === "likedPost" &&
+				notification.type.startsWith("likedPost") &&
 					push(`/post/${notification.nanoId}`);
 
 				notification.type === "commentedOnPost" &&
@@ -41,7 +41,7 @@ export default function NotificationCard({
 						return;
 					}
 
-					notification.type === "likedPost" &&
+					notification.type.startsWith("likedPost") &&
 						push(`/post/${notification.nanoId}`);
 
 					notification.type === "commentedOnPost" &&
@@ -71,15 +71,25 @@ export default function NotificationCard({
 				>
 					{notification.notifierName}
 				</Link>{" "}
-				{notification.type === "likedPost"
+				{notification.type === "likedPost.like"
 					? notification.deleted
 						? "liked your deleted post"
 						: "liked your post: "
-					: notification.type === "commentedOnPost"
-					  ? notification.deleted
-							? "commented on your deleted post"
-							: "commented on your post: "
-					  : "followed you"}{" "}
+					: notification.type.startsWith("likedPost")
+					  ? `reacted ${
+								notification.type.endsWith("heart")
+									? "❤️"
+									: notification.type.endsWith("cry")
+									  ? "😭"
+									  : notification.type.endsWith("laugh")
+										  ? "😂"
+										  : notification.type.endsWith("surprise") && "'😮"
+						  } to your ${notification.deleted ? "deleted post" : "post: "}`
+					  : notification.type === "commentedOnPost"
+						  ? notification.deleted
+								? "commented on your deleted post"
+								: "commented on your post: "
+						  : "followed you"}{" "}
 				{notification.content &&
 					!notification.deleted &&
 					`"${notification.content}"`}

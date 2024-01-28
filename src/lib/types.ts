@@ -34,7 +34,13 @@ export type User = {
 
 export type Notification = {
 	id: string;
-	type: "likedPost" | "commentedOnPost" | "followedUser";
+	type:
+		| "likedPost.surprise"
+		| "likedPost.laugh"
+		| "likedPost.cry"
+		| "likedPost.like"
+		| "commentedOnPost"
+		| "followedUser";
 	createdAt: string;
 	notifier: string;
 	postId: string;

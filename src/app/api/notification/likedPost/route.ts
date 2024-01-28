@@ -5,15 +5,16 @@ export async function POST(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const userId = searchParams.get("userId");
 	const postId = searchParams.get("postId");
+	const type = searchParams.get("type");
 	const { userId: currentUserId } = auth();
 
 	if (currentUserId === userId) {
-		return;
+		return new Response("OK");
 	}
 
 	if (userId && postId && currentUserId) {
 		await db.execute(
-			"INSERT INTO notifications (type, notifier, notified, postId) VALUES ('likedPost', :currentUserId, :userId, :postId)",
+			`INSERT INTO notifications (type, notifier, notified, postId) VALUES ('likedPost.${type}', :currentUserId, :userId, :postId)`,
 			{
 				userId,
 				postId,
