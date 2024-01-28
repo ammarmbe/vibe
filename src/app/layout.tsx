@@ -6,6 +6,7 @@ import ReactQueryProvider from "@/lib/ReactQueryProvider";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import LoadingBar from "@/components/LoadingBar";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
 						<LoadingBar />
 						{children}
 						<Analytics />
+						<SpeedInsights />
 					</body>
 				</ClerkProvider>
 			</ReactQueryProvider>
