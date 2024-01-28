@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: "Vibe",
 	description:
-		"Introducing Vibe, a new social media web app built with Next.js 13. Vibe is all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
+		"Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
 };
 
 export default function RootLayout({
