@@ -91,7 +91,7 @@ export default function PostCard({
 						>
 							{post.commentCount} {commentOrComments}
 						</Link>
-						<div className="tracking-[-0.2rem]">
+						<div className="tracking-[-0.2rem] text-sm">
 							{parseInt(post.heartCount) ? "❤️" : null}
 							{parseInt(post.laughCount) ? "😂" : null}
 							{parseInt(post.surpriseCount) ? "😮" : null}

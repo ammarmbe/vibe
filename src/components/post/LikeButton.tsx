@@ -4,13 +4,15 @@ import { Post } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
 	TooltipProvider,
 	Tooltip,
 	TooltipTrigger,
 	TooltipContent,
 } from "../ui/tooltip";
+import { PopoverContent, PopoverTrigger, Popover } from "../ui/popover";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 export default function LikeButton({
 	likeCount,
@@ -33,6 +35,7 @@ export default function LikeButton({
 	nanoId?: string;
 	userId: string;
 }) {
+	const [popoverOpen, setPopoverOpen] = useState(false);
 	const { userId: currentUserId, isSignedIn } = useAuth();
 	const { push } = useRouter();
 	const [currentStatus, setCurrentStatus] = useState(userLikeStatus);
@@ -43,6 +46,20 @@ export default function LikeButton({
 		surpriseCount,
 		cryCount,
 	});
+
+	const isTouchDevice =
+		"ontouchstart" in window || navigator.maxTouchPoints > 0;
+	let timeoutId: NodeJS.Timeout;
+
+	const handleTouchStart = () => {
+		timeoutId = setTimeout(() => {
+			setPopoverOpen(true);
+		}, 1000);
+	};
+
+	const handleTouchEnd = () => {
+		clearTimeout(timeoutId);
+	};
 
 	const notificationMutation = useMutation({
 		mutationFn: async () =>
@@ -216,12 +233,91 @@ export default function LikeButton({
 
 	const likesOrLike = buttonCounts.likeCount === 1 ? "like" : "likes";
 
-	return (
+	return isTouchDevice ? (
+		<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+			<PopoverTrigger
+				disabled={likeMutation.isLoading}
+				className={`text-xs px-2.5 py-1 border transition-colors rounded-md h-full select-none ${
+					currentStatus === "like"
+						? "bg-main text-white border-main/50 hover:bg-main/90"
+						: "hover:bg-main/10 hover:border-main/50 text-main"
+				}`}
+				onClick={
+					isSignedIn
+						? (e) => {
+								e.preventDefault();
+								toggleLike("like");
+						  }
+						: (e) => {
+								e.preventDefault();
+								push("/sign-up");
+						  }
+				}
+				onTouchStart={handleTouchStart}
+				onTouchEnd={handleTouchEnd}
+			>
+				{buttonCounts.likeCount}{" "}
+				{currentStatus === "like" ? "liked" : likesOrLike}
+			</PopoverTrigger>
+			<PopoverContent className="p-1.5 w-fit space-x-1" side="top">
+				<PopoverClose
+					type="button"
+					className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
+						currentStatus === "heart" ? "bg-secondary" : "hover:bg-secondary/50"
+					}`}
+					disabled={likeMutation.isLoading}
+					onClick={
+						isSignedIn ? () => toggleLike("heart") : () => push("/sign-up")
+					}
+				>
+					❤️ {buttonCounts.heartCount}
+				</PopoverClose>
+				<PopoverClose
+					type="button"
+					className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
+						currentStatus === "cry" ? "bg-secondary" : "hover:bg-secondary/50"
+					}`}
+					disabled={likeMutation.isLoading}
+					onClick={
+						isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
+					}
+				>
+					😭 {buttonCounts.cryCount}
+				</PopoverClose>
+				<PopoverClose
+					type="button"
+					className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
+						currentStatus === "laugh" ? "bg-secondary" : "hover:bg-secondary/50"
+					}`}
+					disabled={likeMutation.isLoading}
+					onClick={
+						isSignedIn ? () => toggleLike("laugh") : () => push("/sign-up")
+					}
+				>
+					😂 {buttonCounts.laughCount}
+				</PopoverClose>
+				<PopoverClose
+					type="button"
+					className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
+						currentStatus === "surprise"
+							? "bg-secondary"
+							: "hover:bg-secondary/50"
+					}`}
+					disabled={likeMutation.isLoading}
+					onClick={
+						isSignedIn ? () => toggleLike("surprise") : () => push("/sign-up")
+					}
+				>
+					😮 {buttonCounts.surpriseCount}
+				</PopoverClose>
+			</PopoverContent>
+		</Popover>
+	) : (
 		<TooltipProvider>
 			<Tooltip>
 				<TooltipTrigger
 					disabled={likeMutation.isLoading}
-					className={`text-xs px-2.5 py-1 border transition-colors rounded-md h-full ${
+					className={`text-xs px-2.5 py-1 border transition-colors rounded-md h-full select-none ${
 						currentStatus === "like"
 							? "bg-main text-white border-main/50 hover:bg-main/90"
 							: "hover:bg-main/10 hover:border-main/50 text-main"
