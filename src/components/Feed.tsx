@@ -22,7 +22,7 @@ export default function Feed() {
 				await fetch(`/api/posts?postId=${pageParam}&feed=${feed.current}`)
 			).json(),
 		getNextPageParam: (lastPage, _pages) => {
-			if (lastPage.length === 11) {
+			if (lastPage?.length === 11) {
 				return lastPage[lastPage.length - 1].postId;
 			}
 			return undefined;

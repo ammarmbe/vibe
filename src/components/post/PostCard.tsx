@@ -8,6 +8,12 @@ import { useUser } from "@clerk/nextjs";
 import OptionsButton from "./OptionsButton";
 import { Pencil } from "lucide-react";
 import Link from "@/components/Link";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 dayjs.extend(relativeTime);
 
 export default function PostCard({
@@ -99,9 +105,16 @@ export default function PostCard({
 						} justify-end`}
 					>
 						{parseInt(post.edited) === 1 && (
-							<abbr title="This post has been edited">
-								<Pencil size={12} className="text-foreground/50" />
-							</abbr>
+							<TooltipProvider>
+								<Tooltip>
+									<TooltipTrigger className="px-0.5 cursor-auto">
+										<Pencil size={14} className="text-[#666666]" />
+									</TooltipTrigger>
+									<TooltipContent className="text-xs px-2">
+										<p>This post has been edited</p>
+									</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
 						)}
 						{user?.id === post.userId && (
 							<OptionsButton

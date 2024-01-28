@@ -25,7 +25,7 @@ export default function NotificationButton() {
 				await fetch(`/api/notifications?notificationId=${pageParam}`)
 			).json(),
 		getNextPageParam: (lastPage, _pages) => {
-			if (lastPage.length === 11) {
+			if (lastPage?.length === 11) {
 				return lastPage[lastPage.length - 1].id;
 			}
 			return undefined;

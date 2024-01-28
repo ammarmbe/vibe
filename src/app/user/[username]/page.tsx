@@ -40,7 +40,7 @@ export default function Page({ params }: Props) {
 			).json(),
 		// eslint-disable-next-line no-unused-vars
 		getNextPageParam: (lastPage, pages) => {
-			if (lastPage.length === 11) {
+			if (lastPage?.length === 11) {
 				return lastPage[lastPage.length - 1].postId;
 			}
 			return undefined;
