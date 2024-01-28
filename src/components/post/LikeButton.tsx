@@ -54,7 +54,7 @@ export default function LikeButton({
 	const handleTouchStart = () => {
 		timeoutId = setTimeout(() => {
 			setPopoverOpen(true);
-		}, 1000);
+		}, 500);
 	};
 
 	const handleTouchEnd = () => {
