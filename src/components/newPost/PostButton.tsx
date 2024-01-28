@@ -12,7 +12,9 @@ export default function Button() {
 	useEffect(() => {
 		if (prevPendingState && !pending) {
 			setTimeout(() => {
-				client.invalidateQueries({ queryKey: ["homeFeed"] });
+				client.invalidateQueries({
+					predicate: (query) => query.queryKey[0] === "homeFeed",
+				});
 			}, 300);
 		}
 
