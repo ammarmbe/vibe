@@ -92,7 +92,7 @@ export default function OptionsButton({
 						if (oldData) {
 							return {
 								...oldData,
-								comments: (parseInt(oldData.comments) - 1).toString(),
+								comments: (parseInt(oldData.commentCount) - 1).toString(),
 							};
 						}
 					},

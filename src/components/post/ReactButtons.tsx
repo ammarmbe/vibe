@@ -1,33 +1,24 @@
-"use client";
 import { client } from "@/lib/ReactQueryProvider";
 import { Post } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "../ui/tooltip";
 
-export default function LikeButton({
-	likeCount,
+export default function ReactionButtons({
+	heartCount,
 	laughCount,
 	surpriseCount,
 	cryCount,
-	heartCount,
 	userLikeStatus,
 	postId,
 	nanoId,
 	userId,
 }: {
-	likeCount: number;
+	heartCount: number;
 	laughCount: number;
 	surpriseCount: number;
 	cryCount: number;
-	heartCount: number;
 	userLikeStatus: "like" | "laugh" | "heart" | "surprise" | "cry" | null;
 	postId: string;
 	nanoId?: string;
@@ -37,12 +28,24 @@ export default function LikeButton({
 	const { push } = useRouter();
 	const [currentStatus, setCurrentStatus] = useState(userLikeStatus);
 	const [buttonCounts, setButtonCounts] = useState({
-		likeCount,
 		heartCount,
 		laughCount,
 		surpriseCount,
 		cryCount,
 	});
+
+	useEffect(() => {
+		setCurrentStatus(userLikeStatus);
+	}, [userLikeStatus]);
+
+	useEffect(() => {
+		setButtonCounts({
+			heartCount,
+			laughCount,
+			surpriseCount,
+			cryCount,
+		});
+	}, [heartCount, laughCount, surpriseCount, cryCount]);
 
 	const notificationMutation = useMutation({
 		mutationFn: async () =>
@@ -70,12 +73,6 @@ export default function LikeButton({
 			setCurrentStatus(type === currentStatus ? null : type);
 			setButtonCounts((prev) => {
 				return {
-					likeCount:
-						currentStatus === "like"
-							? prev.likeCount - 1
-							: type === "like"
-							  ? prev.likeCount + 1
-							  : prev.likeCount,
 					laughCount:
 						currentStatus === "laugh"
 							? prev.laughCount - 1
@@ -105,13 +102,6 @@ export default function LikeButton({
 		},
 		onError: () => {
 			setCurrentStatus(userLikeStatus);
-			setButtonCounts({
-				likeCount,
-				heartCount,
-				laughCount,
-				surpriseCount,
-				cryCount,
-			});
 		},
 		onSuccess: (_data, type) => {
 			if (userLikeStatus === null && userId !== currentUserId)
@@ -125,33 +115,33 @@ export default function LikeButton({
 								if (post.postId === postId) {
 									return {
 										...post,
-										userLikeStatus: type === userLikeStatus ? null : type,
+										userLikeStatus: type === currentStatus ? null : type,
 										likeCount:
-											userLikeStatus === "like"
+											currentStatus === "like"
 												? (parseInt(post.likeCount) - 1).toString()
 												: type === "like"
 												  ? (parseInt(post.likeCount) + 1).toString()
 												  : post.likeCount,
 										laughCount:
-											userLikeStatus === "laugh"
+											currentStatus === "laugh"
 												? (parseInt(post.laughCount) - 1).toString()
 												: type === "laugh"
 												  ? (parseInt(post.laughCount) + 1).toString()
 												  : post.laughCount,
 										heartCount:
-											userLikeStatus === "heart"
+											currentStatus === "heart"
 												? (parseInt(post.heartCount) - 1).toString()
 												: type === "heart"
 												  ? (parseInt(post.heartCount) + 1).toString()
 												  : post.heartCount,
 										surpriseCount:
-											userLikeStatus === "surprise"
+											currentStatus === "surprise"
 												? (parseInt(post.surpriseCount) - 1).toString()
 												: type === "surprise"
 												  ? (parseInt(post.surpriseCount) + 1).toString()
 												  : post.surpriseCount,
 										cryCount:
-											userLikeStatus === "cry"
+											currentStatus === "cry"
 												? (parseInt(post.cryCount) - 1).toString()
 												: type === "cry"
 												  ? (parseInt(post.cryCount) + 1).toString()
@@ -171,33 +161,33 @@ export default function LikeButton({
 				if (data) {
 					return {
 						...data,
-						userLikeStatus: type === userLikeStatus ? null : type,
+						userLikeStatus: type === currentStatus ? null : type,
 						likeCount:
-							userLikeStatus === "like"
+							currentStatus === "like"
 								? (parseInt(data.likeCount) - 1).toString()
 								: type === "like"
 								  ? (parseInt(data.likeCount) + 1).toString()
 								  : data.likeCount,
 						laughCount:
-							userLikeStatus === "laugh"
+							currentStatus === "laugh"
 								? (parseInt(data.laughCount) - 1).toString()
 								: type === "laugh"
 								  ? (parseInt(data.laughCount) + 1).toString()
 								  : data.laughCount,
 						heartCount:
-							userLikeStatus === "heart"
+							currentStatus === "heart"
 								? (parseInt(data.heartCount) - 1).toString()
 								: type === "heart"
 								  ? (parseInt(data.heartCount) + 1).toString()
 								  : data.heartCount,
 						surpriseCount:
-							userLikeStatus === "surprise"
+							currentStatus === "surprise"
 								? (parseInt(data.surpriseCount) - 1).toString()
 								: type === "surprise"
 								  ? (parseInt(data.surpriseCount) + 1).toString()
 								  : data.surpriseCount,
 						cryCount:
-							userLikeStatus === "cry"
+							currentStatus === "cry"
 								? (parseInt(data.cryCount) - 1).toString()
 								: type === "cry"
 								  ? (parseInt(data.cryCount) + 1).toString()
@@ -214,82 +204,62 @@ export default function LikeButton({
 		likeMutation.mutate(type);
 	};
 
-	const likesOrLike = buttonCounts.likeCount === 1 ? "like" : "likes";
-
 	return (
-		<TooltipProvider>
-			<Tooltip>
-				<TooltipTrigger
-					disabled={likeMutation.isLoading}
-					className={`text-xs px-2.5 py-1 border transition-colors rounded-md h-full ${
-						currentStatus === "like"
-							? "bg-main text-white border-main/50 hover:bg-main/90"
-							: "hover:bg-main/10 hover:border-main/50 text-main"
-					}`}
-					onClick={
-						isSignedIn ? () => toggleLike("like") : () => push("/sign-up")
-					}
-				>
-					{buttonCounts.likeCount}{" "}
-					{currentStatus === "like" ? "liked" : likesOrLike}
-				</TooltipTrigger>
-				<TooltipContent className="px-1.5 space-x-1">
-					<button
-						type="button"
-						className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
-							currentStatus === "heart"
-								? "bg-secondary"
-								: "hover:bg-secondary/50"
-						}`}
-						disabled={likeMutation.isLoading}
-						onClick={
-							isSignedIn ? () => toggleLike("heart") : () => push("/sign-up")
-						}
-					>
-						❤️ {buttonCounts.heartCount}
-					</button>
-					<button
-						type="button"
-						className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
-							currentStatus === "cry" ? "bg-secondary" : "hover:bg-secondary/50"
-						}`}
-						disabled={likeMutation.isLoading}
-						onClick={
-							isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
-						}
-					>
-						😭 {buttonCounts.cryCount}
-					</button>
-					<button
-						type="button"
-						className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
-							currentStatus === "laugh"
-								? "bg-secondary"
-								: "hover:bg-secondary/50"
-						}`}
-						disabled={likeMutation.isLoading}
-						onClick={
-							isSignedIn ? () => toggleLike("laugh") : () => push("/sign-up")
-						}
-					>
-						😂 {buttonCounts.laughCount}
-					</button>
-					<button
-						type="button"
-						className={`rounded-sm px-2 p-[7px] text-sm transition-all ${
-							currentStatus === "surprise"
-								? "bg-secondary"
-								: "hover:bg-secondary/50"
-						}`}
-						disabled={likeMutation.isLoading}
-						onClick={
-							isSignedIn ? () => toggleLike("surprise") : () => push("/sign-up")
-						}
-					>
-						😮 {buttonCounts.surpriseCount}
-					</button>
-				</TooltipContent>
-			</Tooltip>
-		</TooltipProvider>
+		<div className="flex gap-1.5">
+			<button
+				type="button"
+				className={`rounded-md px-2 p-[7px] text-xs transition-all border ${
+					currentStatus === "heart"
+						? "bg-accent border-ring"
+						: "hover:bg-accent hover:border-ring"
+				}`}
+				disabled={likeMutation.isLoading}
+				onClick={
+					isSignedIn ? () => toggleLike("heart") : () => push("/sign-up")
+				}
+			>
+				❤️ {buttonCounts.heartCount}
+			</button>
+			<button
+				type="button"
+				className={`rounded-md px-2 p-[7px] text-xs transition-all border ${
+					currentStatus === "cry"
+						? "bg-accent border-ring"
+						: "hover:bg-accent hover:border-ring"
+				}`}
+				disabled={likeMutation.isLoading}
+				onClick={isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")}
+			>
+				😭 {buttonCounts.cryCount}
+			</button>
+			<button
+				type="button"
+				className={`rounded-md px-2 p-[7px] text-xs transition-all border ${
+					currentStatus === "laugh"
+						? "bg-accent border-ring"
+						: "hover:bg-accent hover:border-ring"
+				}`}
+				disabled={likeMutation.isLoading}
+				onClick={
+					isSignedIn ? () => toggleLike("laugh") : () => push("/sign-up")
+				}
+			>
+				😂 {buttonCounts.laughCount}
+			</button>
+			<button
+				type="button"
+				className={`rounded-md px-2 p-[7px] text-xs transition-all border ${
+					currentStatus === "surprise"
+						? "bg-accent border-ring"
+						: "hover:bg-accent hover:border-ring"
+				}`}
+				disabled={likeMutation.isLoading}
+				onClick={
+					isSignedIn ? () => toggleLike("surprise") : () => push("/sign-up")
+				}
+			>
+				😮 {buttonCounts.surpriseCount}
+			</button>
+		</div>
 	);
 }

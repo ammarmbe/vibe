@@ -49,7 +49,7 @@ export default function NewComment({
 				if (data) {
 					return {
 						...data,
-						comments: String(parseInt(data.comments) + 1),
+						comments: String(parseInt(data.commentCount) + 1),
 					};
 				}
 			});

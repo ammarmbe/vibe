@@ -1,6 +1,6 @@
 import { Post } from "@/lib/types";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import LikeButton from "./LikeButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -22,7 +22,7 @@ export default function PostCard({
 	const { user } = useUser();
 
 	const commentOrComments =
-		parseInt(post.comments) === 1 ? "Comment" : "Comments";
+		parseInt(post.commentCount) === 1 ? "Comment" : "Comments";
 
 	return (
 		<article
@@ -73,20 +73,30 @@ export default function PostCard({
 					{post.content}
 				</p>
 				<div className="flex justify-between w-full">
-					<div className="flex gap-1.5">
+					<div className="flex gap-1.5 items-center">
 						<LikeButton
-							count={post.likes}
-							liked={parseInt(post.likedByUser) === 0 ? false : true}
+							likeCount={parseInt(post.likeCount)}
+							cryCount={parseInt(post.cryCount)}
+							heartCount={parseInt(post.heartCount)}
+							laughCount={parseInt(post.laughCount)}
+							surpriseCount={parseInt(post.surpriseCount)}
+							userLikeStatus={post.userLikeStatus}
 							postId={post.postId}
 							userId={post.userId}
 							nanoId={post.nanoId}
 						/>
 						<Link
 							href={`/post/${post.nanoId}`}
-							className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent"
+							className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent h-full flex items-center"
 						>
-							{post.comments} {commentOrComments}
+							{post.commentCount} {commentOrComments}
 						</Link>
+						<div className="tracking-[-0.2rem]">
+							{parseInt(post.heartCount) ? "❤️" : null}
+							{parseInt(post.laughCount) ? "😂" : null}
+							{parseInt(post.surpriseCount) ? "😮" : null}
+							{parseInt(post.cryCount) ? "😭" : null}
+						</div>
 					</div>
 
 					<div

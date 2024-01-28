@@ -10,9 +10,13 @@ export type Post = {
 	image: string;
 	userId: string;
 
-	likes: string;
-	comments: string;
-	likedByUser: string;
+	likeCount: string;
+	cryCount: string;
+	laughCount: string;
+	heartCount: string;
+	surpriseCount: string;
+	commentCount: string;
+	userLikeStatus: "like" | "cry" | "laugh" | "heart" | "surprise" | null;
 
 	deleted: string;
 	edited: string;
