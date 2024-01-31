@@ -231,7 +231,7 @@ export default function Input({
 							<Spinner size="md" />
 						</div>
 					) : data?.length ? (
-						<div className="max-h-[200px] overflow-auto">
+						<div>
 							{data.map((user) => (
 								<button
 									type="button"
