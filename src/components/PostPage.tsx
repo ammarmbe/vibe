@@ -3,7 +3,7 @@ import { Post } from "@/lib/types";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { Link } from "lucide-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NewComment from "./NewComment";
 import Spinner from "./Spinner";
