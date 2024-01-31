@@ -42,12 +42,12 @@ export async function POST(request: Request) {
 	}
 
 	await db.execute(
-		"INSERT INTO `users` (id, name, email, image) VALUES (:id, :name, :email, :image)",
+		"INSERT INTO `users` (id, name, email, image, username) VALUES (:id, :name, :email, :image, :username)",
 		{
 			id: body.data.id,
 			name: `${body.data.first_name} ${body.data.last_name}`,
 			email: body.data.email_addresses[0].email_address,
-			username: username,
+			username,
 			image: body.data.image_url,
 		},
 	);
