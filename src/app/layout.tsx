@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 	title: "Vibe",
 	description:
 		"Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
+	metadataBase: new URL("https://vibe.ambe.dev"),
 };
 
 export default function RootLayout({

@@ -4,6 +4,7 @@ import type { Notification } from "@/lib/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "@/components/Link";
+import sanitize from "sanitize-html";
 
 export default function NotificationCard({
 	notification,
@@ -26,14 +27,9 @@ export default function NotificationCard({
 					return;
 				}
 
-				notification.type.startsWith("likedPost") &&
-					push(`/post/${notification.nanoId}`);
-
-				notification.type === "commentedOnPost" &&
-					push(`/post/${notification.nanoId}`);
-
-				notification.type === "followedUser" &&
-					push(`/user/${notification.notifierUsername}`);
+				notification.type === "followedUser"
+					? push(`/user/${notification.notifierUsername}`)
+					: push(`/post/${notification.nanoId}`);
 			}}
 			onKeyDown={(e) => {
 				if (e.key === "Enter") {
@@ -41,14 +37,9 @@ export default function NotificationCard({
 						return;
 					}
 
-					notification.type.startsWith("likedPost") &&
-						push(`/post/${notification.nanoId}`);
-
-					notification.type === "commentedOnPost" &&
-						push(`/post/${notification.nanoId}`);
-
-					notification.type === "followedUser" &&
-						push(`/user/${notification.notifierUsername}`);
+					notification.type === "followedUser"
+						? push(`/user/${notification.notifierUsername}`)
+						: push(`/post/${notification.nanoId}`);
 				}
 			}}
 		>
@@ -83,16 +74,28 @@ export default function NotificationCard({
 									  ? "😭"
 									  : notification.type.endsWith("laugh")
 										  ? "😂"
-										  : notification.type.endsWith("surprise") && "'😮"
+										  : notification.type.endsWith("surprise")
+											  ? "😮"
+											  : ""
 						  } to your ${notification.deleted ? "deleted post" : "post: "}`
 					  : notification.type === "commentedOnPost"
 						  ? notification.deleted
 								? "commented on your deleted post"
 								: "commented on your post: "
-						  : "followed you"}{" "}
+						  : notification.type === "mentioned.post"
+							  ? notification.deleted
+									? "mentioned you in their deleted post"
+									: "mentioned you in their post: "
+							  : notification.type === "mentioned.comment"
+								  ? notification.deleted
+										? "mentioned you in their deleted comment"
+										: "mentioned you in their comment: "
+								  : "followed you"}{" "}
 				{notification.content &&
 					!notification.deleted &&
-					`"${notification.content}"`}
+					`"${sanitize(notification.content, {
+						allowedTags: [],
+					}).replaceAll(/&nbsp;/g, " ")}"`}
 			</p>
 		</div>
 	);

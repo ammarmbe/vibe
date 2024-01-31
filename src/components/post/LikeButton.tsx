@@ -409,7 +409,7 @@ export default function LikeButton({
 			{buttonCounts.heartCount ? (
 				<button
 					type="button"
-					className={`border p-[7px] pl-[5px] py-0.5 text-sm rounded-md order-3 ${
+					className={`border p-1.5 py-1 text-xs rounded-md order-3 ${
 						currentStatus === "heart"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -425,7 +425,7 @@ export default function LikeButton({
 			{buttonCounts.laughCount ? (
 				<button
 					type="button"
-					className={`border p-[7px] pl-[5px] py-0.5 text-sm rounded-md order-4 ${
+					className={`border p-1.5 py-1 text-xs rounded-md order-4 ${
 						currentStatus === "laugh"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -441,7 +441,7 @@ export default function LikeButton({
 			{buttonCounts.surpriseCount ? (
 				<button
 					type="button"
-					className={`border p-[7px] pl-[5px] py-0.5 text-sm rounded-md order-5 ${
+					className={`border p-1.5 py-1 text-xs rounded-md order-5 ${
 						currentStatus === "surprise"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -457,7 +457,7 @@ export default function LikeButton({
 			{buttonCounts.cryCount ? (
 				<button
 					type="button"
-					className={`border p-[7px] pl-[5px] py-0.5 text-sm rounded-md order-6 ${
+					className={`border p-1.5 py-1 text-xs rounded-md order-6 ${
 						currentStatus === "cry"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"

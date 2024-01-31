@@ -60,7 +60,7 @@ export default function NotificationButton() {
 		if (
 			data?.pages
 				.flatMap((page) => page)
-				.some((notification) => !notification.read)
+				.some((notification) => !notification?.read)
 		) {
 			setUnread(true);
 		}
@@ -80,7 +80,7 @@ export default function NotificationButton() {
 				<Bell size={16} color="grey" />
 			</PopoverTrigger>
 			<PopoverContent className="p-0">
-				{data && data?.pages[0].length > 0 ? (
+				{data?.pages[0] && data?.pages[0].length > 0 ? (
 					<>
 						{isLoading ? (
 							<div className="w-full h-[300px] flex p-2.5 items-center justify-center">

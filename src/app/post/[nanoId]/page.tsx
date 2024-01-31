@@ -53,8 +53,7 @@ export default function Page({ params }: Props) {
 					`/api/posts/parentNanoId?postId=${pageParam}&parentNanoId=${mainPost?.nanoId}`,
 				)
 			).json(),
-		// eslint-disable-next-line no-unused-vars
-		getNextPageParam: (lastPage, pages) => {
+		getNextPageParam: (lastPage, _pages) => {
 			if (lastPage?.length === 11) {
 				return lastPage[lastPage.length - 1].postId;
 			}
@@ -128,7 +127,10 @@ export default function Page({ params }: Props) {
 										>
 											@{parentPost.username}
 										</Link>
-										<p className="mt-2.5 text-sm">{parentPost.content}</p>
+										<p
+											className="mt-2.5 text-sm"
+											dangerouslySetInnerHTML={{ __html: parentPost.content }}
+										/>
 									</div>
 								</button>
 								<div className="border-t w-full border-dashed peer-hover:border-solid peer-hover:border-ring transition-colors" />
@@ -164,6 +166,7 @@ export default function Page({ params }: Props) {
 										nanoId={mainPost.nanoId}
 										userId={mainPost.userId}
 										parentPostId={mainPost.postId}
+										parentPostUsername={mainPost.username}
 									/>
 								</>
 							)}

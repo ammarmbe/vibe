@@ -40,7 +40,9 @@ export type Notification = {
 		| "likedPost.cry"
 		| "likedPost.like"
 		| "commentedOnPost"
-		| "followedUser";
+		| "followedUser"
+		| "mentioned.post"
+		| "mentioned.comment";
 	createdAt: string;
 	notifier: string;
 	postId: string;

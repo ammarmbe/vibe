@@ -98,3 +98,33 @@ body {
   scrollbar-gutter: stable;
   overflow: auto;
 }
+
+@keyframes vibrate {
+  0% {
+    transform: translateX(0);
+  }
+
+  16.67% {
+    transform: translateX(-2px);
+  }
+
+  33.34% {
+    transform: translateX(0);
+  }
+
+  50.01% {
+    transform: translateX(2px);
+  }
+
+  66.68% {
+    transform: translateX(0);
+  }
+
+  83.35% {
+    transform: translateX(-2px);
+  }
+
+  100.0% {
+    transform: translateX(0);
+  }
+}

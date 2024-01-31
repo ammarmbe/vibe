@@ -7,7 +7,6 @@ export default function Loading() {
 	const [progress, setProgress] = useState(0);
 	const pathname = usePathname();
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies:
 	useEffect(() => {
 		setProgress(100);
 	}, [pathname]);

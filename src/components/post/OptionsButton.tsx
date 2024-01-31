@@ -52,7 +52,6 @@ export default function OptionsButton({
 		textareaRef.current = textarea;
 	}, []);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies:
 	useLayoutEffect(() => {
 		updateTextAreaSize(textareaRef.current);
 	}, [inputValue]);

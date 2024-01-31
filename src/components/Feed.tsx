@@ -37,7 +37,7 @@ export default function Feed() {
 			</div>
 		);
 
-	if (data && data?.pages[0].length > 0)
+	if (data?.pages[0] && data?.pages[0].length > 0)
 		return (
 			<>
 				<InfiniteScroll

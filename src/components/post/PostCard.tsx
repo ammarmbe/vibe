@@ -75,9 +75,9 @@ export default function PostCard({
 				</Link>
 				<p
 					className={`mt-2.5 ${!postPage && "text-sm"} break-words w-full mb-4`}
-				>
-					{post.content}
-				</p>
+					dangerouslySetInnerHTML={{ __html: post.content }}
+				/>
+
 				<div className="flex justify-between w-full">
 					<div className="flex gap-1.5 items-center">
 						<LikeButton

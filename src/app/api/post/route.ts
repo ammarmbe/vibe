@@ -3,25 +3,32 @@ import { Post } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
 
 export async function POST(request: Request) {
-	const { searchParams } = new URL(request.url);
-	const parentNanoId = searchParams.get("parentNanoId");
 	const { userId } = auth();
-	const content = searchParams.get("content");
-	const nanoId = searchParams.get("nanoId");
 
-	if (parentNanoId && userId && content && nanoId && content.length < 513) {
+	const body = (await request.json()) as {
+		content: string;
+		nanoId: string;
+		parentNanoId: string;
+	};
+
+	// remove ONLY trailing and leading &nbsp; from content
+	body.content = body.content.replace(/^&nbsp;|&nbsp;$/g, "");
+
+	if (userId && body.content) {
 		await db.execute(
 			"INSERT INTO posts (userId, content, parentNanoId, nanoId) VALUES (:userId, :content, :parentNanoId, :nanoId)",
 			{
 				userId,
-				content,
-				parentNanoId,
-				nanoId,
+				content: body.content,
+				parentNanoId: body.parentNanoId ?? null,
+				nanoId: body.nanoId,
 			},
 		);
 	}
 
-	return new Response("OK");
+	return new Response(
+		(await db.execute("SELECT LAST_INSERT_ID() AS id")).rows[0].id,
+	);
 }
 
 export async function GET(request: Request) {

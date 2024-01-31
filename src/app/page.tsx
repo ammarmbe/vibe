@@ -1,6 +1,6 @@
 import Feed from "@/components/Feed";
 import Header from "@/components/header/Header";
-import NewPost from "@/components/newPost/NewPost";
+import NewPost from "@/components/NewPost";
 import { currentUser } from "@clerk/nextjs";
 
 export default async function Home() {
