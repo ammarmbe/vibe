@@ -15,7 +15,7 @@ export default function NotificationCard({
 
 	return (
 		<div
-			className={`rounded-md border transition-colors ${
+			className={`rounded-md border transition-colors flex items-center ${
 				!notification.deleted &&
 				"hover:border-ring hover:bg-accent cursor-pointer"
 			} dark:bg-foreground/5
@@ -44,7 +44,7 @@ export default function NotificationCard({
 			}}
 		>
 			<Link
-				className="flex-none"
+				className="flex-none self-start"
 				href={`/user/${notification.notifierUsername}`}
 			>
 				<Image
@@ -55,7 +55,7 @@ export default function NotificationCard({
 					className="rounded-full"
 				/>
 			</Link>
-			<p className="text-sm line-clamp-2">
+			<p className="text-sm line-clamp-2 h-fit">
 				<Link
 					href={`/user/${notification.notifierUsername}`}
 					className="font-medium"

@@ -79,7 +79,7 @@ export default function NewPost() {
 
 	return (
 		<form
-			className={`grid grid-cols-[1fr,auto] grid-rows-[auto,auto,1fr] mb-2.5 hover:shadow-none items-center transition-colors shadow-sm rounded-md px-2 py-1 pr-1 border ${
+			className={`grid grid-cols-[1fr,auto] grid-rows-[auto,auto,1fr] gap-x-2 mb-2.5 hover:shadow-none items-center transition-colors shadow-sm rounded-md px-2 py-1 pr-1 border ${
 				inputFocus ? "dark:border-foreground/25 border-ring" : null
 			}`}
 		>

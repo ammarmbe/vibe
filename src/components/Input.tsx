@@ -41,6 +41,7 @@ export default function Input({
 	setInputFocus,
 	postMutation,
 	className,
+	relativeParent,
 }: {
 	value: {
 		sanitized: string;
@@ -59,13 +60,14 @@ export default function Input({
 		>
 	>;
 	inputRef: RefObject<HTMLElement>;
-	setInputFocus: Dispatch<SetStateAction<boolean>>;
+	setInputFocus?: Dispatch<SetStateAction<boolean>>;
 	// biome-ignore lint/suspicious/noExplicitAny:
 	postMutation: UseMutationResult<any, unknown, void, unknown>;
 	className?: string;
+	relativeParent?: string;
 }) {
 	const [mentionModalOpen, setMentionModalOpen] = useState(false);
-	const [caretPosition, setCaretPosition] = useState({ x: 0, y: 0 });
+	const [caretPosition, setCaretPosition] = useState({ left: 0, top: 0 });
 
 	const handleSelectionChange = useCallback(() => {
 		// get the caret x and y position
@@ -73,7 +75,23 @@ export default function Input({
 		if (selection && selection.rangeCount > 0) {
 			const range = selection.getRangeAt(0);
 			const rect = range.getBoundingClientRect();
-			setCaretPosition({ x: rect.x, y: rect.y });
+
+			let left = rect.left;
+			let top = rect.top;
+
+			if (relativeParent) {
+				// get the relative parent using querySelector
+				const relativeParentElement = document.querySelector(relativeParent);
+
+				// get the relative parent's x and y position
+				const relativeParentRect =
+					relativeParentElement?.getBoundingClientRect();
+
+				// subtract the relative parent's x and y position from the caret's x and y position
+				left = rect.left - (relativeParentRect?.left ?? 0);
+				top = rect.top - (relativeParentRect?.top ?? 0);
+			}
+			setCaretPosition({ left: left, top: top });
 		}
 
 		// set selected = true for the word that the caret is in
@@ -137,21 +155,20 @@ export default function Input({
 	});
 
 	return (
-		<div className="row-span-3 order-1 break-words max-w-full">
+		<div className="row-span-3 order-1 break-words w-full min-w-0">
 			{!value.map((v) => v.sanitized).join(" ").length ? (
 				<p
-					className={`absolute select-none pointer-events-none ${
-						className ?? "w-fit text-foreground/20"
+					className={`absolute w-fit select-none pointer-events-none text-foreground/20 ${
+						className ?? ""
 					}`}
 				>
 					What's on your mind?
 				</p>
 			) : null}
 			<ContentEditable
-				className={
-					className ??
-					"overflow-auto bg-transparent w-full min-h-[1.5rem] outline-none break-words"
-				}
+				className={`overflow-auto min-h-[1.5rem] ${
+					className ?? "w-full bg-transparent outline-none break-words"
+				}`}
 				html={value.map((v) => v.unsanitized).join("&nbsp;")}
 				tagName="p"
 				id="textarea"
@@ -165,10 +182,10 @@ export default function Input({
 					document.execCommand("insertHTML", false, text);
 				}}
 				onFocus={() => {
-					setInputFocus(true);
+					setInputFocus?.(true);
 				}}
 				onBlur={() => {
-					setInputFocus(false);
+					setInputFocus?.(false);
 				}}
 				onChange={(e) => {
 					const words = e.target.value.replaceAll(/&nbsp;/g, " ").split(" ");
@@ -209,16 +226,16 @@ export default function Input({
 			/>
 			<Popover open={mentionModalOpen} onOpenChange={setMentionModalOpen}>
 				<PopoverTrigger
-					className="absolute invisible pointer-events-none"
+					className="fixed invisible pointer-events-none"
 					style={{
-						left: caretPosition.x,
-						top: caretPosition.y,
+						left: caretPosition.left,
+						top: caretPosition.top,
 					}}
 					onClick={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
 					}}
-					key={caretPosition.x + caretPosition.y}
+					key={caretPosition.left + caretPosition.top}
 				>
 					a
 				</PopoverTrigger>

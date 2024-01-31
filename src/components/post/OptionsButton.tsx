@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { useMutation } from "@tanstack/react-query";
 import { MoreHorizontal } from "lucide-react";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -21,15 +21,9 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Link from "@/components/Link";
+import Input from "../Input";
+import sanitize from "sanitize-html";
 dayjs.extend(relativeTime);
-
-// Textarea code
-function updateTextAreaSize(textarea?: HTMLTextAreaElement) {
-	if (textarea == null) return;
-	textarea.style.height = "0";
-	textarea.style.height = `${textarea.scrollHeight + 2}px`;
-}
 
 export default function OptionsButton({
 	post,
@@ -42,22 +36,40 @@ export default function OptionsButton({
 }) {
 	const [border, setBorder] = useState<"delete" | "edit" | "">("");
 
-	// Textarea code
-	const [inputValue, setInputValue] = useState(post.content);
-	const textareaRef = useRef<HTMLTextAreaElement>();
+	const [value, setValue] = useState<
+		{
+			sanitized: string;
+			unsanitized: string;
+			mention: boolean;
+			selected: boolean;
+		}[]
+	>(
+		post.content.split("&nbsp;").map((v) => ({
+			sanitized: sanitize(v, {
+				allowedTags: [],
+			}),
+			unsanitized: v,
+			mention: false,
+			selected: false,
+		})),
+	);
+
 	const deleteRef = useRef<HTMLButtonElement>(null);
 
-	const inputRef = useCallback((textarea: HTMLTextAreaElement) => {
-		updateTextAreaSize(textarea);
-		textareaRef.current = textarea;
-	}, []);
-
-	useLayoutEffect(() => {
-		updateTextAreaSize(textareaRef.current);
-	}, [inputValue]);
+	const inputRef = useRef<HTMLElement>(null);
 
 	function resetTextarea(opened: boolean) {
-		opened && setInputValue(post.content);
+		opened &&
+			setValue(
+				post.content.split("&nbsp;").map((v) => ({
+					sanitized: sanitize(v, {
+						allowedTags: [],
+					}),
+					unsanitized: v,
+					mention: false,
+					selected: false,
+				})),
+			);
 	}
 
 	const deleteMuatation = useMutation({
@@ -101,8 +113,12 @@ export default function OptionsButton({
 
 	const updateMutation = useMutation({
 		mutationFn: async () => {
-			await fetch(`/api/post?postId=${post.postId}&content=${inputValue}`, {
+			await fetch("/api/post", {
 				method: "PUT",
+				body: JSON.stringify({
+					postId: post.postId,
+					content: value.map((v) => v.unsanitized).join("&nbsp;"),
+				}),
 			});
 		},
 		onSuccess: () => {
@@ -114,7 +130,7 @@ export default function OptionsButton({
 								if (oldPost.postId === post.postId) {
 									return {
 										...oldPost,
-										content: inputValue,
+										content: value.map((v) => v.unsanitized).join("&nbsp;"),
 										edited: "1",
 									};
 								}
@@ -134,7 +150,7 @@ export default function OptionsButton({
 						if (oldData) {
 							return {
 								...oldData,
-								content: inputValue,
+								content: value.map((v) => v.unsanitized).join("&nbsp;"),
 								edited: "1",
 							};
 						}
@@ -161,12 +177,11 @@ export default function OptionsButton({
 						onMouseLeave={() => {
 							setBorder("");
 						}}
-						disabled
 						className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10"
 					>
 						Edit
 					</DialogTrigger>
-					<DialogContent className="p-5 !rounded-md">
+					<DialogContent className="p-5 !rounded-md" id="editMenu">
 						<div className="gap-1.5 flex">
 							<div className="flex-none h-fit">
 								<Image
@@ -177,27 +192,20 @@ export default function OptionsButton({
 									alt={`${post.name}'s profile picture}`}
 								/>
 							</div>
-							<div className="flex flex-col flex-grow">
+							<div className="flex flex-col flex-grow w-full">
 								<h2 className="leading-tight font-medium">{post.name}</h2>
 								<h3 className="text-foreground/70 leading-none w-fit">
 									@{post.username}
 								</h3>
-								<textarea
-									ref={inputRef}
-									value={inputValue}
-									name="edit-content"
-									onFocus={() => {
-										textareaRef.current?.setSelectionRange(
-											post.content.length,
-											post.content.length,
-										);
-									}}
-									onChange={(e) => {
-										setInputValue(e.target.value);
-									}}
+								<Input
+									inputRef={inputRef}
+									postMutation={updateMutation}
+									setValue={setValue}
+									value={value}
 									className={
 										"mt-2.5 mb-4 bg-transparent max-h-36 resize-none outline-none"
 									}
+									relativeParent="#editMenu"
 								/>
 							</div>
 						</div>
@@ -207,26 +215,30 @@ export default function OptionsButton({
 							</DialogClose>
 							<div className="flex items-center gap-2.5">
 								<p
-									className={`transition-colors text-xs text-foreground/60 ${
-										inputValue.length < 412 && "hidden"
-									} ${
-										inputValue.length > 481 &&
-										inputValue.length < 513 &&
-										"!text-yellow-500/90"
-									} ${inputValue.length > 512 && "!text-danger"}`}
+									className={`transition-colors text-xs text-right p-1 w-[43px] ${(() => {
+										if (value.map((v) => v.sanitized).join(" ").length < 412)
+											return "hidden";
+										if (value.map((v) => v.sanitized).join(" ").length < 481)
+											return "text-foreground/60";
+										if (value.map((v) => v.sanitized).join(" ").length < 512)
+											return "text-yellow-500/90";
+										return "text-danger";
+									})()}`}
 								>
-									{512 - inputValue.length}
+									{512 - value.map((v) => v.sanitized).join(" ").length}
 								</p>
 								<DialogClose
+									disabled={
+										value.map((v) => v.sanitized).join(" ").length > 512 ||
+										updateMutation.isLoading
+									}
 									onClick={() => {
-										inputValue.length < 513 &&
-											inputValue !== post.content &&
-											inputValue.length > 0 &&
-											updateMutation.mutate();
+										updateMutation.mutate();
 
-										inputValue.length === 0 && deleteRef.current?.click();
+										value.map((v) => v.sanitized).join(" ").length === 0 &&
+											deleteRef.current?.click();
 									}}
-									className="text-main hover:bg-main/10 hover:border-main/50 text-sm rounded-sm w-fit transition-colors border px-2.5 py-1.5"
+									className="text-main hover:bg-main/10 hover:border-main/50 text-sm rounded-sm w-fit transition-colors border px-2.5 py-1.5 disabled:opacity-70 disabled:hover:border-main/30 disabled:hover:bg-main/5"
 								>
 									Save
 								</DialogClose>
