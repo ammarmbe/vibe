@@ -138,7 +138,7 @@ export default function Input({
 
 	return (
 		<div className="row-span-3 order-1 break-words max-w-full">
-			{!value.length ? (
+			{!value.map((v) => v.sanitized).join(" ").length ? (
 				<p
 					className={`absolute select-none pointer-events-none ${
 						className ?? "w-fit text-foreground/20"
