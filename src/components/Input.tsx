@@ -9,6 +9,7 @@ import {
 	Dispatch,
 	RefObject,
 	SetStateAction,
+	useCallback,
 	useEffect,
 	useState,
 } from "react";
@@ -64,52 +65,52 @@ export default function Input({
 	const [mentionModalOpen, setMentionModalOpen] = useState(false);
 	const [caretPosition, setCaretPosition] = useState({ x: 0, y: 0 });
 
-	useEffect(() => {
-		const handleSelectionChange = () => {
-			// get the caret x and y position
-			const selection = window.getSelection();
-			if (selection && selection.rangeCount > 0) {
-				const range = selection.getRangeAt(0);
-				const rect = range.getBoundingClientRect();
-				setCaretPosition({ x: rect.x, y: rect.y });
-			}
+	const handleSelectionChange = useCallback(() => {
+		// get the caret x and y position
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0);
+			const rect = range.getBoundingClientRect();
+			setCaretPosition({ x: rect.x, y: rect.y });
+		}
 
-			// set selected = true for the word that the caret is in
-			let position = getCaretOffset(inputRef.current as HTMLElement);
-			const words = value.map((v) => v.sanitized);
-			const newValue = [...value];
+		// set selected = true for the word that the caret is in
+		let position = getCaretOffset(inputRef.current as HTMLElement);
+		const words = value.map((v) => v.sanitized);
+		const newValue = [...value];
 
-			for (let i = 0; i < words.length; i++) {
-				if (words[i].length < position) {
-					position -= words[i].length + 1;
-				} else {
-					for (const word of newValue) {
-						word.selected = false;
-					}
-					newValue[i].selected = true;
-					break;
-				}
-			}
-
-			position = getCaretOffset(inputRef.current as HTMLElement);
-
-			// check if the caret is at the end of the selected word and if it starts with @ then open the mention modal
-			if (
-				newValue
-					.slice(0, newValue.findIndex((v) => v.selected) + 1)
-					.map((v) => v.sanitized)
-					.join(" ").length === position &&
-				newValue.find((v) => v.selected)?.sanitized.startsWith("@") &&
-				!newValue.find((v) => v.selected)?.unsanitized.includes("<a")
-			) {
-				setMentionModalOpen(true);
+		for (let i = 0; i < words.length; i++) {
+			if (words[i].length < position) {
+				position -= words[i].length + 1;
 			} else {
-				setMentionModalOpen(false);
+				for (const word of newValue) {
+					word.selected = false;
+				}
+				newValue[i].selected = true;
+				break;
 			}
+		}
 
-			setValue(newValue);
-		};
+		position = getCaretOffset(inputRef.current as HTMLElement);
 
+		// check if the caret is at the end of the selected word and if it starts with @ then open the mention modal
+		if (
+			newValue
+				.slice(0, newValue.findIndex((v) => v.selected) + 1)
+				.map((v) => v.sanitized)
+				.join(" ").length === position &&
+			newValue.find((v) => v.selected)?.sanitized.startsWith("@") &&
+			!newValue.find((v) => v.selected)?.unsanitized.includes("<a")
+		) {
+			setMentionModalOpen(true);
+		} else {
+			setMentionModalOpen(false);
+		}
+
+		setValue(newValue);
+	}, [value]);
+
+	useEffect(() => {
 		document.addEventListener("selectionchange", handleSelectionChange);
 		updateInputSize(inputRef.current);
 
@@ -184,6 +185,7 @@ export default function Input({
 						};
 					});
 
+					handleSelectionChange();
 					setValue(newValue);
 				}}
 			/>
