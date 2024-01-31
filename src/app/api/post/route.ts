@@ -43,10 +43,20 @@ export async function GET(request: Request) {
 		)
 	).rows[0] as Post;
 
+	if (!post) {
+		return new Response(
+			JSON.stringify({
+				nanoId: nanoId,
+				deleted: 1,
+				parentNanoId: null,
+			}),
+		);
+	}
+
 	if (post.deleted) {
 		return new Response(
 			JSON.stringify({
-				nanoId: post.nanoId,
+				nanoId: nanoId,
 				deleted: post.deleted,
 				parentNanoId: post.parentNanoId,
 			}),
