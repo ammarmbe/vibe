@@ -89,7 +89,7 @@ export default function AccountButton() {
 								Edit profile
 							</DialogTrigger>
 							<DialogContent className="p-0 border-0 !w-[360px]">
-								<EditProfile newUser={false} />
+								<EditProfile />
 							</DialogContent>
 						</Dialog>
 						<div

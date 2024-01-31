@@ -11,13 +11,13 @@ import {
 } from "./ui/card";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { User } from "@/lib/types";
+import { Post, User } from "@/lib/types";
 import { client } from "@/lib/ReactQueryProvider";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import Link from "@/components/Link";
 
-export default function EditProfile({ newUser }: { newUser: boolean }) {
+export default function EditProfile() {
 	const [username, setUsername] = useState("");
 	const [bio, setBio] = useState("");
 	const [usernameTaken, setUsernameTaken] = useState(false);
@@ -26,6 +26,7 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 	const [invalidUsername, setInvalidUsername] = useState(false);
 	const { user } = useUser();
 	const { push } = useRouter();
+	const pathname = usePathname();
 
 	const usernameMutation = useMutation({
 		mutationFn: async () => {
@@ -50,21 +51,56 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 				username,
 			});
 
-			!newUser &&
+			if (pathname.startsWith("/user")) {
+				push(`/user/${username}`);
+				return;
+			}
+
+			if (pathname.startsWith("/post")) {
 				client.setQueryData(
-					["user", user?.username],
-					(oldData: User | undefined) => {
-						if (oldData) {
-							return {
-								...oldData,
-								username: username,
-								bio: bio,
-							};
-						}
+					["comments"],
+					(data: { pages: Post[][] } | undefined) => {
+						if (!data) return;
+						return {
+							pages: data.pages.map((page) =>
+								page.map((post) => {
+									if (post.userId === user?.id) {
+										return {
+											...post,
+											username,
+										};
+									}
+									return post;
+								}),
+							),
+						};
 					},
 				);
 
-			newUser && push("/");
+				client.invalidateQueries({
+					predicate: (query) => query.queryKey[0] === "post",
+				});
+			}
+
+			client.setQueryData(
+				["homeFeed"],
+				(data: { pages: Post[][] } | undefined) => {
+					if (!data) return;
+					return {
+						pages: data.pages.map((page) =>
+							page.map((post) => {
+								if (post.userId === user?.id) {
+									return {
+										...post,
+										username,
+									};
+								}
+								return post;
+							}),
+						),
+					};
+				},
+			);
 		},
 	});
 
@@ -74,7 +110,6 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 			(await (
 				await fetch(`/api/user?username=${user?.username}`)
 			).json()) as User,
-		enabled: !newUser,
 	});
 
 	useEffect(() => {
@@ -87,8 +122,6 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 		}
 	}, [data]);
 
-	const loading = isLoading && !newUser;
-
 	return (
 		<form
 			onSubmit={(e) => {
@@ -98,32 +131,23 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 			}}
 			className="flex gap-2.5 flex-col w-fit"
 		>
-			<Card className={`w-[360px] h-[375px] ${!newUser && "bg-background"}`}>
-				{loading ? (
+			<Card className="w-[360px] h-[375px] bg-background">
+				{isLoading ? (
 					<div className="justify-center h-[375px] items-center flex">
 						<Spinner size="xl" />
 					</div>
 				) : (
 					<>
 						<CardHeader>
-							<CardTitle>
-								{newUser ? "Add your details" : "Update your details"}
-							</CardTitle>
+							<CardTitle>Update your details</CardTitle>
 							<CardDescription>
-								{newUser ? (
-									"You'll be able to change these later."
-								) : (
-									<>
-										You&apos;re signed in as{" "}
-										<Link
-											className="hover:underline"
-											href={`/user/${user?.username}`}
-										>
-											{user?.fullName}
-										</Link>
-										.
-									</>
-								)}
+								You&apos;re signed in as{" "}
+								<Link
+									className="hover:underline"
+									href={`/user/${user?.username}`}
+								>
+									{user?.fullName}
+								</Link>
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="flex flex-col">
@@ -199,40 +223,18 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 							</div>
 						</CardContent>
 						<CardFooter className="w-full flex items-end justify-between">
-							{newUser ? (
-								<>
-									<SignOutButton>
-										<button
-											type="button"
-											className="rounded-md border transition-colors text-danger hover:bg-danger/5 hover:border-danger/50 py-1.5 px-2.5"
-										>
-											Sign out
-										</button>
-									</SignOutButton>
-									<button
-										type="submit"
-										onClick={() => usernameMutation.mutate()}
-										className="rounded-md border transition-colors hover:bg-main/10 hover:border-main/50 text-main py-1.5 px-2.5"
-									>
-										Submit
-									</button>
-								</>
-							) : (
-								<>
-									<DialogClose
-										type="button"
-										className="rounded-md border text-danger hover:bg-danger/5 hover:border-danger/50 transition-colors py-1.5 px-2.5"
-									>
-										Cancel
-									</DialogClose>
-									<DialogClose
-										type="submit"
-										className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5"
-									>
-										Save
-									</DialogClose>
-								</>
-							)}
+							<DialogClose
+								type="button"
+								className="rounded-md border text-danger hover:bg-danger/5 hover:border-danger/50 transition-colors py-1.5 px-2.5"
+							>
+								Cancel
+							</DialogClose>
+							<DialogClose
+								type="submit"
+								className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5"
+							>
+								Save
+							</DialogClose>
 						</CardFooter>
 					</>
 				)}

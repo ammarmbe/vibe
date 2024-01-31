@@ -38,8 +38,7 @@ export default function Page({ params }: Props) {
 			await (
 				await fetch(`/api/posts/userId?userId=${user?.id}&postId=${pageParam}`)
 			).json(),
-		// eslint-disable-next-line no-unused-vars
-		getNextPageParam: (lastPage, pages) => {
+		getNextPageParam: (lastPage, _pages) => {
 			if (lastPage?.length === 11) {
 				return lastPage[lastPage.length - 1].postId;
 			}
@@ -105,7 +104,7 @@ export default function Page({ params }: Props) {
 														Edit
 													</DialogTrigger>
 													<DialogContent className="p-0 border-0 !w-[360px]">
-														<EditProfile newUser={false} />
+														<EditProfile />
 													</DialogContent>
 												</Dialog>
 											</>
