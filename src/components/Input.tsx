@@ -112,10 +112,12 @@ export default function Input({
 
 	useEffect(() => {
 		document.addEventListener("selectionchange", handleSelectionChange);
+		document.addEventListener("resize", handleSelectionChange);
 		updateInputSize(inputRef.current);
 
 		return () => {
 			document.removeEventListener("selectionchange", handleSelectionChange);
+			document.removeEventListener("resize", handleSelectionChange);
 		};
 	}, [value]);
 
