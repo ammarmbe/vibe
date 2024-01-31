@@ -7,8 +7,8 @@ Vibe is a social media web app created using Next.js 14, PlanetScale's databasej
 ## Features
 
 - **User registration and login:** users can create an account and login to the website.
-- **Creating, reading, updating, and deleting posts:** users can create posts, read posts from other users, and edit or delete their own posts.
-- **Comments and likes:** users can like and comment on posts.
+- **Creating, reading, updating, and deleting posts:** users can create posts, read posts from other users, edit or delete their own posts, **and mention others in their posts (new)**.
+- **Comments and likes:** users can like and comment on posts, **and add reactions (new)**.
 - **Profile page:** users can see their own and others' profile page.
 - **Following other users:** users can follow others and see their posts in the "Following" feed.
 - **Notifications:** users get notified when someone likes their post or follows them.
