@@ -192,7 +192,7 @@ export default function OptionsButton({
 									alt={`${post.name}'s profile picture}`}
 								/>
 							</div>
-							<div className="flex flex-col flex-grow w-full">
+							<div className="grid grid-rows-[auto,auto,auto] flex-grow w-full">
 								<h2 className="leading-tight font-medium">{post.name}</h2>
 								<h3 className="text-foreground/70 leading-none w-fit">
 									@{post.username}
