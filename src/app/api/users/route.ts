@@ -10,7 +10,7 @@ export async function GET(request: Request) {
 		if (value) {
 			const users = (
 				await db.execute(
-					"SELECT id, name, username, image FROM users LEFT JOIN follower_relation ON follower_relation.following = users.id WHERE users.username LIKE :value OR users.name LIKE :value GROUP BY users.id ORDER BY COUNT(follower_relation.following) DESC LIMIT 5",
+					"SELECT id, name, username, image FROM users LEFT JOIN follower_relation ON follower_relation.following = users.id AND follower_relation.follower = :userId WHERE users.username LIKE :value OR users.name LIKE :value GROUP BY users.id LIMIT 5",
 					{ userId, value: `%${value}%` },
 				)
 			).rows;
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
 		const users = (
 			await db.execute(
-				"SELECT id, name, username, image FROM users LEFT JOIN follower_relation ON follower_relation.following = users.id GROUP BY users.id ORDER BY COUNT(follower_relation.following) DESC LIMIT 5",
+				"SELECT id, name, username, image FROM users LEFT JOIN follower_relation ON follower_relation.following = users.id AND follower_relation.follower = :userId GROUP BY users.id ORDER BY COALESCE(follower_relation.follower, '') = :userId LIMIT 5",
 				{ userId },
 			)
 		).rows;
