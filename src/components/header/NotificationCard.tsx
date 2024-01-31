@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef, useState } from "react";
 import type { Notification } from "@/lib/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,45 @@ export default function NotificationCard({
 	notification: Notification;
 }) {
 	const { push } = useRouter();
+	const notificationContent = useRef(
+		(() => {
+			if (notification.type === "followedUser") {
+				return `${notification.notifierName} followed you`;
+			}
+
+			if (notification.type.startsWith("likedPost")) {
+				return `${notification.notifierName} reacted ${
+					notification.type.endsWith("heart")
+						? "❤️"
+						: notification.type.endsWith("cry")
+						  ? "😭"
+						  : notification.type.endsWith("laugh")
+							  ? "😂"
+							  : notification.type.endsWith("surprise")
+								  ? "😮"
+								  : ""
+				} to your ${notification.deleted ? "deleted post" : "post: "}`;
+			}
+
+			if (notification.type === "commentedOnPost") {
+				return `${notification.notifierName} commented on your ${
+					notification.deleted ? "deleted post" : "post: "
+				}`;
+			}
+
+			if (notification.type === "mentioned.post") {
+				return `${notification.notifierName} mentioned you in their ${
+					notification.deleted ? "deleted post" : "post: "
+				}`;
+			}
+
+			if (notification.type === "mentioned.comment") {
+				return `${notification.notifierName} mentioned you in their ${
+					notification.deleted ? "deleted comment" : "comment: "
+				}`;
+			}
+		})(),
+	);
 
 	return (
 		<div
@@ -62,40 +101,12 @@ export default function NotificationCard({
 				>
 					{notification.notifierName}
 				</Link>{" "}
-				{notification.type === "likedPost.like"
-					? notification.deleted
-						? "liked your deleted post"
-						: "liked your post: "
-					: notification.type.startsWith("likedPost")
-					  ? `reacted ${
-								notification.type.endsWith("heart")
-									? "❤️"
-									: notification.type.endsWith("cry")
-									  ? "😭"
-									  : notification.type.endsWith("laugh")
-										  ? "😂"
-										  : notification.type.endsWith("surprise")
-											  ? "😮"
-											  : ""
-						  } to your ${notification.deleted ? "deleted post" : "post: "}`
-					  : notification.type === "commentedOnPost"
-						  ? notification.deleted
-								? "commented on your deleted post"
-								: "commented on your post: "
-						  : notification.type === "mentioned.post"
-							  ? notification.deleted
-									? "mentioned you in their deleted post"
-									: "mentioned you in their post: "
-							  : notification.type === "mentioned.comment"
-								  ? notification.deleted
-										? "mentioned you in their deleted comment"
-										: "mentioned you in their comment: "
-								  : "followed you"}{" "}
-				{notification.content &&
-					!notification.deleted &&
-					`"${sanitize(notification.content, {
-						allowedTags: [],
-					}).replaceAll(/&nbsp;/g, " ")}"`}
+				{notificationContent.current}
+				{notification.content && !notification.deleted
+					? `"${sanitize(notification.content, {
+							allowedTags: [],
+					  }).replaceAll(/&nbsp;/g, " ")}"`
+					: null}
 			</p>
 		</div>
 	);
