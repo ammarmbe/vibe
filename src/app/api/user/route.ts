@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { User } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
+import { nanoid } from "nanoid";
 
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
@@ -28,8 +29,17 @@ export async function POST(request: Request) {
 			last_name: string;
 			email_addresses: [{ email_address: string }];
 			image_url: string;
+			username: string;
 		};
 	};
+
+	let username = body.data.username;
+
+	if (!username) {
+		username = (
+			body.data.email_addresses[0].email_address.split("@")[0] + nanoid(4)
+		).toLocaleLowerCase();
+	}
 
 	await db.execute(
 		"INSERT INTO `users` (id, name, email, image) VALUES (:id, :name, :email, :image)",
@@ -37,6 +47,7 @@ export async function POST(request: Request) {
 			id: body.data.id,
 			name: `${body.data.first_name} ${body.data.last_name}`,
 			email: body.data.email_addresses[0].email_address,
+			username: username,
 			image: body.data.image_url,
 		},
 	);
