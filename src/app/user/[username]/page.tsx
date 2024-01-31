@@ -5,7 +5,7 @@ import Spinner from "@/components/Spinner";
 import Header from "@/components/header/Header";
 import PostCard from "@/components/post/PostCard";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Post, User } from "@/lib/types";
+import { Post, Repost, User } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -61,7 +61,7 @@ export default function Page({ params }: Props) {
 	}
 
 	return (
-		<main className="max-w-3xl h-full flex flex-col w-full mx-auto px-2.5">
+		<main className="max-w-2xl h-full flex flex-col w-full mx-auto px-2.5">
 			<Header />
 			{userLoading ? (
 				<div className="w-full flex h-full items-center justify-center">
@@ -139,8 +139,16 @@ export default function Page({ params }: Props) {
 								className="flex flex-col gap-2.5 pb-2.5"
 							>
 								{userPosts.pages.map((page) => {
-									return page.map((post: Post) => {
-										return <PostCard key={post.postId} post={post} />;
+									return page.map((post: Post | Repost) => {
+										return (
+											<PostCard
+												key={
+													post.postId +
+													("repostCreatedAt" in post ? "repost" : "")
+												}
+												post={post}
+											/>
+										);
 									});
 								})}
 							</InfiniteScroll>

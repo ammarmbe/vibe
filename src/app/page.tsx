@@ -7,7 +7,7 @@ export default async function Home() {
 	const user = await currentUser();
 
 	return (
-		<main className="max-w-3xl h-full flex flex-col w-full mx-auto px-2.5">
+		<main className="max-w-2xl h-full flex flex-col w-full mx-auto px-2.5">
 			<Header />
 			{user && <NewPost />}
 			<Feed />

@@ -17,6 +17,7 @@ export type Post = {
 	surpriseCount: string;
 	commentCount: string;
 	userLikeStatus: "like" | "cry" | "laugh" | "heart" | "surprise" | null;
+	userRepostStatus: string;
 
 	deleted: string;
 	edited: string;
@@ -54,3 +55,9 @@ export type Notification = {
 	nanoId: string;
 	deleted: string;
 };
+
+export interface Repost extends Post {
+	reposterName: string;
+	reposterUsername: string;
+	repostCreatedAt: string;
+}

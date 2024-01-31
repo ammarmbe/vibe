@@ -1,7 +1,7 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useEffect, useRef } from "react";
-import type { Post } from "@/lib/types";
+import type { Post, Repost } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./post/PostCard";
 import Spinner from "./Spinner";
@@ -55,8 +55,15 @@ export default function Feed() {
 					className="flex flex-col gap-2.5 pb-2.5"
 				>
 					{data.pages.map((page) => {
-						return page.map((post: Post) => {
-							return <PostCard key={post.postId} post={post} />;
+						return page.map((post: Post | Repost) => {
+							return (
+								<PostCard
+									key={
+										post.postId + ("repostCreatedAt" in post ? "repost" : "")
+									}
+									post={post}
+								/>
+							);
 						});
 					})}
 				</InfiniteScroll>
