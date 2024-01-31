@@ -161,7 +161,8 @@ export default function OptionsButton({
 						onMouseLeave={() => {
 							setBorder("");
 						}}
-						className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2"
+						disabled
+						className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10"
 					>
 						Edit
 					</DialogTrigger>

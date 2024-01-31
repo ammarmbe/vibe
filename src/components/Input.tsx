@@ -40,6 +40,7 @@ export default function Input({
 	inputRef,
 	setInputFocus,
 	postMutation,
+	className,
 }: {
 	value: {
 		sanitized: string;
@@ -61,6 +62,7 @@ export default function Input({
 	setInputFocus: Dispatch<SetStateAction<boolean>>;
 	// biome-ignore lint/suspicious/noExplicitAny:
 	postMutation: UseMutationResult<any, unknown, void, unknown>;
+	className?: string;
 }) {
 	const [mentionModalOpen, setMentionModalOpen] = useState(false);
 	const [caretPosition, setCaretPosition] = useState({ x: 0, y: 0 });
@@ -137,12 +139,19 @@ export default function Input({
 	return (
 		<div className="row-span-3 order-1 break-words max-w-full">
 			{!value.length ? (
-				<p className="absolute select-none pointer-events-none w-fit text-foreground/20">
+				<p
+					className={`absolute select-none pointer-events-none ${
+						className ?? "w-fit text-foreground/20"
+					}`}
+				>
 					What's on your mind?
 				</p>
 			) : null}
 			<ContentEditable
-				className="overflow-auto bg-transparent w-full min-h-[1.5rem] outline-none break-words"
+				className={
+					className ??
+					"overflow-auto bg-transparent w-full min-h-[1.5rem] outline-none break-words"
+				}
 				html={value.map((v) => v.unsanitized).join("&nbsp;")}
 				tagName="p"
 				id="textarea"
