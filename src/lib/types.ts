@@ -43,7 +43,8 @@ export type Notification = {
 		| "commentedOnPost"
 		| "followedUser"
 		| "mentioned.post"
-		| "mentioned.comment";
+		| "mentioned.comment"
+		| "reposted";
 	createdAt: string;
 	notifier: string;
 	postId: string;

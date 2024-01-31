@@ -12,45 +12,6 @@ export default function NotificationCard({
 	notification: Notification;
 }) {
 	const { push } = useRouter();
-	const notificationContent = useRef(
-		(() => {
-			if (notification.type === "followedUser") {
-				return `${notification.notifierName} followed you`;
-			}
-
-			if (notification.type.startsWith("likedPost")) {
-				return `${notification.notifierName} reacted ${
-					notification.type.endsWith("heart")
-						? "❤️"
-						: notification.type.endsWith("cry")
-						  ? "😭"
-						  : notification.type.endsWith("laugh")
-							  ? "😂"
-							  : notification.type.endsWith("surprise")
-								  ? "😮"
-								  : ""
-				} to your ${notification.deleted ? "deleted post" : "post: "}`;
-			}
-
-			if (notification.type === "commentedOnPost") {
-				return `${notification.notifierName} commented on your ${
-					notification.deleted ? "deleted post" : "post: "
-				}`;
-			}
-
-			if (notification.type === "mentioned.post") {
-				return `${notification.notifierName} mentioned you in their ${
-					notification.deleted ? "deleted post" : "post: "
-				}`;
-			}
-
-			if (notification.type === "mentioned.comment") {
-				return `${notification.notifierName} mentioned you in their ${
-					notification.deleted ? "deleted comment" : "comment: "
-				}`;
-			}
-		})(),
-	);
 
 	return (
 		<div
@@ -101,7 +62,51 @@ export default function NotificationCard({
 				>
 					{notification.notifierName}
 				</Link>{" "}
-				{notificationContent.current}
+				{(() => {
+					console.log(notification);
+
+					if (notification.type === "followedUser") {
+						return "followed you";
+					}
+
+					if (notification.type.startsWith("likedPost")) {
+						return `reacted ${
+							notification.type.endsWith("heart")
+								? "❤️"
+								: notification.type.endsWith("cry")
+								  ? "😭"
+								  : notification.type.endsWith("laugh")
+									  ? "😂"
+									  : notification.type.endsWith("surprise")
+										  ? "😮"
+										  : ""
+						} to your ${notification.deleted ? "deleted post" : "post: "}`;
+					}
+
+					if (notification.type === "commentedOnPost") {
+						return `commented on your ${
+							notification.deleted ? "deleted post" : "post: "
+						}`;
+					}
+
+					if (notification.type === "mentioned.comment") {
+						return `mentioned you in their ${
+							notification.deleted ? "deleted comment" : "comment: "
+						}`;
+					}
+
+					if (notification.type.startsWith("mentioned")) {
+						return `mentioned you in their ${
+							notification.deleted ? "deleted post" : "post: "
+						}`;
+					}
+
+					if (notification.type === "reposted") {
+						return `mentioned you in their ${
+							notification.deleted ? "deleted post" : "post: "
+						}`;
+					}
+				})()}
 				{notification.content && !notification.deleted
 					? `"${sanitize(notification.content, {
 							allowedTags: [],
