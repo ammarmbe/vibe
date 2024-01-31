@@ -12,7 +12,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const mainPost = (await (
-		await fetch(`/api/post?nanoId=${params.nanoId}`)
+		await fetch(`https://vibe.ambe.dev/api/post?nanoId=${params.nanoId}`)
 	).json()) as Post;
 
 	return {
