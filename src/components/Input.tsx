@@ -178,7 +178,6 @@ export default function Input({
 					e.preventDefault();
 
 					const text = e.clipboardData.getData("text/plain");
-					console.log(text);
 					document.execCommand("insertHTML", false, text);
 				}}
 				onFocus={() => {
