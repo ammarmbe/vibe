@@ -128,7 +128,7 @@ export default function NewComment({
 					commentMutation.isLoading ||
 					value.map((v) => v.sanitized).join(" ").length > 512
 				}
-				className="order-2 border disabled:cursor-wait disabled:!opacity-50 rounded-sm text-sm px-1.5 py-0.5 hover:bg-accent hover:border-ring transition-colors relative top-[0px] self-start"
+				className="order-2 border disabled:!opacity-50 rounded-sm text-sm px-1.5 py-0.5 hover:bg-accent hover:border-ring transition-colors relative top-[0px] self-start"
 			>
 				Reply
 			</button>

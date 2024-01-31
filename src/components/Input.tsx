@@ -157,6 +157,13 @@ export default function Input({
 				id="textarea"
 				innerRef={inputRef}
 				disabled={postMutation.isLoading}
+				onPaste={(e) => {
+					e.preventDefault();
+
+					const text = e.clipboardData.getData("text/plain");
+					console.log(text);
+					document.execCommand("insertHTML", false, text);
+				}}
 				onFocus={() => {
 					setInputFocus(true);
 				}}
