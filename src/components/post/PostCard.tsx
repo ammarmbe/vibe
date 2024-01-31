@@ -34,6 +34,22 @@ export default function PostCard({
 	const commentOrComments =
 		parseInt(post.commentCount) === 1 ? "Comment" : "Comments";
 
+	const notificationMutation = useMutation(
+		async () => {
+			await fetch(
+				`/api/notification/mentioned?postId=${post.postId}&userId=${post.userId}`,
+				{
+					method: "POST",
+				},
+			);
+		},
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(["notifications", post.userId]);
+			},
+		},
+	);
+
 	const repostMutation = useMutation(
 		async (userRepostStatus: number) => {
 			await fetch(
@@ -45,6 +61,8 @@ export default function PostCard({
 		},
 		{
 			onSuccess: () => {
+				notificationMutation.mutate();
+
 				queryClient.invalidateQueries(["homeFeed"]);
 				queryClient.invalidateQueries(["user", user?.id]);
 			},

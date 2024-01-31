@@ -12,11 +12,26 @@ import PostCard from "@/components/post/PostCard";
 import NewComment from "@/components/NewComment";
 import { useRouter } from "next/navigation";
 import Link from "@/components/Link";
+import { Metadata } from "next/types";
 dayjs.extend(relativeTime);
 
 interface Props {
 	params: {
 		nanoId: string;
+	};
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { data: mainPost } = useQuery({
+		queryKey: ["post", params.nanoId],
+		queryFn: async () =>
+			(await (await fetch(`/api/post?nanoId=${params.nanoId}`)).json()) as Post,
+	});
+
+	return {
+		title: `${mainPost?.name} on Vibe`,
+		description: mainPost?.content,
+		metadataBase: new URL("https://vibe.ambe.dev"),
 	};
 }
 
