@@ -71,7 +71,7 @@ export default function NewPost() {
 				.map((v) => v.sanitized.slice(1));
 
 			for (const username of mentionedUsers) {
-				if (user?.unsafeMetadata.username !== username)
+				if (user?.username !== username)
 					notificationMutation.mutate(JSON.stringify([username, data]));
 			}
 		},

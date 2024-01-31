@@ -95,10 +95,7 @@ export default function NewComment({
 				.map((v) => v.sanitized.slice(1));
 
 			for (const username of mentionedUsers) {
-				if (
-					parentPostUsername !== username &&
-					user?.unsafeMetadata.username !== username
-				)
+				if (parentPostUsername !== username && user?.username !== username)
 					notificationMutation2.mutate(JSON.stringify([username, data]));
 			}
 

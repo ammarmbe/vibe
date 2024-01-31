@@ -8,7 +8,7 @@ export default function Page() {
 	const { push } = useRouter();
 	const { user } = useUser();
 
-	if (user?.unsafeMetadata.username) {
+	if (user?.username) {
 		push("/");
 	}
 

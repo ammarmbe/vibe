@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 	const type = searchParams.get("type") as "comment" | "post";
 	const { userId: currentUserId, user } = auth();
 
-	if (user?.unsafeMetadata.username === username) {
+	if (user?.username === username) {
 		return new Response("OK");
 	}
 

@@ -61,7 +61,7 @@ export default function AccountButton() {
 					</PopoverTrigger>
 					<PopoverContent className="flex flex-col p-0 border-0 w-[150px]">
 						<Link
-							href={`/user/${user.unsafeMetadata.username}`}
+							href={`/user/${user.username}`}
 							onMouseEnter={() => setShowBorderTop(true)}
 							onMouseLeave={() => setShowBorderTop(false)}
 							className="rounded-t-md border-b-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"

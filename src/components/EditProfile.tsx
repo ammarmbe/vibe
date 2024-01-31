@@ -47,12 +47,12 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 		},
 		onSuccess: async () => {
 			await user?.update({
-				unsafeMetadata: { username: username },
+				username,
 			});
 
 			!newUser &&
 				client.setQueryData(
-					["user", user?.unsafeMetadata.username],
+					["user", user?.username],
 					(oldData: User | undefined) => {
 						if (oldData) {
 							return {
@@ -72,7 +72,7 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 		queryKey: ["user", user?.username],
 		queryFn: async () =>
 			(await (
-				await fetch(`/api/user?username=${user?.unsafeMetadata.username}`)
+				await fetch(`/api/user?username=${user?.username}`)
 			).json()) as User,
 		enabled: !newUser,
 	});
@@ -117,7 +117,7 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 										You&apos;re signed in as{" "}
 										<Link
 											className="hover:underline"
-											href={`/user/${user?.unsafeMetadata.username}`}
+											href={`/user/${user?.username}`}
 										>
 											{user?.fullName}
 										</Link>
