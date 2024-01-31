@@ -144,7 +144,7 @@ export default function EditProfile({ newUser }: { newUser: boolean }) {
 											}
 											setInvalidUsername(false);
 
-											setUsername(e.target.value.toLocaleLowerCase());
+											setUsername(e.target.value?.toLocaleLowerCase());
 											setUsernameTaken(false);
 											if (e.target.value.length > 16) setUsernameTooLong(true);
 											else setUsernameTooLong(false);

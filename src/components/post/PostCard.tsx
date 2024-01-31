@@ -69,7 +69,7 @@ export default function PostCard({
 					className={`${
 						!postPage && "text-sm"
 					} hover:underline text-foreground/70 leading-tight w-fit`}
-					href={`/user/${post.username.toLocaleLowerCase()}`}
+					href={`/user/${post.username?.toLocaleLowerCase()}`}
 				>
 					@{post.username}
 				</Link>
