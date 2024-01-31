@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	).json()) as Post;
 
 	return {
-		title: `${mainPost?.name} on Vibe`,
+		title: mainPost?.name ? `${mainPost?.name} on Vibe` : "Vibe",
 		description: mainPost?.content
 			? sanitize(mainPost?.content, { allowedTags: [] })
 			: "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
