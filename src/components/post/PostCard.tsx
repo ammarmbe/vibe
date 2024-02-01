@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useUser } from "@clerk/nextjs";
 import OptionsButton from "./OptionsButton";
-import { Pencil, Repeat2 } from "lucide-react";
+import { MessageCircle, Pencil, Repeat2, Share } from "lucide-react";
 import Link from "@/components/Link";
 import {
 	Tooltip,
@@ -72,8 +72,9 @@ export default function PostCard({
 	return (
 		<div>
 			{"reposterName" in post ? (
-				<div className="bg-border rounded-t-md p-1 px-2 text-xs -mb-2 pb-[calc(0.75rem-1px)]">
-					<p className="text-foreground/70">
+				<div className="bg-border rounded-t-md p-1 px-2 text-xs -mb-2 pb-[calc(0.75rem-1px)] flex items-center gap-1">
+					<Repeat2 size={14} strokeWidth={2} className="text-[#ababab]" />
+					<p className="text-[#ababab]">
 						<Link
 							href={`/user/${post.reposterUsername}`}
 							className="font-semibold"
@@ -147,9 +148,14 @@ export default function PostCard({
 							/>
 							<Link
 								href={`/post/${post.nanoId}`}
-								className="text-xs px-2.5 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent h-full flex items-center order-2"
+								className="text-xs px-2 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent h-full items-end flex gap-1 justify-center order-2 leading-[1.3]"
 							>
-								{post.commentCount} {commentOrComments}
+								<div className="h-4 w-4 flex items-center justify-center -translate-y-[0.5px]">
+									<MessageCircle size={14} />
+								</div>
+								<span className="h-fit">
+									{post.commentCount} {commentOrComments}
+								</span>
 							</Link>
 						</div>
 
@@ -183,12 +189,17 @@ export default function PostCard({
 									className="flex flex-col shadow-sm p-0 border-0 w-[100px] group"
 								>
 									<PopoverClose
-										className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10"
+										className="border-b-0 text-sm rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10 flex items-end justify-center gap-1.5 leading-[1.3]"
 										onClick={() =>
 											repostMutation.mutate(parseInt(post.userRepostStatus))
 										}
 									>
-										{parseInt(post.userRepostStatus) ? "Unrepost" : "Repost"}
+										<div className="h-5 w-5 flex items-center justify-center">
+											<Repeat2 size={16} />
+										</div>
+										<span className="h-fit">
+											{parseInt(post.userRepostStatus) ? "Unrepost" : "Repost"}
+										</span>
 									</PopoverClose>
 									<div className="border-b border-dashed transition-all group-hover:border-ring group-hover:border-solid" />
 									<PopoverClose
@@ -199,9 +210,12 @@ export default function PostCard({
 													url: `https://vibe.ambe.dev/post/${post.nanoId}`,
 												});
 										}}
-										className="border-t-0 text-sm text-center rounded-b-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10"
+										className="border-t-0 text-sm text-center rounded-b-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10 flex justify-center gap-1.5 items-end leading-[1.3]"
 									>
-										Share
+										<div className="h-5 w-5 flex items-center justify-center">
+											<Share size={16} />
+										</div>
+										<span className="h-fit">Share</span>
 									</PopoverClose>
 								</PopoverContent>
 							</Popover>

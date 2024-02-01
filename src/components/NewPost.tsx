@@ -5,12 +5,8 @@ import { nanoid } from "nanoid";
 import { useUser } from "@clerk/nextjs";
 import Input from "./Input";
 import { Post } from "@/lib/types";
-
-export function updateInputSize(input: HTMLElement | null) {
-	if (input == null) return;
-	input.style.height = "0px";
-	input.style.height = `${input.scrollHeight}px`;
-}
+import { Send } from "lucide-react";
+import { updateInputSize } from "@/lib/utils";
 
 export default function NewPost() {
 	const client = useQueryClient();
@@ -127,7 +123,7 @@ export default function NewPost() {
 
 	return (
 		<form
-			className={`grid grid-cols-[1fr,auto] grid-rows-[auto,auto,1fr] gap-x-2 mb-2.5 hover:shadow-none items-center transition-colors shadow-sm rounded-md px-2 py-1 pr-1 border ${
+			className={`grid grid-cols-[1fr,auto] grid-rows-[auto,auto,1fr] gap-x-2 mb-2.5 hover:shadow-none items-center transition-colors shadow-sm rounded-md px-2 py-2 pl-2.5 border ${
 				inputFocus ? "dark:border-foreground/25 border-ring" : null
 			}`}
 		>
@@ -148,9 +144,12 @@ export default function NewPost() {
 					postMutation.isLoading ||
 					value.map((v) => v.sanitized).join(" ").length > 512
 				}
-				className="order-2 border disabled:!opacity-50 rounded-sm text-sm px-1.5 py-0.5 hover:bg-accent hover:border-ring transition-colors relative top-[0px] self-start"
+				className="order-2 border disabled:!opacity-50 rounded-sm text-sm px-2 py-1 hover:bg-accent hover:border-ring transition-colors relative top-[0px] self-start flex items-end justify-center gap-1 leading-[1.2]"
 			>
-				Post
+				<div className="h-4 w-4 flex items-center justify-center -translate-x-[1px] -translate-y-[0.5px]">
+					<Send size={14} />
+				</div>
+				<span className="h-fit">Post</span>
 			</button>
 			<p
 				className={`order-3 transition-colors text-xs text-right p-1 w-[43px] ${(() => {

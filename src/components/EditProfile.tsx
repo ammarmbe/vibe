@@ -1,4 +1,5 @@
-import { SignOutButton, useUser } from "@clerk/nextjs";
+"use client";
+import { useUser } from "@clerk/nextjs";
 import { Label } from "@radix-ui/react-label";
 import React, { useEffect, useState } from "react";
 import {
@@ -17,7 +18,9 @@ import { usePathname, useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import Link from "@/components/Link";
 
-export default function EditProfile() {
+export default function EditProfile({
+	newUser = false,
+}: { newUser?: boolean }) {
 	const [username, setUsername] = useState("");
 	const [bio, setBio] = useState("");
 	const [usernameTaken, setUsernameTaken] = useState(false);
@@ -39,7 +42,10 @@ export default function EditProfile() {
 			if (status === 409) {
 				throw new Error("Username already exists");
 			}
-			return;
+
+			await user?.update({
+				username,
+			});
 		},
 		onError(error: Error) {
 			if (error.message === "Username already exists") {
@@ -47,9 +53,10 @@ export default function EditProfile() {
 			}
 		},
 		onSuccess: async () => {
-			await user?.update({
-				username,
-			});
+			if (newUser) {
+				push("/");
+				return;
+			}
 
 			if (pathname.startsWith("/user")) {
 				push(`/user/${username}`);
@@ -146,7 +153,7 @@ export default function EditProfile() {
 			}}
 			className="flex gap-2.5 flex-col w-fit"
 		>
-			<Card className="w-[360px] h-[375px] bg-background">
+			<Card className="w-[360px] h-[375px] bg-popover">
 				{isLoading ? (
 					<div className="justify-center h-[375px] items-center flex">
 						<Spinner size="xl" />
@@ -154,15 +161,23 @@ export default function EditProfile() {
 				) : (
 					<>
 						<CardHeader>
-							<CardTitle>Update your details</CardTitle>
+							<CardTitle>
+								{newUser ? "Add your details" : "Update your details"}
+							</CardTitle>
 							<CardDescription>
-								You&apos;re signed in as{" "}
-								<Link
-									className="hover:underline"
-									href={`/user/${user?.username}`}
-								>
-									{user?.fullName}
-								</Link>
+								{newUser ? (
+									"You'll be able to change these later."
+								) : (
+									<>
+										You&apos;re signed in as{" "}
+										<Link
+											className="hover:underline"
+											href={`/user/${user?.username}`}
+										>
+											{user?.fullName}
+										</Link>
+									</>
+								)}
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="flex flex-col">
@@ -237,20 +252,37 @@ export default function EditProfile() {
 								</div>
 							</div>
 						</CardContent>
-						<CardFooter className="w-full flex items-end justify-between">
-							<DialogClose
-								type="button"
-								className="rounded-md border text-danger hover:bg-danger/5 hover:border-danger/50 transition-colors py-1.5 px-2.5"
-							>
-								Cancel
-							</DialogClose>
-							<DialogClose
-								type="submit"
-								className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5"
-							>
-								Save
-							</DialogClose>
-						</CardFooter>
+						{newUser ? (
+							<CardFooter className="w-full flex items-end justify-between">
+								<button
+									type="button"
+									className="hover:bg-accent hover:border-ring rounded-md border transition-colors py-1.5 px-2.5"
+								>
+									{newUser ? "Later" : "Cancel"}
+								</button>
+								<button
+									type="submit"
+									className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5"
+								>
+									Save
+								</button>
+							</CardFooter>
+						) : (
+							<CardFooter className="w-full flex items-end justify-between">
+								<DialogClose
+									type="button"
+									className="hover:bg-accent hover:border-ring rounded-md border transition-colors py-1.5 px-2.5"
+								>
+									{newUser ? "Later" : "Cancel"}
+								</DialogClose>
+								<DialogClose
+									type="submit"
+									className="rounded-md border hover:bg-main/10 transition-colors hover:border-main/50 text-main py-1.5 px-2.5"
+								>
+									Save
+								</DialogClose>
+							</CardFooter>
+						)}
 					</>
 				)}
 			</Card>

@@ -13,6 +13,7 @@ import {
 } from "../ui/tooltip";
 import { PopoverContent, PopoverTrigger, Popover } from "../ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { Heart } from "lucide-react";
 
 export default function LikeButton({
 	likeCount,
@@ -240,7 +241,7 @@ export default function LikeButton({
 					<PopoverTrigger
 						name="like"
 						disabled={likeMutation.isLoading}
-						className={`text-xs px-2.5 py-1 border transition-colors rounded-md h-full select-none order-1 ${
+						className={`text-xs px-2 gap-1 leading-[1.3] py-1 border transition-colors rounded-md h-full select-none order-1 items-end flex justify-center ${
 							currentStatus === "like"
 								? "bg-main text-white border-main/50 hover:bg-main/90"
 								: "hover:bg-main/10 hover:border-main/50 dark:text-[#f5315c] text-main"
@@ -259,8 +260,13 @@ export default function LikeButton({
 						onTouchStart={handleTouchStart}
 						onTouchEnd={handleTouchEnd}
 					>
-						{buttonCounts.likeCount}{" "}
-						{currentStatus === "like" ? "liked" : likesOrLike}
+						<div className="h-4 w-4 flex items-center justify-center">
+							<Heart size={14} />
+						</div>
+						<span className="h-fit">
+							{buttonCounts.likeCount}{" "}
+							{currentStatus === "like" ? "liked" : likesOrLike}
+						</span>
 					</PopoverTrigger>
 					<PopoverContent className="p-1.5 w-fit space-x-1" side="top">
 						<PopoverClose
@@ -333,7 +339,7 @@ export default function LikeButton({
 						<TooltipTrigger
 							disabled={likeMutation.isLoading}
 							name="like"
-							className={`text-xs px-2.5 py-1 border transition-colors rounded-md h-full select-none ${
+							className={`text-xs gap-1 leading-[1.3] px-2 py-1 border transition-colors rounded-md h-full select-none flex items-end justify-center ${
 								currentStatus === "like"
 									? "bg-main text-white border-main/50 hover:bg-main/90"
 									: "hover:bg-main/10 hover:border-main/50 dark:text-[#f5315c] text-main"
@@ -342,8 +348,13 @@ export default function LikeButton({
 								isSignedIn ? () => toggleLike("like") : () => push("/sign-up")
 							}
 						>
-							{buttonCounts.likeCount}{" "}
-							{currentStatus === "like" ? "liked" : likesOrLike}
+							<div className="h-4 w-4 flex items-center justify-center">
+								<Heart size={14} />
+							</div>
+							<span className="h-fit">
+								{buttonCounts.likeCount}{" "}
+								{currentStatus === "like" ? "liked" : likesOrLike}
+							</span>
 						</TooltipTrigger>
 						<TooltipContent className="px-1.5 space-x-1">
 							<button

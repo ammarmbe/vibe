@@ -10,6 +10,7 @@ import Spinner from "./Spinner";
 import Header from "./header/Header";
 import PostCard from "./post/PostCard";
 import Image from "next/image";
+import { PencilIcon } from "lucide-react";
 
 export default function Page({ username }: { username: string }) {
 	const { userId: currentUserId } = useAuth();
@@ -97,8 +98,11 @@ export default function Page({ username }: { username: string }) {
 										{currentUserId === user.id ? (
 											<>
 												<Dialog>
-													<DialogTrigger className="py-1 px-3.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors">
-														Edit
+													<DialogTrigger className="py-1 px-2.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors flex items-end justify-center gap-1 leading-[1.2]">
+														<div className="h-4 w-4 flex items-center justify-center">
+															<PencilIcon size={12} />
+														</div>
+														<span className="h-fit">Edit</span>
 													</DialogTrigger>
 													<DialogContent className="p-0 border-0 !w-[360px]">
 														<EditProfile />

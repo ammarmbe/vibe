@@ -17,7 +17,7 @@ import ContentEditable from "react-contenteditable";
 import sanitize from "sanitize-html";
 import Spinner from "./Spinner";
 import { UseMutationResult, useQuery } from "@tanstack/react-query";
-import { updateInputSize } from "./NewPost";
+import { updateInputSize } from "@/lib/utils";
 
 function getCaretOffset(element: HTMLElement) {
 	let caretOffset = 0;

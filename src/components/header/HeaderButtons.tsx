@@ -18,6 +18,7 @@ import NotificationButton from "./NotificationButton";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import EditProfile from "../EditProfile";
 import Link from "@/components/Link";
+import { LogOut, PencilIcon, User2 } from "lucide-react";
 
 export default function AccountButton() {
 	const { user } = useUser();
@@ -51,24 +52,29 @@ export default function AccountButton() {
 			<ClerkLoaded>
 				<NotificationButton />
 				<Popover>
-					<PopoverTrigger className="border shadow-sm hover:shadow-none font-medium text-sm hover:bg-accent flex gap-[5px] items-center hover:border-ring transition-colors px-2.5 py-1.5 rounded-md">
-						<Image
-							src={user.imageUrl}
-							alt="Account options"
-							width={16}
-							height={16}
-							className="rounded-full"
-						/>
-						<p>{user.fullName}</p>
+					<PopoverTrigger className="border shadow-sm hover:shadow-none font-medium text-sm hover:bg-accent flex gap-1.5 items-end hover:border-ring transition-colors px-2.5 py-1.5 rounded-md">
+						<div className="h-5 flex items-center justify-center">
+							<Image
+								src={user.imageUrl}
+								alt="Account options"
+								width={16}
+								height={16}
+								className="rounded-full"
+							/>
+						</div>
+						<p className="h-fit leading-[1.3]">{user.fullName}</p>
 					</PopoverTrigger>
 					<PopoverContent className="flex flex-col p-0 border-0 w-[150px]">
 						<Link
 							href={`/user/${user.username}`}
 							onMouseEnter={() => setShowBorderTop(true)}
 							onMouseLeave={() => setShowBorderTop(false)}
-							className="rounded-t-md border-b-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
+							className="rounded-t-md border-b-0 text-sm transition-colors hover:bg-accent hover:border-ring border p-2.5 flex items-end justify-center gap-1.5 leading-[1.3]"
 						>
-							View profile
+							<div className="h-5 w-5 flex items-center justify-center">
+								<User2 size={16} />
+							</div>
+							<span className="h-fit">View profile</span>
 						</Link>
 						<div
 							className={`border-b border-dashed transition-all ${
@@ -87,9 +93,12 @@ export default function AccountButton() {
 									setShowBorderTop(false);
 									setBorderBottom("");
 								}}
-								className="border-y-0 text-sm text-center transition-colors hover:bg-accent hover:border-ring border p-2.5"
+								className="border-y-0 text-sm transition-colors hover:bg-accent hover:border-ring border p-2.5 flex items-end justify-center gap-1.5 leading-[1.3]"
 							>
-								Edit profile
+								<div className="h-5 w-5 flex items-center justify-center">
+									<PencilIcon size={16} />
+								</div>
+								<span className="h-fit">Edit profile</span>
 							</DialogTrigger>
 							<DialogContent className="p-0 border-0 !w-[360px]">
 								<EditProfile />
@@ -106,9 +115,12 @@ export default function AccountButton() {
 								name="Sign out"
 								onMouseEnter={() => setBorderBottom("signOut")}
 								onMouseLeave={() => setBorderBottom("")}
-								className="text-danger hover:bg-danger/5 text-sm rounded-b-md border-t-0 transition-colors hover:border-danger/50 border p-2.5"
+								className="text-danger hover:bg-danger/5 text-sm rounded-b-md border-t-0 transition-colors hover:border-danger/50 border p-2.5 flex items-end justify-center gap-1.5 leading-[1.3]"
 							>
-								Sign out
+								<div className="h-5 w-5 flex items-center justify-center">
+									<LogOut size={16} />
+								</div>
+								<span className="h-fit">Sign out</span>
 							</button>
 						</SignOutButton>
 					</PopoverContent>

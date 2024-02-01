@@ -6,7 +6,7 @@ import {
 	PopoverContent,
 } from "@/components/ui/popover";
 import { useMutation } from "@tanstack/react-query";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, PencilIcon, Trash2 } from "lucide-react";
 import React, { useRef, useState } from "react";
 import {
 	Dialog,
@@ -180,9 +180,12 @@ export default function OptionsButton({
 						onMouseLeave={() => {
 							setBorder("");
 						}}
-						className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10"
+						className="border-b-0 text-sm text-center rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10 flex items-end justify-center gap-1.5 leading-[1.3]"
 					>
-						Edit
+						<div className="h-5 w-5 flex items-center justify-center">
+							<PencilIcon size={14} />
+						</div>
+						<span className="h-fit">Edit</span>
 					</DialogTrigger>
 					<DialogContent className="p-5 !rounded-md" id="editMenu">
 						<div className="gap-1.5 flex">
@@ -259,9 +262,12 @@ export default function OptionsButton({
 						onMouseEnter={() => setBorder("delete")}
 						onMouseLeave={() => setBorder("")}
 						ref={deleteRef}
-						className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2"
+						className="text-danger hover:bg-danger/5 text-sm rounded-b-sm border-t-0 transition-colors hover:border-danger/50 border p-2 flex items-end justify-center gap-1.5 leading-[1.3]"
 					>
-						Delete
+						<div className="h-5 w-5 flex items-center justify-center">
+							<Trash2 size={14} />
+						</div>
+						<span className="h-fit">Delete</span>
 					</DialogTrigger>
 					<DialogContent className="p-5 max-w-[300px] !rounded-md">
 						<DialogHeader className="!text-left space-y-2">
