@@ -63,7 +63,6 @@ export default function Page({ username }: { username: string }) {
 			) : (
 				user && (
 					<>
-						{" "}
 						<div
 							style={{ gridTemplateColumns: "auto 1fr" }}
 							className="rounded-md grid gap-x-2.5 border p-2.5 mb-2.5 shadow-sm"

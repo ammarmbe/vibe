@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
 import { useUser } from "@clerk/nextjs";
 import Input from "./Input";
+import { Post } from "@/lib/types";
 
 export function updateInputSize(input: HTMLElement | null) {
 	if (input == null) return;
@@ -55,15 +56,62 @@ export default function NewPost() {
 				}),
 			});
 
-			return id.json();
+			return {
+				id: await id.json(),
+				nanoId,
+			};
 		},
 		onSuccess: (data) => {
 			setValue([]);
 			updateInputSize(inputRef.current);
 
-			client.invalidateQueries(["posts"]);
-			client.invalidateQueries(["homeFeed"]);
-			client.invalidateQueries(["userPosts", user?.id]);
+			const name: string[] = [];
+
+			user?.firstName && name.push(user.firstName);
+			user?.lastName && name.push(user.lastName);
+
+			if (!name.length) {
+				user?.emailAddresses[0].emailAddress.split("@")[0] &&
+					name.push(user?.emailAddresses[0].emailAddress.split("@")[0]);
+			}
+
+			client.setQueryData(
+				["homeFeed"],
+				(oldData: { pages: Post[][] | undefined } | undefined) => {
+					if (oldData?.pages) {
+						return {
+							pages: [
+								[
+									{
+										postId: JSON.parse(data.id),
+										nanoId: data.nanoId,
+										content: value.map((v) => v.unsanitized).join(" "),
+										createdAt: (Date.now() / 1000).toString(),
+										parentNanoId: null,
+										name: name.join(" "),
+										username: user?.username || "",
+										image: user?.imageUrl || "",
+										userId: user?.id || "",
+										likeCount: "0",
+										cryCount: "0",
+										laughCount: "0",
+										heartCount: "0",
+										surpriseCount: "0",
+										commentCount: "0",
+										userLikeStatus: null,
+										userRepostStatus: "",
+										deleted: "0",
+										edited: "0",
+									},
+									...oldData.pages[0],
+								],
+								...oldData.pages.slice(1),
+							],
+						};
+					}
+					return oldData;
+				},
+			);
 
 			// send a notification for all users mentioned in the post
 			const mentionedUsers = value
