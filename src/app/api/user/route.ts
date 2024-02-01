@@ -34,6 +34,14 @@ export async function POST(request: Request) {
 	};
 
 	let username = body.data.username;
+	const name = [];
+
+	body.data.first_name && name.push(body.data.first_name);
+	body.data.last_name && name.push(body.data.last_name);
+
+	if (!name.length) {
+		name.push(body.data.email_addresses[0].email_address.split("@")[0]);
+	}
 
 	if (!username) {
 		username = (
@@ -45,7 +53,7 @@ export async function POST(request: Request) {
 		"INSERT INTO `users` (id, name, email, image, username) VALUES (:id, :name, :email, :image, :username)",
 		{
 			id: body.data.id,
-			name: `${body.data.first_name} ${body.data.last_name}`,
+			name: name.join(" "),
 			email: body.data.email_addresses[0].email_address,
 			username,
 			image: body.data.image_url,
