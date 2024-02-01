@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React from "react";
 import type { Notification } from "@/lib/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

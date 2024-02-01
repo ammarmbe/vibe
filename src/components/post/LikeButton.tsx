@@ -5,14 +5,6 @@ import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "../ui/tooltip";
-import { PopoverContent, PopoverTrigger, Popover } from "../ui/popover";
-import { PopoverClose } from "@radix-ui/react-popover";
 import { Heart } from "lucide-react";
 import {
 	HoverCard,
@@ -53,8 +45,6 @@ export default function LikeButton({
 		cryCount,
 	});
 
-	const isTouchDevice =
-		"ontouchstart" in window || navigator.maxTouchPoints > 0;
 	let timeoutId: NodeJS.Timeout;
 
 	const handleTouchStart = () => {

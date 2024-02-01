@@ -1,6 +1,6 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Post, Repost } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./post/PostCard";

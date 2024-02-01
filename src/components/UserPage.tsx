@@ -3,7 +3,7 @@ import { Post, Repost, User } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import InfiniteScroll, { Props } from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroll-component";
 import EditProfile from "./EditProfile";
 import FollowButton from "./FollowButton";
 import Spinner from "./Spinner";
