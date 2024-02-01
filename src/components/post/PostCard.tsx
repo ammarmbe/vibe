@@ -37,7 +37,7 @@ export default function PostCard({
 	const notificationMutation = useMutation(
 		async () => {
 			await fetch(
-				`/api/notification/mentioned?postId=${post.postId}&userId=${post.userId}`,
+				`/api/notification/reposted?postId=${post.postId}&userId=${post.userId}`,
 				{
 					method: "POST",
 				},
@@ -132,7 +132,6 @@ export default function PostCard({
 						} break-words w-full mb-4`}
 						dangerouslySetInnerHTML={{ __html: post.content }}
 					/>
-
 					<div className="flex justify-between w-full">
 						<div className="flex gap-1.5 items-center">
 							<LikeButton
