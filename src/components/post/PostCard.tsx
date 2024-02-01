@@ -74,8 +74,11 @@ export default function PostCard({
 			{"reposterName" in post ? (
 				<div className="bg-border rounded-t-md p-1 px-2 text-xs -mb-2 pb-[calc(0.75rem-1px)]">
 					<p className="text-foreground/70">
-						<Link href={`/user/${post.username}`} className="font-semibold">
-							{post.name}
+						<Link
+							href={`/user/${post.reposterUsername}`}
+							className="font-semibold"
+						>
+							{post.reposterName}
 						</Link>{" "}
 						reposted this
 					</p>
