@@ -54,6 +54,7 @@ export default function FollowButton({
 	return (
 		<button
 			type="button"
+			name="Follow"
 			className={`py-1 px-2.5 border w-fit h-fit rounded-md text-xs ${
 				followed
 					? "bg-main text-white border-main/50 hover:bg-main/90"

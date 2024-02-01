@@ -114,9 +114,10 @@ export default function HeaderTitle() {
 							<polyline points="6 9 12 15 18 9" />
 						</svg>
 					</PopoverTrigger>
-					<PopoverContent className="p-1 flex flex-col text-center h-auto w-auto gap-0.5">
+					<PopoverContent className="p-1 flex flex-col text-center h-auto w-auto gap-1">
 						<button
 							type="button"
+							name="Home"
 							onClick={() => {
 								setFeed("Home");
 								localStorage.setItem("feed", "Home");
@@ -139,6 +140,7 @@ export default function HeaderTitle() {
 						</button>
 						<button
 							type="button"
+							name="Following"
 							onClick={() => {
 								setFeed("Following");
 								localStorage.setItem("feed", "Following");
@@ -159,7 +161,7 @@ export default function HeaderTitle() {
 						>
 							Following
 						</button>
-						<PopoverClose ref={popoverClose} />
+						<PopoverClose ref={popoverClose} className="absolute" />
 					</PopoverContent>
 				</Popover>
 			)}

@@ -268,6 +268,7 @@ export default function Input({
 						<div>
 							{data.map((user) => (
 								<button
+									name="Mention user"
 									type="button"
 									key={user.id}
 									onClick={(e) => {

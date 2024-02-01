@@ -171,7 +171,10 @@ export default function PostCard({
 								</TooltipProvider>
 							)}
 							<Popover>
-								<PopoverTrigger className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center">
+								<PopoverTrigger
+									name="Share"
+									className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center"
+								>
 									<Repeat2 size={16} />
 								</PopoverTrigger>
 								<PopoverContent

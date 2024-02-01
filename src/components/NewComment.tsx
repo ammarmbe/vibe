@@ -117,6 +117,7 @@ export default function NewComment({
 				postMutation={commentMutation}
 			/>
 			<button
+				name="Reply"
 				type="button"
 				onClick={() => {
 					commentMutation.mutate();

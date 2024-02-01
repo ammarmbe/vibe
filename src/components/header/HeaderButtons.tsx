@@ -28,6 +28,7 @@ export default function AccountButton() {
 		<>
 			<SignInButton>
 				<button
+					name="Sign in"
 					className="border rounded-md hover:border-ring hover:bg-accent transition-colors px-2.5 py-1"
 					type="button"
 				>
@@ -36,6 +37,7 @@ export default function AccountButton() {
 			</SignInButton>
 			<SignUpButton>
 				<button
+					name="Sign up"
 					className="border rounded-md hover:bg-main/5 hover:border-main/50 text-main transition-colors px-2.5 py-1"
 					type="button"
 				>
@@ -76,6 +78,7 @@ export default function AccountButton() {
 
 						<Dialog>
 							<DialogTrigger
+								name="Edit profile"
 								onMouseEnter={() => {
 									setShowBorderTop(true);
 									setBorderBottom("edit");
@@ -100,6 +103,7 @@ export default function AccountButton() {
 						<SignOutButton>
 							<button
 								type="button"
+								name="Sign out"
 								onMouseEnter={() => setBorderBottom("signOut")}
 								onMouseLeave={() => setBorderBottom("")}
 								className="text-danger hover:bg-danger/5 text-sm rounded-b-md border-t-0 transition-colors hover:border-danger/50 border p-2.5"

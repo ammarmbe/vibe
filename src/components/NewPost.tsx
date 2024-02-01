@@ -92,6 +92,7 @@ export default function NewPost() {
 			/>
 			<button
 				type="button"
+				name="Post"
 				onClick={() => {
 					postMutation.mutate();
 				}}
