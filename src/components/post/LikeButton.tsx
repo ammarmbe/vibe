@@ -347,7 +347,7 @@ export default function LikeButton({
 				<button
 					name="heart"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md order-3 ${
+					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-3 ${
 						currentStatus === "heart"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -364,7 +364,7 @@ export default function LikeButton({
 				<button
 					name="laugh"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md order-4 ${
+					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-4 ${
 						currentStatus === "laugh"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -381,7 +381,7 @@ export default function LikeButton({
 				<button
 					name="cry"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md order-6 ${
+					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-6 ${
 						currentStatus === "cry"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -398,7 +398,7 @@ export default function LikeButton({
 				<button
 					name="surprise"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md order-5 ${
+					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-5 ${
 						currentStatus === "surprise"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
