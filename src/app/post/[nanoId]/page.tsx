@@ -17,10 +17,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 	return {
 		title: mainPost?.name ? `${mainPost?.name} on Vibe` : "Vibe",
-		description: mainPost?.content
-			? sanitize(mainPost?.content, { allowedTags: [] })
-			: "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
+		description:
+			"Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
 		metadataBase: new URL("https://vibe.ambe.dev"),
+		openGraph: {
+			description: mainPost?.content
+				? sanitize(mainPost?.content, { allowedTags: [] })
+				: "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
+		},
 	};
 }
 

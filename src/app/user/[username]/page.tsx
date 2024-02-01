@@ -1,15 +1,6 @@
-"use client";
-import EditProfile from "@/components/EditProfile";
-import FollowButton from "@/components/FollowButton";
-import Spinner from "@/components/Spinner";
-import Header from "@/components/header/Header";
-import PostCard from "@/components/post/PostCard";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Post, Repost, User } from "@/lib/types";
-import { useAuth } from "@clerk/nextjs";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import InfiniteScroll from "react-infinite-scroll-component";
+import UserPage from "@/components/UserPage";
+import { User } from "@/lib/types";
+import { Metadata } from "next/types";
 
 interface Props {
 	params: {
@@ -17,149 +8,24 @@ interface Props {
 	};
 }
 
-export default function Page({ params }: Props) {
-	const username = params.username;
-	const { userId: currentUserId } = useAuth();
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const user = (await (
+		await fetch(`https://vibe.ambe.dev/api/user?username=${params.username}`)
+	).json()) as User;
 
-	const { data: user, isLoading: userLoading } = useQuery({
-		queryKey: ["user", username],
-		queryFn: async () =>
-			(await (await fetch(`/api/user?username=${username}`)).json()) as User,
-	});
-
-	const {
-		data: userPosts,
-		hasNextPage,
-		fetchNextPage,
-		isLoading: postsLoading,
-	} = useInfiniteQuery({
-		queryKey: ["userPosts", user?.id],
-		queryFn: async ({ pageParam = 4294967295 }) =>
-			await (
-				await fetch(`/api/posts/userId?userId=${user?.id}&postId=${pageParam}`)
-			).json(),
-		getNextPageParam: (lastPage, _pages) => {
-			if (lastPage?.length >= 11) {
-				return lastPage[lastPage.length - 1].postId;
-			}
-			return undefined;
+	return {
+		title: user?.name ? `${user?.name} – Vibe` : "Vibe",
+		description:
+			"Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
+		metadataBase: new URL("https://vibe.ambe.dev"),
+		openGraph: {
+			description: user?.bio
+				? user?.bio
+				: "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
 		},
-		enabled: Boolean(user),
-	});
+	};
+}
 
-	function formatFollowerCount() {
-		if (user) {
-			const followerCount = parseInt(user.followers);
-			if (followerCount >= 1000000) {
-				return `${`00${followerCount / 1000000}`.slice(-3)}M`;
-			}
-			if (followerCount >= 1000) {
-				return `${`00${followerCount / 1000}`.slice(-3)}K`;
-			}
-			return `000${followerCount}`.slice(-4);
-		}
-	}
-
-	return (
-		<main className="max-w-2xl h-full flex flex-col w-full mx-auto px-2.5">
-			<Header />
-			{userLoading ? (
-				<div className="w-full flex h-full items-center justify-center">
-					<Spinner size="xl" />
-				</div>
-			) : (
-				user && (
-					<>
-						{" "}
-						<div
-							style={{ gridTemplateColumns: "auto 1fr" }}
-							className="rounded-md grid gap-x-2.5 border p-2.5 mb-2.5 shadow-sm"
-						>
-							<Image
-								src={user.image}
-								alt={`${user.name}'s profile picture`}
-								width={34}
-								height={34}
-								className={`rounded-full ${!user.bio && "self-center"}`}
-							/>
-							<div className="flex flex-col">
-								<div className="flex items-center gap-2.5">
-									<div className={`flex-grow ${!user.bio && "self-center"}`}>
-										<h2 className="font-semibold text-lg leading-none">
-											{user.name}
-										</h2>
-										<p className="leading-none text-foreground/70">
-											@{user.username}
-										</p>
-										<p className="text-sm mt-1.5 empty:mt-0">{user.bio}</p>
-									</div>
-									<div className="flex flex-col h-full justify-between items-center">
-										<p className="font-bold !h-[34px] flex items-center text-center text-lg leading-none">
-											{formatFollowerCount()}
-										</p>
-										{currentUserId === user.id ? (
-											<>
-												<Dialog>
-													<DialogTrigger className="py-1 px-3.5 border w-fit h-fit rounded-md text-xs hover:bg-accent hover:border-ring transition-colors">
-														Edit
-													</DialogTrigger>
-													<DialogContent className="p-0 border-0 !w-[360px]">
-														<EditProfile />
-													</DialogContent>
-												</Dialog>
-											</>
-										) : (
-											<FollowButton
-												userId={user.id}
-												username={user.username}
-												followed={parseInt(user.followedByUser) === 1}
-											/>
-										)}
-									</div>
-								</div>
-							</div>
-						</div>
-						{postsLoading ? (
-							<div className="w-full flex items-center justify-center">
-								<Spinner size="xl" />
-							</div>
-						) : userPosts && userPosts.pages[0].length > 0 ? (
-							<InfiniteScroll
-								dataLength={userPosts.pages.flatMap((page) => page).length}
-								hasMore={hasNextPage || false}
-								loader={
-									<div className="w-full flex items-center justify-center">
-										<Spinner size="xl" />
-									</div>
-								}
-								endMessage={
-									<p className="text-ring/70 text-center">No more posts</p>
-								}
-								next={fetchNextPage}
-								className="flex flex-col gap-2.5 pb-2.5"
-							>
-								{userPosts.pages.map((page) => {
-									return page.map((post: Post | Repost) => {
-										return (
-											<PostCard
-												key={
-													post.postId +
-													("repostCreatedAt" in post ? "repost" : "")
-												}
-												post={post}
-											/>
-										);
-									});
-								})}
-							</InfiniteScroll>
-						) : (
-							<p className="text-ring/70 text-center">
-								This user hasn&apos;t posted yet
-							</p>
-						)}
-					</>
-				)
-			)}
-		</main>
-	);
+export default function Page({ params }: Props) {
+	return <UserPage username={params.username} />;
 }

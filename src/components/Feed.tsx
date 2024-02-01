@@ -1,34 +1,47 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { Post, Repost } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./post/PostCard";
 import Spinner from "./Spinner";
 
 export default function Feed() {
-	const feed = useRef<"Home" | "Following">("Home");
+	const [feed, setFeed] = useState<"Home" | "Following">("Home");
 
 	useEffect(() => {
-		const localFeed = localStorage.getItem("feed") as "Home" | "Following";
-		if (!localFeed) localStorage.setItem("feed", "Home");
-		else feed.current = localFeed;
+		function changeFeed() {
+			const localFeed = localStorage.getItem("feed") as "Home" | "Following";
+			if (!localFeed) localStorage.setItem("feed", "Home");
+			setFeed(localFeed);
+		}
+
+		window.addEventListener("feed", changeFeed);
+
+		return () => {
+			window.removeEventListener("feed", changeFeed);
+		};
 	});
 
-	const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
-		queryKey: ["homeFeed"],
-		queryFn: async ({ pageParam = 4294967295 }) =>
-			await (
-				await fetch(`/api/posts?postId=${pageParam}&feed=${feed.current}`)
-			).json(),
-		getNextPageParam: (lastPage, _pages) => {
-			if (lastPage?.length >= 11) {
-				return lastPage[lastPage.length - 1].postId;
-			}
-			return undefined;
-		},
-		enabled: Boolean(feed),
-	});
+	const { data, fetchNextPage, hasNextPage, isLoading, refetch } =
+		useInfiniteQuery({
+			queryKey: ["homeFeed"],
+			queryFn: async ({ pageParam = 4294967295 }) =>
+				await (
+					await fetch(`/api/posts?postId=${pageParam}&feed=${feed}`)
+				).json(),
+			getNextPageParam: (lastPage, _pages) => {
+				if (lastPage?.length >= 11) {
+					return lastPage[lastPage.length - 1].postId;
+				}
+				return undefined;
+			},
+			enabled: Boolean(feed),
+		});
+
+	useEffect(() => {
+		refetch();
+	}, [feed]);
 
 	if (isLoading)
 		return (

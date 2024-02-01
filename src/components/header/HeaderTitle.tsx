@@ -38,7 +38,7 @@ export default function HeaderTitle() {
 			containerRef.current?.classList.remove(style.animateWidth);
 			setPopoverDisabled(false);
 		}, 3000);
-	}, [isSignedIn]);
+	}, [isSignedIn, feed]);
 
 	return (
 		<div className="flex items-center">
@@ -114,7 +114,7 @@ export default function HeaderTitle() {
 							<polyline points="6 9 12 15 18 9" />
 						</svg>
 					</PopoverTrigger>
-					<PopoverContent className="p-1 flex flex-col text-center h-auto w-auto">
+					<PopoverContent className="p-1 flex flex-col text-center h-auto w-auto gap-0.5">
 						<button
 							type="button"
 							onClick={() => {
@@ -122,13 +122,17 @@ export default function HeaderTitle() {
 								localStorage.setItem("feed", "Home");
 								popoverClose.current?.click();
 								if (location.pathname === "/") {
-									location.reload();
+									window.dispatchEvent(new Event("feed", { bubbles: true }));
 								} else {
 									push("/");
 								}
 							}}
 							className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-								feed === "Home" ? "bg-secondary" : !feed && "hover:bg-secondary"
+								feed === "Home"
+									? "bg-secondary"
+									: !feed
+									  ? "hover:bg-secondary"
+									  : "hover:bg-secondary/40"
 							}`}
 						>
 							Home
@@ -140,7 +144,7 @@ export default function HeaderTitle() {
 								localStorage.setItem("feed", "Following");
 								popoverClose.current?.click();
 								if (location.pathname === "/") {
-									location.reload();
+									window.dispatchEvent(new Event("feed", { bubbles: true }));
 								} else {
 									push("/");
 								}
@@ -148,7 +152,9 @@ export default function HeaderTitle() {
 							className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
 								feed === "Following"
 									? "bg-secondary"
-									: !feed && "hover:bg-secondary"
+									: !feed
+									  ? "hover:bg-secondary"
+									  : "hover:bg-secondary/40"
 							}`}
 						>
 							Following
