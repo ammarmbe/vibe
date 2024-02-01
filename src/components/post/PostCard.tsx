@@ -94,8 +94,8 @@ export default function PostCard({
 				<Link className="flex-none h-fit" href={`/user/${post.username}`}>
 					<Image
 						src={post.image}
-						width={33}
-						height={33}
+						width={32}
+						height={32}
 						className="rounded-full"
 						alt={`${post.name}'s profile picture}`}
 					/>

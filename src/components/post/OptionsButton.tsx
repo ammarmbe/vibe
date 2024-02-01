@@ -189,8 +189,8 @@ export default function OptionsButton({
 							<div className="flex-none h-fit">
 								<Image
 									src={post.image}
-									width={33}
-									height={33}
+									width={32}
+									height={32}
 									className="rounded-full"
 									alt={`${post.name}'s profile picture}`}
 								/>

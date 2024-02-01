@@ -50,8 +50,8 @@ export default function NotificationCard({
 				<Image
 					src={notification.notifierImage}
 					alt={`${notification.notifierName}'s profile picture`}
-					width={25}
-					height={25}
+					width={24}
+					height={24}
 					className="rounded-full"
 				/>
 			</Link>

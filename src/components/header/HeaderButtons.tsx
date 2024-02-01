@@ -55,8 +55,8 @@ export default function AccountButton() {
 						<Image
 							src={user.imageUrl}
 							alt="Account options"
-							width={17}
-							height={17}
+							width={16}
+							height={16}
 							className="rounded-full"
 						/>
 						<p>{user.fullName}</p>

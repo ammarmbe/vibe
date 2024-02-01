@@ -89,8 +89,8 @@ export default function Page({ nanoId }: { nanoId: string }) {
 									>
 										<Image
 											src={parentPost.image}
-											width={33}
-											height={33}
+											width={32}
+											height={32}
 											className="rounded-full"
 											alt={`${parentPost.name}'s profile picture}`}
 										/>

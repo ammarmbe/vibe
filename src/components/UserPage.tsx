@@ -71,8 +71,8 @@ export default function Page({ username }: { username: string }) {
 							<Image
 								src={user.image}
 								alt={`${user.name}'s profile picture`}
-								width={34}
-								height={34}
+								width={32}
+								height={32}
 								className={`rounded-full ${!user.bio && "self-center"}`}
 							/>
 							<div className="flex flex-col">
