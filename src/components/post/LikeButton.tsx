@@ -14,6 +14,11 @@ import {
 import { PopoverContent, PopoverTrigger, Popover } from "../ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Heart } from "lucide-react";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "../ui/hover-card";
 
 export default function LikeButton({
 	likeCount,
@@ -36,7 +41,7 @@ export default function LikeButton({
 	nanoId?: string;
 	userId: string;
 }) {
-	const [popoverOpen, setPopoverOpen] = useState(false);
+	const [hoverCardOpen, setHoverCardOpen] = useState(false);
 	const { userId: currentUserId, isSignedIn } = useAuth();
 	const { push } = useRouter();
 	const [currentStatus, setCurrentStatus] = useState(userLikeStatus);
@@ -54,7 +59,7 @@ export default function LikeButton({
 
 	const handleTouchStart = () => {
 		timeoutId = setTimeout(() => {
-			setPopoverOpen(true);
+			setHoverCardOpen(true);
 		}, 500);
 	};
 
@@ -236,9 +241,10 @@ export default function LikeButton({
 
 	return (
 		<>
-			{isTouchDevice ? (
-				<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-					<PopoverTrigger
+			<HoverCard open={hoverCardOpen} onOpenChange={setHoverCardOpen}>
+				<HoverCardTrigger>
+					<button
+						type="button"
 						name="like"
 						disabled={likeMutation.isLoading}
 						className={`text-xs px-2 gap-1 leading-[1.3] py-1 border transition-colors rounded-md h-full select-none order-1 items-end flex justify-center ${
@@ -248,14 +254,11 @@ export default function LikeButton({
 						}`}
 						onClick={
 							isSignedIn
-								? (e) => {
-										e.preventDefault();
+								? () => {
 										toggleLike("like");
+										setHoverCardOpen(false);
 								  }
-								: (e) => {
-										e.preventDefault();
-										push("/sign-up");
-								  }
+								: () => push("/sign-up")
 						}
 						onTouchStart={handleTouchStart}
 						onTouchEnd={handleTouchEnd}
@@ -267,166 +270,89 @@ export default function LikeButton({
 							{buttonCounts.likeCount}{" "}
 							{currentStatus === "like" ? "liked" : likesOrLike}
 						</span>
-					</PopoverTrigger>
-					<PopoverContent className="p-1.5 w-fit space-x-1" side="top">
-						<PopoverClose
-							type="button"
-							name="heart"
-							className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-								currentStatus === "heart"
-									? "bg-secondary"
-									: "hover:bg-secondary/50"
-							}`}
-							disabled={likeMutation.isLoading}
-							onClick={
-								isSignedIn ? () => toggleLike("heart") : () => push("/sign-up")
-							}
-						>
-							❤️
-						</PopoverClose>
-						<PopoverClose
-							type="button"
-							name="laugh"
-							className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-								currentStatus === "laugh"
-									? "bg-secondary"
-									: "hover:bg-secondary/50"
-							}`}
-							disabled={likeMutation.isLoading}
-							onClick={
-								isSignedIn ? () => toggleLike("laugh") : () => push("/sign-up")
-							}
-						>
-							😂
-						</PopoverClose>
-						<PopoverClose
-							type="button"
-							name="cry"
-							className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-								currentStatus === "cry"
-									? "bg-secondary"
-									: "hover:bg-secondary/50"
-							}`}
-							disabled={likeMutation.isLoading}
-							onClick={
-								isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
-							}
-						>
-							😭
-						</PopoverClose>
-						<PopoverClose
-							type="button"
-							name="surprise"
-							className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-								currentStatus === "surprise"
-									? "bg-secondary"
-									: "hover:bg-secondary/50"
-							}`}
-							disabled={likeMutation.isLoading}
-							onClick={
-								isSignedIn
-									? () => toggleLike("surprise")
-									: () => push("/sign-up")
-							}
-						>
-							😮
-						</PopoverClose>
-					</PopoverContent>
-				</Popover>
-			) : (
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger
-							disabled={likeMutation.isLoading}
-							name="like"
-							className={`text-xs gap-1 leading-[1.3] px-2 py-1 border transition-colors rounded-md h-full select-none flex items-end justify-center ${
-								currentStatus === "like"
-									? "bg-main text-white border-main/50 hover:bg-main/90"
-									: "hover:bg-main/10 hover:border-main/50 dark:text-[#f5315c] text-main"
-							}`}
-							onClick={
-								isSignedIn ? () => toggleLike("like") : () => push("/sign-up")
-							}
-						>
-							<div className="h-4 w-4 flex items-center justify-center">
-								<Heart size={14} />
-							</div>
-							<span className="h-fit">
-								{buttonCounts.likeCount}{" "}
-								{currentStatus === "like" ? "liked" : likesOrLike}
-							</span>
-						</TooltipTrigger>
-						<TooltipContent className="px-1.5 space-x-1">
-							<button
-								type="button"
-								name="heart"
-								className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-									currentStatus === "heart"
-										? "bg-secondary"
-										: "hover:bg-secondary/50"
-								}`}
-								disabled={likeMutation.isLoading}
-								onClick={
-									isSignedIn
-										? () => toggleLike("heart")
-										: () => push("/sign-up")
-								}
-							>
-								❤️
-							</button>
-							<button
-								type="button"
-								name="laugh"
-								className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-									currentStatus === "laugh"
-										? "bg-secondary"
-										: "hover:bg-secondary/50"
-								}`}
-								disabled={likeMutation.isLoading}
-								onClick={
-									isSignedIn
-										? () => toggleLike("laugh")
-										: () => push("/sign-up")
-								}
-							>
-								😂
-							</button>
-							<button
-								type="button"
-								name="cry"
-								className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-									currentStatus === "cry"
-										? "bg-secondary"
-										: "hover:bg-secondary/50"
-								}`}
-								disabled={likeMutation.isLoading}
-								onClick={
-									isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
-								}
-							>
-								😭
-							</button>
-							<button
-								type="button"
-								name="surprise"
-								className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
-									currentStatus === "surprise"
-										? "bg-secondary"
-										: "hover:bg-secondary/50"
-								}`}
-								disabled={likeMutation.isLoading}
-								onClick={
-									isSignedIn
-										? () => toggleLike("surprise")
-										: () => push("/sign-up")
-								}
-							>
-								😮
-							</button>
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
-			)}
+					</button>
+				</HoverCardTrigger>
+				<HoverCardContent className="p-1.5 w-fit space-x-1" side="top">
+					<button
+						type="button"
+						name="heart"
+						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
+							currentStatus === "heart"
+								? "bg-secondary"
+								: "hover:bg-secondary/50"
+						}`}
+						disabled={likeMutation.isLoading}
+						onClick={
+							isSignedIn
+								? () => {
+										toggleLike("heart");
+										setHoverCardOpen(false);
+								  }
+								: () => push("/sign-up")
+						}
+					>
+						❤️
+					</button>
+					<button
+						type="button"
+						name="laugh"
+						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
+							currentStatus === "laugh"
+								? "bg-secondary"
+								: "hover:bg-secondary/50"
+						}`}
+						disabled={likeMutation.isLoading}
+						onClick={
+							isSignedIn
+								? () => {
+										toggleLike("laugh");
+										setHoverCardOpen(false);
+								  }
+								: () => push("/sign-up")
+						}
+					>
+						😂
+					</button>
+					<button
+						type="button"
+						name="cry"
+						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
+							currentStatus === "cry" ? "bg-secondary" : "hover:bg-secondary/50"
+						}`}
+						disabled={likeMutation.isLoading}
+						onClick={
+							isSignedIn
+								? () => {
+										toggleLike("cry");
+										setHoverCardOpen(false);
+								  }
+								: () => push("/sign-up")
+						}
+					>
+						😭
+					</button>
+					<button
+						type="button"
+						name="surprise"
+						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
+							currentStatus === "surprise"
+								? "bg-secondary"
+								: "hover:bg-secondary/50"
+						}`}
+						disabled={likeMutation.isLoading}
+						onClick={
+							isSignedIn
+								? () => {
+										toggleLike("surprise");
+										setHoverCardOpen(false);
+								  }
+								: () => push("/sign-up")
+						}
+					>
+						😮
+					</button>
+				</HoverCardContent>
+			</HoverCard>
 			{buttonCounts.heartCount ? (
 				<button
 					name="heart"

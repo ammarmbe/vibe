@@ -11,7 +11,7 @@ export const jetBrains = JetBrains_Mono({
 
 export default function Header() {
 	return (
-		<header className="py-3 flex items-center justify-between">
+		<header className="pt-3 pb-2 flex items-center justify-between">
 			<HeaderTitle />
 			<nav className="flex gap-2.5 items-center">
 				<HeaderButtons />
