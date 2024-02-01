@@ -102,7 +102,7 @@ export default function NotificationCard({
 					}
 
 					if (notification.type === "reposted") {
-						return `mentioned you in their ${
+						return `repopsted your ${
 							notification.deleted ? "deleted post" : "post: "
 						}`;
 					}
