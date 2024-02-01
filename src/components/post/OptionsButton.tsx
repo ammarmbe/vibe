@@ -194,7 +194,7 @@ export default function OptionsButton({
 							</div>
 							<div className="grid grid-rows-[auto,auto,auto] flex-grow w-full">
 								<h2 className="leading-tight font-medium">{post.name}</h2>
-								<h3 className="text-foreground/70 leading-none w-fit">
+								<h3 className="text-foreground/70 leading-tight w-fit">
 									@{post.username}
 								</h3>
 								<Input

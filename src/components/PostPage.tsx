@@ -113,7 +113,7 @@ export default function Page({ nanoId }: { nanoId: string }) {
 											</time>
 										</div>
 										<Link
-											className="text-sm hover:underline text-foreground/70 leading-none w-fit"
+											className="text-sm hover:underline text-foreground/70 leading-tight w-fit"
 											href={`/user/${parentPost.username}`}
 										>
 											@{parentPost.username}

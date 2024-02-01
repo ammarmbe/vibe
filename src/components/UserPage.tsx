@@ -78,10 +78,10 @@ export default function Page({ username }: { username: string }) {
 							<div className="flex flex-col">
 								<div className="flex items-center gap-2.5">
 									<div className={`flex-grow ${!user.bio && "self-center"}`}>
-										<h2 className="font-semibold text-lg leading-none">
+										<h2 className="font-semibold text-lg leading-tight">
 											{user.name}
 										</h2>
-										<p className="leading-none text-foreground/70">
+										<p className="leading-tight text-foreground/70">
 											@{user.username}
 										</p>
 										<p className="text-sm mt-1.5 empty:mt-0">{user.bio}</p>
