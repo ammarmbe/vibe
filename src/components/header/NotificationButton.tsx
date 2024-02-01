@@ -79,11 +79,11 @@ export default function NotificationButton() {
 			>
 				<Bell size={16} color="grey" />
 			</PopoverTrigger>
-			<PopoverContent className="p-0">
+			<PopoverContent className="p-0 overflow-hidden relative h-[300px]">
 				{data?.pages[0] && data?.pages[0].length > 0 ? (
 					<>
 						{isLoading ? (
-							<div className="w-full h-[300px] flex p-2.5 items-center justify-center">
+							<div className="flex p-2.5 items-center justify-center inset-0 absolute">
 								<Spinner size="xl" />
 							</div>
 						) : (
@@ -102,7 +102,7 @@ export default function NotificationButton() {
 								}
 								next={fetchNextPage}
 								height={300}
-								className="flex flex-col p-2.5 gap-2.5"
+								className="flex flex-col p-2.5 gap-2.5 overflow-auto inset-0 absolute"
 							>
 								{data.pages.map((page) => {
 									return page.map((notification: Notification) => {

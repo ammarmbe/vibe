@@ -68,6 +68,11 @@ export default function NotificationCard({
 					}
 
 					if (notification.type.startsWith("likedPost")) {
+						if (notification.type.endsWith("like")) {
+							return `liked your ${
+								notification.deleted ? "deleted post" : "post: "
+							}`;
+						}
 						return `reacted ${
 							notification.type.endsWith("heart")
 								? "❤️"
