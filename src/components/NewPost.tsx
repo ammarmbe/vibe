@@ -50,7 +50,7 @@ export default function NewPost() {
 			const id = await fetch("/api/post", {
 				method: "POST",
 				body: JSON.stringify({
-					content: value.map((v) => v.unsanitized).join("&nbsp;"),
+					content: value.map((v) => v.unsanitized).join(" "),
 					nanoId,
 				}),
 			});

@@ -169,7 +169,7 @@ export default function Input({
 				className={`overflow-auto min-h-[1.5rem] ${
 					className ?? "w-full bg-transparent outline-none break-words"
 				}`}
-				html={value.map((v) => v.unsanitized).join("&nbsp;")}
+				html={value.map((v) => v.unsanitized).join(" ")}
 				tagName="p"
 				id="textarea"
 				innerRef={inputRef}
