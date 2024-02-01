@@ -22,27 +22,5 @@ export async function GET(request: Request) {
 		)
 	).rows as Repost[];
 
-	// merge posts and reposts and sort by createdAt desc
-	const merged: (Post | Repost)[] = [...posts, ...reposts].sort(
-		(a: Post | Repost, b: Post | Repost) => {
-			let acreatedAt: string;
-			let bcreatedAt: string;
-
-			if ("reposterName" in a) {
-				acreatedAt = a.repostCreatedAt;
-			} else {
-				acreatedAt = a.createdAt;
-			}
-
-			if ("reposterName" in b) {
-				bcreatedAt = b.repostCreatedAt;
-			} else {
-				bcreatedAt = b.createdAt;
-			}
-
-			return parseInt(bcreatedAt) - parseInt(acreatedAt);
-		},
-	);
-
-	return new Response(JSON.stringify(merged));
+	return new Response(JSON.stringify([...posts, ...reposts]));
 }

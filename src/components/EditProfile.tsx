@@ -53,6 +53,19 @@ export default function EditProfile() {
 
 			if (pathname.startsWith("/user")) {
 				push(`/user/${username}`);
+
+				client.setQueryData(
+					["user", user?.username],
+					(data: User | undefined) => {
+						if (!data) return;
+						return {
+							...data,
+							username,
+							bio,
+						};
+					},
+				);
+
 				return;
 			}
 
@@ -68,6 +81,7 @@ export default function EditProfile() {
 										return {
 											...post,
 											username,
+											bio,
 										};
 									}
 									return post;
@@ -93,6 +107,7 @@ export default function EditProfile() {
 									return {
 										...post,
 										username,
+										bio,
 									};
 								}
 								return post;

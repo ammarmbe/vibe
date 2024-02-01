@@ -77,7 +77,7 @@ export default function NewPost() {
 
 			client.setQueryData(
 				["homeFeed"],
-				(oldData: { pages: Post[][] | undefined } | undefined) => {
+				(oldData: { pages: Post[][] } | undefined) => {
 					if (oldData?.pages) {
 						return {
 							pages: [

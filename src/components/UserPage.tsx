@@ -79,14 +79,19 @@ export default function Page({ username }: { username: string }) {
 									<div className={`flex-grow ${!user.bio && "self-center"}`}>
 										<h2 className="font-semibold text-lg leading-tight">
 											{user.name}
+											{parseInt(user.followsUser) ? (
+												<span className="font-normal bg-secondary text-xs py-1 px-1.5 rounded-md ml-1.5">
+													follows you
+												</span>
+											) : null}
 										</h2>
 										<p className="leading-tight text-foreground/70">
 											@{user.username}
 										</p>
 										<p className="text-sm mt-1.5 empty:mt-0">{user.bio}</p>
 									</div>
-									<div className="flex flex-col h-full justify-between items-center">
-										<p className="font-bold !h-[34px] flex items-center text-center text-lg leading-none">
+									<div className="flex flex-col h-full justify-end items-center">
+										<p className="font-bold mb-1.5 flex items-center text-center text-lg leading-none">
 											{formatFollowerCount()}
 										</p>
 										{currentUserId === user.id ? (
@@ -131,17 +136,36 @@ export default function Page({ username }: { username: string }) {
 								className="flex flex-col gap-2.5 pb-2.5"
 							>
 								{userPosts.pages.map((page) => {
-									return page.map((post: Post | Repost) => {
-										return (
-											<PostCard
-												key={
-													post.postId +
-													("repostCreatedAt" in post ? "repost" : "")
-												}
-												post={post}
-											/>
-										);
-									});
+									return page
+										.sort((a: Post | Repost, b: Post | Repost) => {
+											let acreatedAt: string;
+											let bcreatedAt: string;
+
+											if ("reposterName" in a) {
+												acreatedAt = a.repostCreatedAt;
+											} else {
+												acreatedAt = a.createdAt;
+											}
+
+											if ("reposterName" in b) {
+												bcreatedAt = b.repostCreatedAt;
+											} else {
+												bcreatedAt = b.createdAt;
+											}
+
+											return parseInt(bcreatedAt) - parseInt(acreatedAt);
+										})
+										.map((post: Post | Repost) => {
+											return (
+												<PostCard
+													key={
+														post.postId +
+														("repostCreatedAt" in post ? "repost" : "")
+													}
+													post={post}
+												/>
+											);
+										});
 								})}
 							</InfiniteScroll>
 						) : (

@@ -64,7 +64,7 @@ export default function PostCard({
 				notificationMutation.mutate();
 
 				queryClient.invalidateQueries(["homeFeed"]);
-				queryClient.invalidateQueries(["user", user?.id]);
+				queryClient.invalidateQueries(["userPosts", user?.id]);
 			},
 		},
 	);

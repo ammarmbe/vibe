@@ -276,7 +276,7 @@ export default function LikeButton({
 								isSignedIn ? () => toggleLike("heart") : () => push("/sign-up")
 							}
 						>
-							❤️ {buttonCounts.heartCount}
+							❤️
 						</PopoverClose>
 						<PopoverClose
 							type="button"
@@ -291,7 +291,7 @@ export default function LikeButton({
 								isSignedIn ? () => toggleLike("laugh") : () => push("/sign-up")
 							}
 						>
-							😂 {buttonCounts.laughCount}
+							😂
 						</PopoverClose>
 						<PopoverClose
 							type="button"
@@ -306,7 +306,7 @@ export default function LikeButton({
 								isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
 							}
 						>
-							😭 {buttonCounts.cryCount}
+							😭
 						</PopoverClose>
 						<PopoverClose
 							type="button"
@@ -323,7 +323,7 @@ export default function LikeButton({
 									: () => push("/sign-up")
 							}
 						>
-							😮 {buttonCounts.surpriseCount}
+							😮
 						</PopoverClose>
 					</PopoverContent>
 				</Popover>
@@ -361,7 +361,7 @@ export default function LikeButton({
 										: () => push("/sign-up")
 								}
 							>
-								❤️ {buttonCounts.heartCount}
+								❤️
 							</button>
 							<button
 								type="button"
@@ -378,7 +378,7 @@ export default function LikeButton({
 										: () => push("/sign-up")
 								}
 							>
-								😂 {buttonCounts.laughCount}
+								😂
 							</button>
 							<button
 								type="button"
@@ -393,7 +393,7 @@ export default function LikeButton({
 									isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
 								}
 							>
-								😭 {buttonCounts.cryCount}
+								😭
 							</button>
 							<button
 								type="button"
@@ -410,7 +410,7 @@ export default function LikeButton({
 										: () => push("/sign-up")
 								}
 							>
-								😮 {buttonCounts.surpriseCount}
+								😮
 							</button>
 						</TooltipContent>
 					</Tooltip>

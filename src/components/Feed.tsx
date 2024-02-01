@@ -68,16 +68,35 @@ export default function Feed() {
 					className="flex flex-col gap-2.5 pb-2.5"
 				>
 					{data.pages.map((page) => {
-						return page.map((post: Post | Repost) => {
-							return (
-								<PostCard
-									key={
-										post.postId + ("repostCreatedAt" in post ? "repost" : "")
-									}
-									post={post}
-								/>
-							);
-						});
+						return page
+							.sort((a: Post | Repost, b: Post | Repost) => {
+								let acreatedAt: string;
+								let bcreatedAt: string;
+
+								if ("reposterName" in a) {
+									acreatedAt = a.repostCreatedAt;
+								} else {
+									acreatedAt = a.createdAt;
+								}
+
+								if ("reposterName" in b) {
+									bcreatedAt = b.repostCreatedAt;
+								} else {
+									bcreatedAt = b.createdAt;
+								}
+
+								return parseInt(bcreatedAt) - parseInt(acreatedAt);
+							})
+							.map((post: Post | Repost) => {
+								return (
+									<PostCard
+										key={
+											post.postId + ("repostCreatedAt" in post ? "repost" : "")
+										}
+										post={post}
+									/>
+								);
+							});
 					})}
 				</InfiniteScroll>
 			</>

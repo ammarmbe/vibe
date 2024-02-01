@@ -31,6 +31,7 @@ export type User = {
 	image: string;
 	followers: string;
 	followedByUser: string;
+	followsUser: string;
 };
 
 export type Notification = {
