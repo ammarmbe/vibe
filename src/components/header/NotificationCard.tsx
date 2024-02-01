@@ -63,8 +63,6 @@ export default function NotificationCard({
 					{notification.notifierName}
 				</Link>{" "}
 				{(() => {
-					console.log(notification);
-
 					if (notification.type === "followedUser") {
 						return "followed you";
 					}
