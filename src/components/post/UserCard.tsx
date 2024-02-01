@@ -50,7 +50,7 @@ export default function PostCard({ username }: { username: string }) {
 						</div>
 					</div>
 				</div>
-				{currentUserId === user.id ? (
+				{currentUserId !== user.id ? (
 					<FollowButton
 						userId={user.id}
 						username={user.username}
