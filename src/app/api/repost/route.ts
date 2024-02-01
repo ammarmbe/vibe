@@ -17,7 +17,6 @@ export async function POST(request: Request) {
 				},
 			);
 		} else {
-			console.log("reposting");
 			await db.execute(
 				"INSERT INTO reposts (postId, userId) VALUES (:postId, :userId)",
 				{
