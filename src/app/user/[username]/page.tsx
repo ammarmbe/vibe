@@ -39,7 +39,7 @@ export default function Page({ params }: Props) {
 				await fetch(`/api/posts/userId?userId=${user?.id}&postId=${pageParam}`)
 			).json(),
 		getNextPageParam: (lastPage, _pages) => {
-			if (lastPage?.length === 11) {
+			if (lastPage?.length >= 11) {
 				return lastPage[lastPage.length - 1].postId;
 			}
 			return undefined;

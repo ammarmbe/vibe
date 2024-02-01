@@ -45,7 +45,7 @@ export default function Page({ nanoId }: { nanoId: string }) {
 				)
 			).json(),
 		getNextPageParam: (lastPage, _pages) => {
-			if (lastPage?.length === 11) {
+			if (lastPage?.length >= 11) {
 				return lastPage[lastPage.length - 1].postId;
 			}
 			return undefined;
