@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "@/components/Link";
 import sanitize from "sanitize-html";
+import he from "he";
 
 export default function NotificationCard({
 	notification,
@@ -111,9 +112,11 @@ export default function NotificationCard({
 					}
 				})()}
 				{notification.content && !notification.deleted
-					? `"${sanitize(notification.content, {
-							allowedTags: [],
-					  }).replaceAll(/&nbsp;/g, " ")}"`
+					? `"${he.decode(
+							sanitize(notification.content, {
+								allowedTags: [],
+							}).replaceAll(/&nbsp;/g, " "),
+					  )}"`
 					: null}
 			</p>
 		</div>

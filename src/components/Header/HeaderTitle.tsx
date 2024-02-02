@@ -8,18 +8,20 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import Link from "@/components/Link";
 
-export default function HeaderTitle() {
+export default function HeaderTitle({ feed }: { feed?: "Home" | "Following" }) {
 	const popoverClose = useRef<HTMLButtonElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [popoverDisabled, setPopoverDisabled] = useState(false);
 	const { push } = useRouter();
 	const { isSignedIn } = useAuth();
-	const searchParams = useSearchParams();
-	const feed = useRef(searchParams.get("feed") as "Home" | "Following" | null);
+
+	if (feed === "Following") {
+		containerRef.current?.classList.add(style.animateWidth);
+	}
 
 	// Run animation when feed changes
 	useEffect(() => {
@@ -28,7 +30,7 @@ export default function HeaderTitle() {
 		setPopoverDisabled(true);
 		containerRef.current?.classList.add(style.animateLetters);
 
-		if (feed.current === "Following") {
+		if (feed === "Following") {
 			containerRef.current?.classList.add(style.animateWidth);
 		}
 
@@ -37,7 +39,7 @@ export default function HeaderTitle() {
 			containerRef.current?.classList.remove(style.animateWidth);
 			setPopoverDisabled(false);
 		}, 3000);
-	}, [isSignedIn, feed.current]);
+	}, [isSignedIn, feed]);
 
 	return (
 		<div className="flex items-center">
@@ -53,7 +55,7 @@ export default function HeaderTitle() {
 					>
 						<span>
 							<div>V</div>
-							<div>{feed.current ? feed.current[0] : "H"}</div>
+							<div>{feed ? feed[0] : "H"}</div>
 						</span>
 						<span style={{ animationDelay: "75ms" }}>
 							<div>i</div>
@@ -61,11 +63,11 @@ export default function HeaderTitle() {
 						</span>
 						<span style={{ animationDelay: "150ms" }}>
 							<div>b</div>
-							<div>{feed.current ? feed.current[2] : "m"}</div>
+							<div>{feed ? feed[2] : "m"}</div>
 						</span>
 						<span style={{ animationDelay: "225ms" }}>
 							<div>e</div>
-							<div>{feed.current ? feed.current[3] : "e"}</div>
+							<div>{feed ? feed[3] : "e"}</div>
 						</span>
 						<span style={{ animationDelay: "300ms" }}>
 							<div>&nbsp;</div>
@@ -122,7 +124,7 @@ export default function HeaderTitle() {
 								push("/?feed=Home");
 							}}
 							className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-								feed.current === "Home"
+								feed === "Home"
 									? "bg-secondary"
 									: !feed
 									  ? "hover:bg-secondary"
@@ -139,7 +141,7 @@ export default function HeaderTitle() {
 								push("/?feed=Following");
 							}}
 							className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
-								feed.current === "Following"
+								feed === "Following"
 									? "bg-secondary"
 									: !feed
 									  ? "hover:bg-secondary"

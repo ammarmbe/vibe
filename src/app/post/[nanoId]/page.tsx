@@ -4,6 +4,9 @@ import sanitize from "sanitize-html";
 import Header from "@/components/Header/Header";
 import getQueryClient from "@/lib/utils";
 import Post from "@/components/PostPage/Post";
+import he from "he";
+
+export const runtime = "edge";
 
 interface Props {
 	params: {
@@ -24,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		metadataBase: new URL("https://vibe.ambe.dev"),
 		openGraph: {
 			description: post.content
-				? sanitize(post.content, { allowedTags: [] })
+				? he.decode(sanitize(post.content, { allowedTags: [] }))
 				: "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
 		},
 	};

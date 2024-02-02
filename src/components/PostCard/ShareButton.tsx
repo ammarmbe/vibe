@@ -74,7 +74,6 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 						if (navigator.share)
 							navigator.share({
 								title: "Share this post",
-
 								url: `https://vibe.ambe.dev/post/${post.nanoId}`,
 							});
 					}}

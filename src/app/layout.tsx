@@ -5,7 +5,8 @@ import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import LoadingBar from "@/components/LoadingBar";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Providers from "./providers";
+import { ClerkProvider } from "@clerk/nextjs";
+import ReactQueryProvider from "../lib/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,14 +24,19 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<Providers>
-				<body className={inter.className}>
-					<LoadingBar />
-					{children}
-					<Analytics />
-					<SpeedInsights />
-				</body>
-			</Providers>
+			<ClerkProvider
+				appearance={{ variables: { colorPrimary: "#cd002b" } }}
+				publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+			>
+				<ReactQueryProvider>
+					<body className={inter.className}>
+						<LoadingBar />
+						{children}
+						<Analytics />
+						<SpeedInsights />
+					</body>
+				</ReactQueryProvider>
+			</ClerkProvider>
 		</html>
 	);
 }
