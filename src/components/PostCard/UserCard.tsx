@@ -9,12 +9,10 @@ import Spinner from "../Spinner";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { UserPlus2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 export default function UserCard({ username }: { username: string }) {
 	const { userId: currentUserId } = useAuth();
-	const { push } = useRouter();
 
 	const { data: user, isLoading: userLoading } = useQuery({
 		queryKey: ["user", username],
@@ -88,17 +86,15 @@ export default function UserCard({ username }: { username: string }) {
 							/>
 						) : null
 					) : (
-						<button
-							type="button"
-							aria-label="Follow"
+						<Link
+							href="/sign-up"
 							className="py-1 px-2.5 border w-full h-fit rounded-sm text-xs flex items-end justify-center gap-1 leading-[1.2] bg-main text-white border-main/50 hover:bg-main/90"
-							onClick={() => push("/sign-up")}
 						>
 							<div className="h-4 w-4 flex items-center justify-center">
 								<UserPlus2 size={12} />
 							</div>
 							<span className="h-fit">Follow</span>
-						</button>
+						</Link>
 					)}
 				</div>
 			</>

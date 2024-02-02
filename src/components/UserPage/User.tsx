@@ -14,11 +14,10 @@ import Posts from "./Posts";
 import { User } from "@/lib/types";
 import Spinner from "../Spinner";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Page({ username }: { username: string }) {
 	const { userId } = useAuth();
-	const { push } = useRouter();
 
 	const { data: user, isLoading } = useQuery({
 		queryKey: ["user", username],
@@ -104,17 +103,15 @@ export default function Page({ username }: { username: string }) {
 										followed={parseInt(user.followedByUser) === 1}
 									/>
 								) : (
-									<button
-										type="button"
-										aria-label="Follow"
+									<Link
+										href="/sign-up"
 										className="py-1 px-2.5 border w-fit h-fit rounded-md text-xs flex items-end justify-center gap-1 leading-[1.2] bg-main text-white border-main/50 hover:bg-main/90"
-										onClick={() => push("/sign-up")}
 									>
 										<div className="h-4 w-4 flex items-center justify-center">
 											<UserPlus2 size={12} />
 										</div>
 										<span className="h-fit">Follow</span>
-									</button>
+									</Link>
 								)}
 							</div>
 						</div>

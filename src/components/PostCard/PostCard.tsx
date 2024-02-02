@@ -1,11 +1,10 @@
 import { Post, Repost } from "@/lib/types";
 import Image from "next/image";
 import React from "react";
-import LikeButton from "./LikeButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import OptionsButton from "./OptionsButton";
-import { MessageCircle, Pencil, Repeat2 } from "lucide-react";
+import { Heart, MessageCircle, Pencil, Repeat2 } from "lucide-react";
 import Link from "@/components/Link";
 import {
 	Tooltip,
@@ -25,6 +24,9 @@ const UserCard = dynamic(() => import("./UserCard"), {
 	ssr: false,
 });
 const ShareButton = dynamic(() => import("./ShareButton"), {
+	ssr: false,
+});
+const LikeButton = dynamic(() => import("./LikeButton"), {
 	ssr: false,
 });
 dayjs.extend(relativeTime);
@@ -128,16 +130,32 @@ export default function PostCard({
 						/>
 						<div className="flex justify-between w-full gap-1">
 							<div className="flex gap-1.5 items-center flex-wrap-reverse w-fit">
-								<LikeButton
-									likeCount={parseInt(post.likeCount)}
-									cryCount={parseInt(post.cryCount)}
-									heartCount={parseInt(post.heartCount)}
-									laughCount={parseInt(post.laughCount)}
-									surpriseCount={parseInt(post.surpriseCount)}
-									userLikeStatus={post.userLikeStatus}
-									postId={post.postId}
-									userId={post.userId}
-								/>
+								{userId ? (
+									<LikeButton
+										likeCount={parseInt(post.likeCount)}
+										cryCount={parseInt(post.cryCount)}
+										heartCount={parseInt(post.heartCount)}
+										laughCount={parseInt(post.laughCount)}
+										surpriseCount={parseInt(post.surpriseCount)}
+										userLikeStatus={post.userLikeStatus}
+										postId={post.postId}
+										userId={post.userId}
+									/>
+								) : (
+									<Link
+										href="/sign-up"
+										aria-label="like"
+										className="text-xs px-2 gap-1 leading-[1.3] py-1 border transition-colors rounded-md h-full select-none order-1 items-end flex justify-center hover:bg-main/10 hover:border-main/50 dark:text-[#f5315c] text-main"
+									>
+										<div className="h-4 w-4 flex items-center justify-center">
+											<Heart size={14} />
+										</div>
+										<span className="h-fit">
+											{parseInt(post.likeCount)}{" "}
+											{parseInt(post.likeCount) === 1 ? "like" : "likes"}
+										</span>
+									</Link>
+								)}
 								<Link
 									href={`/post/${post.nanoId}`}
 									className="text-xs px-2 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent items-end flex gap-1 justify-center order-2 leading-[1.3] h-fit"
