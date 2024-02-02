@@ -25,7 +25,9 @@ export default function Feed() {
 	const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
 		queryKey: ["homeFeed", feed],
 		queryFn: async ({ pageParam = 4294967295 }) => {
-			const res = await fetch(`/api/posts?postId=${pageParam}&feed=${feed}`);
+			const res = await fetch(
+				`/api/posts?postId=${pageParam}&feed=${feed.current || "Home"}`,
+			);
 			return res.json();
 		},
 		getNextPageParam: (lastPage, _pages) => {

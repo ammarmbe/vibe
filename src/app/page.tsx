@@ -5,26 +5,15 @@ import getQueryClient from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { Suspense } from "react";
 
-export default async function Home({
-	searchParams,
-}: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default async function Home() {
 	const { userId } = auth();
 	const queryClient = getQueryClient();
 
 	queryClient.prefetchInfiniteQuery(
-		[
-			"homeFeed",
-			searchParams.feed === "Home" || searchParams.feed === "Following"
-				? searchParams.feed
-				: "Home",
-		],
+		["homeFeed", "Home"],
 		async ({ pageParam = 4294967295 }) => {
 			const res = await fetch(
-				`${process.env.URL}/api/posts?postId=${pageParam}&feed=${
-					searchParams.feed === "Home" || searchParams.feed === "Following"
-						? searchParams.feed
-						: "Home"
-				}`,
+				`${process.env.URL}/api/posts?postId=${pageParam}&feed=Home`,
 			);
 			return res.json();
 		},
@@ -34,7 +23,7 @@ export default async function Home({
 		<main className="max-w-2xl h-full flex flex-col w-full mx-auto px-2.5">
 			<Header />
 			{userId && <NewPost />}
-			<Suspense>
+			<Suspense fallback={<div />}>
 				<Feed />
 			</Suspense>
 		</main>

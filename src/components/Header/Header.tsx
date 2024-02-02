@@ -23,7 +23,7 @@ export default function Header() {
 
 	return (
 		<header className="pt-3 pb-2 flex items-center justify-between">
-			<Suspense>
+			<Suspense fallback={<div />}>
 				<HeaderTitle />
 			</Suspense>
 			<nav className="flex gap-2 items-center">
