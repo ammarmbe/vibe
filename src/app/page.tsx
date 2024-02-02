@@ -5,8 +5,6 @@ import getQueryClient from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import dynamic from "next/dynamic";
 
-export const runtime = "edge";
-
 export default async function Home({
 	searchParams,
 }: {
