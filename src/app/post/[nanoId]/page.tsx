@@ -4,7 +4,6 @@ import sanitize from "sanitize-html";
 import Header from "@/components/Header/Header";
 import getQueryClient from "@/lib/utils";
 import Post from "@/components/PostPage/Post";
-import { decode } from "he/index";
 
 export const runtime = "edge";
 
@@ -15,6 +14,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { decode } = await import("he");
+
 	const res = await fetch(
 		`${process.env.URL}/api/post?nanoId=${params.nanoId}`,
 	);
