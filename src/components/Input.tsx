@@ -308,7 +308,7 @@ export default function Input({
 											<p className="text-sm leading-tight font-medium">
 												{user.name}
 											</p>
-											<p className="text-xs leading-tight text-foreground/70">
+											<p className="text-xs leading-tight text-muted-foreground">
 												@{user.username}
 											</p>
 										</div>

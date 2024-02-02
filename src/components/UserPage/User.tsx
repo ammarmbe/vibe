@@ -73,7 +73,7 @@ export default function Page({ username }: { username: string }) {
 										</span>
 									) : null}
 								</h2>
-								<p className="leading-tight text-foreground/70">
+								<p className="leading-tight text-muted-foreground">
 									@{user.username}
 								</p>
 								<p className="text-sm mt-1.5 empty:mt-0">{user.bio}</p>

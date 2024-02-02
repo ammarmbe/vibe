@@ -197,7 +197,7 @@ export default function OptionsButton({
 							</div>
 							<div className="grid grid-rows-[auto,auto,auto] flex-grow w-full">
 								<h2 className="leading-tight font-medium">{post.name}</h2>
-								<h3 className="text-foreground/70 leading-tight w-fit">
+								<h3 className="text-muted-foreground leading-tight w-fit">
 									@{post.username}
 								</h3>
 								<Input
@@ -222,7 +222,7 @@ export default function OptionsButton({
 										if (value.map((v) => v.sanitized).join(" ").length < 412)
 											return "hidden";
 										if (value.map((v) => v.sanitized).join(" ").length < 481)
-											return "text-foreground/60";
+											return "text-muted-foreground";
 										if (value.map((v) => v.sanitized).join(" ").length < 512)
 											return "text-yellow-500/90";
 										return "text-danger";

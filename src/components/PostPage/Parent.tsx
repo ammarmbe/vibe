@@ -52,13 +52,13 @@ export default function Parent({
 										dateTime={dayjs(
 											new Date(parseInt(post.createdAt) * 1000),
 										).format("YYYY-MM-DD HH:MM")}
-										className="text-sm leading-tight text-foreground/70"
+										className="text-sm leading-tight text-muted-foreground"
 									>
 										{dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
 									</time>
 								</div>
 								<Link
-									className="text-sm hover:underline text-foreground/70 leading-tight w-fit"
+									className="text-sm hover:underline text-muted-foreground leading-tight w-fit"
 									href={`/user/${post.username}`}
 								>
 									@{post.username}

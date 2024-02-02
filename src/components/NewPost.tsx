@@ -151,7 +151,7 @@ export default function NewPost() {
 					if (value.map((v) => v.sanitized).join(" ").length < 412)
 						return "hidden";
 					if (value.map((v) => v.sanitized).join(" ").length < 481)
-						return "text-foreground/60";
+						return "text-muted-foreground";
 					if (value.map((v) => v.sanitized).join(" ").length < 512)
 						return "text-yellow-500/90";
 					return "text-danger";

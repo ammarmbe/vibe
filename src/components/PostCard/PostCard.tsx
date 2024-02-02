@@ -55,8 +55,12 @@ export default function PostCard({
 		<div>
 			{"reposterName" in post ? (
 				<div className="bg-border rounded-t-md p-1 px-2 text-xs -mb-2 pb-[calc(0.75rem-1px)] flex items-center gap-1">
-					<Repeat2 size={14} strokeWidth={2} className="text-[#ababab]" />
-					<p className="text-[#ababab]">
+					<Repeat2
+						size={14}
+						strokeWidth={2}
+						className="text-muted-foreground"
+					/>
+					<p className="text-muted-foreground">
 						<Link
 							href={`/user/${post.reposterUsername}`}
 							className="font-semibold"
@@ -102,7 +106,7 @@ export default function PostCard({
 										<span
 											className={`${
 												!postPage && "text-sm"
-											} hover:underline text-foreground/70 w-fit leading-tight block`}
+											} hover:underline text-muted-foreground w-fit leading-tight block`}
 										>
 											@{post.username}
 										</span>
@@ -114,7 +118,7 @@ export default function PostCard({
 								dateTime={dayjs(
 									new Date(parseInt(post.createdAt) * 1000),
 								).format("YYYY-MM-DD HH:MM")}
-								className="text-sm leading-tight text-foreground/70 self-baseline"
+								className="text-sm leading-tight text-muted-foreground self-baseline"
 							>
 								{dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
 							</time>

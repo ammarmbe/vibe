@@ -4,8 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
 	return {
 		name: "Vibe",
 		short_name: "Vibe",
-		theme_color: "#cd002b",
-		background_color: "#ffffff",
+		theme_color: "#ffffff",
+		background_color: "#d42148",
 		display: "standalone",
 		orientation: "portrait",
 		scope: "/",
@@ -40,7 +40,6 @@ export default function manifest(): MetadataRoute.Manifest {
 				src: "images/icon-192x192.png",
 				sizes: "192x192",
 				type: "image/png",
-				purpose: "maskable",
 			},
 			{
 				src: "images/icon-384x384.png",
@@ -51,6 +50,7 @@ export default function manifest(): MetadataRoute.Manifest {
 				src: "images/icon-512x512.png",
 				sizes: "512x512",
 				type: "image/png",
+				purpose: "maskable",
 			},
 		],
 	};

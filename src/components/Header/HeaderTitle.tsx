@@ -41,6 +41,29 @@ export default function HeaderTitle({ feed }: { feed?: "Home" | "Following" }) {
 		}, 3000);
 	}, [isSignedIn, feed]);
 
+	useEffect(() => {
+		// add event listener that fires when the user changes their theme (light/dark)
+		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		const changeTheme = () => {
+			if (mediaQuery.matches) {
+				document
+					.querySelector("meta[name=theme-color]")
+					?.setAttribute("content", "#0f0f0f");
+			} else {
+				document
+					.querySelector("meta[name=theme-color]")
+					?.setAttribute("content", "#ffffff");
+			}
+		};
+
+		window.addEventListener("focus", changeTheme);
+		changeTheme();
+
+		return () => {
+			window.addEventListener("focus", changeTheme);
+		};
+	}, []);
+
 	return (
 		<div className="flex items-center">
 			<h1

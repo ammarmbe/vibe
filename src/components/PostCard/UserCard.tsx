@@ -66,7 +66,7 @@ export default function UserCard({ username }: { username: string }) {
 									<h2 className="font-semibold text-sm leading-tight text-foreground">
 										<Link href={`/user/${user.username}`}>{user.name}</Link>
 									</h2>
-									<p className="leading-tight text-sm text-foreground/70">
+									<p className="leading-tight text-sm text-muted-foreground">
 										<Link href={`/user/${user.username}`}>
 											@{user.username}
 										</Link>
