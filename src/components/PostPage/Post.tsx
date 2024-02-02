@@ -1,10 +1,11 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import Parent from "./Parent";
+const Parent = dynamic(() => import("./Parent"));
 import PostCard from "../PostCard/PostCard";
 import { Comments } from "./Comments";
 import { Post } from "@/lib/types";
 import Spinner from "../Spinner";
+import dynamic from "next/dynamic";
 
 export default function PostComponent({ nanoId }: { nanoId: string }) {
 	const { data: post, isLoading } = useQuery({
