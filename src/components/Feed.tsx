@@ -1,17 +1,25 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useRef } from "react";
 import type { Post, Repost } from "@/lib/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./PostCard/PostCard";
 import Spinner from "./Spinner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Feed({ feed }: { feed: "Home" | "Following" }) {
+export default function Feed() {
+	const searchParams = useSearchParams();
+	const feed = useRef(searchParams.get("feed"));
+
 	const { push } = useRouter();
 
-	if (feed !== "Home" && feed !== "Following") {
-		push("/");
+	if (
+		feed.current !== "Home" &&
+		feed.current !== "Following" &&
+		feed.current !== null
+	) {
+		push("/?feed=Home");
+		return null;
 	}
 
 	const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({

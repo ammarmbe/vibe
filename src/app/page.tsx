@@ -3,6 +3,7 @@ import Header from "@/components/Header/Header";
 import NewPost from "@/components/NewPost";
 import getQueryClient from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
+import { Suspense } from "react";
 
 export default async function Home({
 	searchParams,
@@ -31,21 +32,11 @@ export default async function Home({
 
 	return (
 		<main className="max-w-2xl h-full flex flex-col w-full mx-auto px-2.5">
-			<Header
-				feed={
-					searchParams.feed === "Home" || searchParams.feed === "Following"
-						? searchParams.feed
-						: "Home"
-				}
-			/>
+			<Header />
 			{userId && <NewPost />}
-			<Feed
-				feed={
-					searchParams.feed === "Home" || searchParams.feed === "Following"
-						? searchParams.feed
-						: "Home"
-				}
-			/>
+			<Suspense>
+				<Feed />
+			</Suspense>
 		</main>
 	);
 }

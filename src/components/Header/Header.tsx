@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import HeaderButtons from "./HeaderButtons";
 import HeaderTitle from "./HeaderTitle";
 import { JetBrains_Mono } from "next/font/google";
@@ -10,7 +10,7 @@ export const jetBrains = JetBrains_Mono({
 	weight: ["400", "500", "600", "700", "800"],
 });
 
-export default function Header({ feed }: { feed?: "Home" | "Following" }) {
+export default function Header() {
 	const queryClient = getQueryClient();
 
 	queryClient.prefetchInfiniteQuery({
@@ -23,7 +23,9 @@ export default function Header({ feed }: { feed?: "Home" | "Following" }) {
 
 	return (
 		<header className="pt-3 pb-2 flex items-center justify-between">
-			<HeaderTitle feed={feed} />
+			<Suspense>
+				<HeaderTitle />
+			</Suspense>
 			<nav className="flex gap-2 items-center">
 				<HeaderButtons />
 			</nav>
