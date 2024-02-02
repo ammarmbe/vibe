@@ -118,7 +118,7 @@ export default function NewComment({
 				postMutation={commentMutation}
 			/>
 			<button
-				name="Reply"
+				aria-label="Reply"
 				type="button"
 				onClick={() => {
 					commentMutation.mutate();

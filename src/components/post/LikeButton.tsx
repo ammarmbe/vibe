@@ -235,7 +235,7 @@ export default function LikeButton({
 				<HoverCardTrigger>
 					<button
 						type="button"
-						name="like"
+						aria-label="like"
 						disabled={likeMutation.isLoading}
 						className={`text-xs px-2 gap-1 leading-[1.3] py-1 border transition-colors rounded-md h-full select-none order-1 items-end flex justify-center ${
 							currentStatus === "like"
@@ -265,7 +265,7 @@ export default function LikeButton({
 				<HoverCardContent className="p-1.5 w-fit space-x-1" side="top">
 					<button
 						type="button"
-						name="heart"
+						aria-label="heart"
 						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
 							currentStatus === "heart"
 								? "bg-secondary"
@@ -285,7 +285,7 @@ export default function LikeButton({
 					</button>
 					<button
 						type="button"
-						name="laugh"
+						aria-label="laugh"
 						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
 							currentStatus === "laugh"
 								? "bg-secondary"
@@ -305,7 +305,7 @@ export default function LikeButton({
 					</button>
 					<button
 						type="button"
-						name="cry"
+						aria-label="cry"
 						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
 							currentStatus === "cry" ? "bg-secondary" : "hover:bg-secondary/50"
 						}`}
@@ -323,7 +323,7 @@ export default function LikeButton({
 					</button>
 					<button
 						type="button"
-						name="surprise"
+						aria-label="surprise"
 						className={`rounded-sm px-2 p-1.5 text-sm transition-all ${
 							currentStatus === "surprise"
 								? "bg-secondary"
@@ -345,7 +345,7 @@ export default function LikeButton({
 			</HoverCard>
 			{buttonCounts.heartCount ? (
 				<button
-					name="heart"
+					aria-label="heart"
 					type="button"
 					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-3 ${
 						currentStatus === "heart"
@@ -362,7 +362,7 @@ export default function LikeButton({
 			) : null}
 			{buttonCounts.laughCount ? (
 				<button
-					name="laugh"
+					aria-label="laugh"
 					type="button"
 					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-4 ${
 						currentStatus === "laugh"
@@ -379,7 +379,7 @@ export default function LikeButton({
 			) : null}
 			{buttonCounts.cryCount ? (
 				<button
-					name="cry"
+					aria-label="cry"
 					type="button"
 					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-6 ${
 						currentStatus === "cry"
@@ -396,7 +396,7 @@ export default function LikeButton({
 			) : null}
 			{buttonCounts.surpriseCount ? (
 				<button
-					name="surprise"
+					aria-label="surprise"
 					type="button"
 					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-5 ${
 						currentStatus === "surprise"

@@ -4,6 +4,7 @@ import { User } from "@/lib/types";
 import Image from "next/image";
 import Spinner from "../Spinner";
 import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function PostCard({ username }: { username: string }) {
 	const { userId: currentUserId } = useAuth();
@@ -29,21 +30,23 @@ export default function PostCard({ username }: { username: string }) {
 					style={{ gridTemplateColumns: "auto 1fr" }}
 					className="grid gap-x-2.5 mr-2"
 				>
-					<Image
-						src={user.image}
-						alt={`${user.name}'s profile picture`}
-						width={24}
-						height={24}
-						className={`rounded-full ${!user.bio && "self-center"}`}
-					/>
+					<Link href={`/user/${user.username}`}>
+						<Image
+							src={user.image}
+							alt={`${user.name}'s profile picture`}
+							width={24}
+							height={24}
+							className={`rounded-full ${!user.bio && "self-center"}`}
+						/>
+					</Link>
 					<div className="flex flex-col">
 						<div className="flex items-center gap-2.5">
 							<div className={`flex-grow ${!user.bio && "self-center"}`}>
 								<h2 className="font-semibold text-sm leading-tight text-foreground">
-									{user.name}
+									<Link href={`/user/${user.username}`}>{user.name}</Link>
 								</h2>
 								<p className="leading-tight text-sm text-foreground/70">
-									@{user.username}
+									<Link href={`/user/${user.username}`}>@{user.username}</Link>
 								</p>
 								<p className="text-xs mt-1.5 empty:mt-0">{user.bio}</p>
 							</div>

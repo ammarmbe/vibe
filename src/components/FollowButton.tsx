@@ -64,7 +64,7 @@ export default function FollowButton({
 	return (
 		<button
 			type="button"
-			name="Follow"
+			aria-label="Follow"
 			disabled={followMutation.isLoading}
 			className={`${className} py-1 px-2.5 border w-fit h-fit rounded-md text-xs flex items-end justify-center gap-1 leading-[1.2] ${
 				following

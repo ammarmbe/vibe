@@ -95,7 +95,7 @@ export default function HeaderTitle() {
 				<Popover>
 					<PopoverTrigger
 						disabled={popoverDisabled}
-						name="Change feed"
+						aria-label="Change feed"
 						className="rounded-sm hover:bg-secondary h-fit p-1 disabled:hover:bg-transparent"
 					>
 						<svg
@@ -117,7 +117,7 @@ export default function HeaderTitle() {
 					<PopoverContent className="p-1 flex flex-col text-center h-auto w-auto gap-1">
 						<button
 							type="button"
-							name="Home"
+							aria-label="Home"
 							onClick={() => {
 								setFeed("Home");
 								localStorage.setItem("feed", "Home");
@@ -140,7 +140,7 @@ export default function HeaderTitle() {
 						</button>
 						<button
 							type="button"
-							name="Following"
+							aria-label="Following"
 							onClick={() => {
 								setFeed("Following");
 								localStorage.setItem("feed", "Following");

@@ -75,7 +75,7 @@ export default function NotificationButton() {
 				onClick={() => {
 					unread && readNotifications.mutate();
 				}}
-				name="Notifications"
+				aria-label="Notifications"
 			>
 				<Bell size={16} color="grey" />
 			</PopoverTrigger>

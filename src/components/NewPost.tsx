@@ -136,7 +136,7 @@ export default function NewPost() {
 			/>
 			<button
 				type="button"
-				name="Post"
+				aria-label="Post"
 				onClick={() => {
 					postMutation.mutate();
 				}}

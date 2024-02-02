@@ -162,7 +162,7 @@ export default function OptionsButton({
 	return (
 		<Popover>
 			<PopoverTrigger
-				name="More options"
+				aria-label="More options"
 				className="border p-1 hover:border-ring h-fit hover:bg-accent rounded-sm transition-colors flex items-center justify-center"
 			>
 				<MoreHorizontal size={16} />

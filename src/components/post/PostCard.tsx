@@ -110,39 +110,42 @@ export default function PostCard({
 				</Link>
 				<HoverCard>
 					<div className="flex flex-col flex-grow w-[calc(100%-39px)]">
-						<div className="flex justify-between items-baseline w-full">
-							<HoverCardTrigger className="p-0 m-0 w-fit h-fit leading-tight">
-								<h2
-									className={`leading-tight font-medium ${
-										postPage && "text-lg truncate inline-block"
-									}`}
-								>
-									<Link href={`/user/${post.username}`}>{post.name}</Link>
-								</h2>
+						<div className="grid grid-cols-[1fr,auto] grid-rows-[auto,auto]">
+							<HoverCardTrigger
+								className={`${
+									!postPage && "text-sm"
+								} p-0 m-0 w-fit h-fit leading-tight`}
+								asChild
+							>
+								<div>
+									<Link href={`/user/${post.username}`}>
+										<span
+											className={`leading-tight font-medium self-baseline block ${
+												postPage && "text-lg truncate"
+											}`}
+										>
+											{post.name}
+										</span>
+										<span
+											className={`${
+												!postPage && "text-sm"
+											} hover:underline text-foreground/70 w-fit leading-tight block`}
+										>
+											@{post.username}
+										</span>
+									</Link>
+								</div>
 							</HoverCardTrigger>
+
 							<time
 								dateTime={dayjs(
 									new Date(parseInt(post.createdAt) * 1000),
 								).format("YYYY-MM-DD HH:MM")}
-								className="text-sm leading-tight text-foreground/70"
+								className="text-sm leading-tight text-foreground/70 self-baseline"
 							>
 								{dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
 							</time>
 						</div>
-						<HoverCardTrigger
-							className={`${
-								!postPage && "text-sm"
-							} p-0 m-0 w-fit h-fit leading-tight`}
-						>
-							<Link
-								className={`${
-									!postPage && "text-sm"
-								} hover:underline text-foreground/70 w-fit`}
-								href={`/user/${post.username?.toLocaleLowerCase()}`}
-							>
-								@{post.username}
-							</Link>
-						</HoverCardTrigger>
 						<HoverCardPortal container={document.body}>
 							<HoverCardContent className="p-2.5 h-fit w-fit z-20 relative">
 								<svg
@@ -213,7 +216,7 @@ export default function PostCard({
 								)}
 								<Popover>
 									<PopoverTrigger
-										name="Share"
+										aria-label="Share"
 										className="border hover:border-ring p-1 h-fit hover:bg-accent rounded-sm transition-colors flex items-center justify-center"
 									>
 										<Repeat2 size={16} />

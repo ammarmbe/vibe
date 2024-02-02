@@ -79,7 +79,7 @@ export default function Page({ nanoId }: { nanoId: string }) {
 							<>
 								<button
 									type="button"
-									name="View parent post"
+									aria-label="View parent post"
 									onClick={() => push(`/post/${parentPost.nanoId}`)}
 									className="border peer text-left hover:border-ring w-full transition-colors cursor-pointer hover:bg-accent border-b-0 rounded-t-md p-2.5 gap-1.5 flex"
 								>
