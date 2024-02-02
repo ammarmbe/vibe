@@ -1,11 +1,11 @@
-import { client } from "@/lib/ReactQueryProvider";
+"use client";
 import { Post } from "@/lib/types";
 import {
 	Popover,
 	PopoverTrigger,
 	PopoverContent,
 } from "@/components/ui/popover";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, PencilIcon, Trash2 } from "lucide-react";
 import React, { useRef, useState } from "react";
 import {
@@ -27,14 +27,11 @@ dayjs.extend(relativeTime);
 
 export default function OptionsButton({
 	post,
-	parentNanoId,
-	postPage,
 }: {
 	post: Post;
-	parentNanoId?: string;
-	postPage?: boolean;
 }) {
 	const [border, setBorder] = useState<"delete" | "edit" | "">("");
+	const client = useQueryClient();
 
 	const [value, setValue] = useState<
 		{
@@ -44,7 +41,7 @@ export default function OptionsButton({
 			selected: boolean;
 		}[]
 	>(
-		post.content.split("&nbsp;").map((v) => ({
+		post.content.split(" ").map((v) => ({
 			sanitized: sanitize(v, {
 				allowedTags: [],
 			}),
@@ -61,7 +58,7 @@ export default function OptionsButton({
 	function resetTextarea(opened: boolean) {
 		opened &&
 			setValue(
-				post.content.split("&nbsp;").map((v) => ({
+				post.content.split(" ").map((v) => ({
 					sanitized: sanitize(v, {
 						allowedTags: [],
 					}),
@@ -79,11 +76,6 @@ export default function OptionsButton({
 			});
 		},
 		onSuccess: () => {
-			if (postPage) {
-				window.location.reload();
-				return;
-			}
-
 			function updater(oldData: { pages: Post[][] } | undefined) {
 				if (oldData)
 					return {
@@ -93,21 +85,29 @@ export default function OptionsButton({
 					};
 			}
 
-			client.setQueryData(["homeFeed"], updater);
-			client.setQueryData(["comments"], updater);
+			client.setQueryData(["homeFeed", "Home"], updater);
+			client.setQueryData(["comments", post.parentNanoId], updater);
 			client.setQueryData(["userPosts", post.userId], updater);
-			parentNanoId &&
-				client.setQueryData(
-					["post", parentNanoId],
-					(oldData: Post | undefined) => {
-						if (oldData) {
-							return {
-								...oldData,
-								comments: (parseInt(oldData.commentCount) - 1).toString(),
-							};
-						}
-					},
-				);
+
+			client.setQueryData(
+				["postPage", post.parentNanoId],
+				(oldData: Post | undefined) => {
+					if (oldData) {
+						return {
+							...oldData,
+							commentCount: (parseInt(oldData.commentCount) - 1).toString(),
+						};
+					}
+				},
+			);
+
+			client.setQueryData(["postPage", post.nanoId], () => {
+				return {
+					postId: post.postId,
+					deleted: "1",
+					nanoId: post.nanoId,
+				};
+			});
 		},
 	});
 
@@ -140,22 +140,22 @@ export default function OptionsButton({
 					};
 			}
 
-			client.setQueryData(["homeFeed"], updater);
-			client.setQueryData(["comments"], updater);
+			client.setQueryData(["homeFeed", "Home"], updater);
+			client.setQueryData(["comments", post.parentNanoId], updater);
 			client.setQueryData(["userPosts", post.userId], updater);
-			postPage &&
-				client.setQueryData(
-					["post", post.nanoId],
-					(oldData: Post | undefined) => {
-						if (oldData) {
-							return {
-								...oldData,
-								content: value.map((v) => v.unsanitized).join(" "),
-								edited: "1",
-							};
-						}
-					},
-				);
+
+			client.setQueryData(
+				["post", post.nanoId],
+				(oldData: Post | undefined) => {
+					if (oldData) {
+						return {
+							...oldData,
+							content: value.map((v) => v.unsanitized).join(" "),
+							edited: "1",
+						};
+					}
+				},
+			);
 		},
 	});
 

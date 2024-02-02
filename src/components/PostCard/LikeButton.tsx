@@ -1,6 +1,4 @@
 "use client";
-import { client } from "@/lib/ReactQueryProvider";
-import { Post } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -20,7 +18,6 @@ export default function LikeButton({
 	heartCount,
 	userLikeStatus,
 	postId,
-	nanoId,
 	userId,
 }: {
 	likeCount: number;
@@ -30,7 +27,6 @@ export default function LikeButton({
 	heartCount: number;
 	userLikeStatus: "like" | "laugh" | "heart" | "surprise" | "cry" | null;
 	postId: string;
-	nanoId?: string;
 	userId: string;
 }) {
 	const [hoverCardOpen, setHoverCardOpen] = useState(false);
@@ -44,7 +40,6 @@ export default function LikeButton({
 		surpriseCount,
 		cryCount,
 	});
-
 	let timeoutId: NodeJS.Timeout;
 
 	const handleTouchStart = () => {
@@ -63,9 +58,6 @@ export default function LikeButton({
 				`/api/notification/likedPost?postId=${postId}&userId=${userId}&type=${type}`,
 				{ method: "POST" },
 			),
-		onSuccess: () => {
-			client.invalidateQueries(["notifications", userId]);
-		},
 	});
 
 	const likeMutation = useMutation({
@@ -129,95 +121,6 @@ export default function LikeButton({
 		onSuccess: (_data, type) => {
 			if (type !== userLikeStatus && userId !== currentUserId)
 				notificationMutation.mutate(type);
-
-			function updater(data: { pages: Post[][] } | undefined) {
-				if (data)
-					return {
-						pages: data.pages.map((page) => {
-							return page.map((post) => {
-								if (post.postId === postId) {
-									return {
-										...post,
-										userLikeStatus: type === userLikeStatus ? null : type,
-										likeCount:
-											userLikeStatus === "like"
-												? (parseInt(post.likeCount) - 1).toString()
-												: type === "like"
-												  ? (parseInt(post.likeCount) + 1).toString()
-												  : post.likeCount,
-										laughCount:
-											userLikeStatus === "laugh"
-												? (parseInt(post.laughCount) - 1).toString()
-												: type === "laugh"
-												  ? (parseInt(post.laughCount) + 1).toString()
-												  : post.laughCount,
-										heartCount:
-											userLikeStatus === "heart"
-												? (parseInt(post.heartCount) - 1).toString()
-												: type === "heart"
-												  ? (parseInt(post.heartCount) + 1).toString()
-												  : post.heartCount,
-										surpriseCount:
-											userLikeStatus === "surprise"
-												? (parseInt(post.surpriseCount) - 1).toString()
-												: type === "surprise"
-												  ? (parseInt(post.surpriseCount) + 1).toString()
-												  : post.surpriseCount,
-										cryCount:
-											userLikeStatus === "cry"
-												? (parseInt(post.cryCount) - 1).toString()
-												: type === "cry"
-												  ? (parseInt(post.cryCount) + 1).toString()
-												  : post.cryCount,
-									};
-								}
-								return post;
-							});
-						}),
-					};
-			}
-
-			client.setQueryData(["homeFeed"], updater);
-			client.setQueryData(["userPosts", userId], updater);
-			client.setQueryData(["comments"], updater);
-			client.setQueryData(["post", nanoId], (data: Post | undefined) => {
-				if (data) {
-					return {
-						...data,
-						userLikeStatus: type === userLikeStatus ? null : type,
-						likeCount:
-							userLikeStatus === "like"
-								? (parseInt(data.likeCount) - 1).toString()
-								: type === "like"
-								  ? (parseInt(data.likeCount) + 1).toString()
-								  : data.likeCount,
-						laughCount:
-							userLikeStatus === "laugh"
-								? (parseInt(data.laughCount) - 1).toString()
-								: type === "laugh"
-								  ? (parseInt(data.laughCount) + 1).toString()
-								  : data.laughCount,
-						heartCount:
-							userLikeStatus === "heart"
-								? (parseInt(data.heartCount) - 1).toString()
-								: type === "heart"
-								  ? (parseInt(data.heartCount) + 1).toString()
-								  : data.heartCount,
-						surpriseCount:
-							userLikeStatus === "surprise"
-								? (parseInt(data.surpriseCount) - 1).toString()
-								: type === "surprise"
-								  ? (parseInt(data.surpriseCount) + 1).toString()
-								  : data.surpriseCount,
-						cryCount:
-							userLikeStatus === "cry"
-								? (parseInt(data.cryCount) - 1).toString()
-								: type === "cry"
-								  ? (parseInt(data.cryCount) + 1).toString()
-								  : data.cryCount,
-					};
-				}
-			});
 		},
 	});
 
@@ -347,7 +250,7 @@ export default function LikeButton({
 				<button
 					aria-label="heart"
 					type="button"
-					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-3 ${
+					className={`border h-fit p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-3 ${
 						currentStatus === "heart"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -364,7 +267,7 @@ export default function LikeButton({
 				<button
 					aria-label="laugh"
 					type="button"
-					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-4 ${
+					className={`border h-fit p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-4 ${
 						currentStatus === "laugh"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -381,7 +284,7 @@ export default function LikeButton({
 				<button
 					aria-label="cry"
 					type="button"
-					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-6 ${
+					className={`border h-fit p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-6 ${
 						currentStatus === "cry"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -398,7 +301,7 @@ export default function LikeButton({
 				<button
 					aria-label="surprise"
 					type="button"
-					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-5 ${
+					className={`border h-fit p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-5 ${
 						currentStatus === "surprise"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"

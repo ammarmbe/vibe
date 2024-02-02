@@ -4,9 +4,8 @@ import React from "react";
 import LikeButton from "./LikeButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useUser } from "@clerk/nextjs";
 import OptionsButton from "./OptionsButton";
-import { MessageCircle, Pencil, Repeat2, Share } from "lucide-react";
+import { MessageCircle, Pencil, Repeat2 } from "lucide-react";
 import Link from "@/components/Link";
 import {
 	Tooltip,
@@ -14,67 +13,39 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "../ui/tooltip";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { PopoverClose } from "@radix-ui/react-popover";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
+	HoverCardPortal,
 } from "../ui/hover-card";
-import UserCard from "./UserCard";
-import { HoverCardPortal } from "@radix-ui/react-hover-card";
+import dynamic from "next/dynamic";
+import { auth, useAuth } from "@clerk/nextjs";
+const UserCard = dynamic(() => import("./UserCard"), {
+	ssr: false,
+});
+const ShareButton = dynamic(() => import("./ShareButton"), {
+	ssr: false,
+});
 dayjs.extend(relativeTime);
 
 export default function PostCard({
 	post,
-	parentNanoId,
 	postPage,
 }: {
 	post: Post | Repost;
-	parentNanoId?: string;
 	postPage?: boolean;
 }) {
-	const { user } = useUser();
-	const queryClient = useQueryClient();
+	let userId: string | undefined | null;
+
+	if (typeof window === "undefined") {
+		userId = auth().userId;
+	} else {
+		userId = useAuth().userId;
+	}
 
 	const commentOrComments =
 		parseInt(post.commentCount) === 1 ? "Comment" : "Comments";
-
-	const notificationMutation = useMutation(
-		async () => {
-			await fetch(
-				`/api/notification/reposted?postId=${post.postId}&userId=${post.userId}`,
-				{
-					method: "POST",
-				},
-			);
-		},
-		{
-			onSuccess: () => {
-				queryClient.invalidateQueries(["notifications", post.userId]);
-			},
-		},
-	);
-
-	const repostMutation = useMutation(
-		async (userRepostStatus: number) => {
-			await fetch(
-				`/api/repost?postId=${post.postId}&userRepostStatus=${userRepostStatus}`,
-				{
-					method: "POST",
-				},
-			);
-		},
-		{
-			onSuccess: () => {
-				notificationMutation.mutate();
-
-				queryClient.invalidateQueries(["homeFeed"]);
-				queryClient.invalidateQueries(["userPosts", user?.id]);
-			},
-		},
-	);
 
 	return (
 		<div>
@@ -93,10 +64,8 @@ export default function PostCard({
 				</div>
 			) : null}
 			<article
-				className={`border rounded-md bg-background p-2.5 gap-1.5 flex shadow-sm z-10 relative ${
-					postPage && parentNanoId
-						? "mb-2.5 rounded-t-none border-t-0"
-						: postPage && "mb-2.5"
+				className={`rounded-md bg-background p-2.5 gap-1.5 flex shadow-sm z-10 relative ${
+					!postPage && "border"
 				}`}
 			>
 				<Link className="flex-none h-fit" href={`/user/${post.username}`}>
@@ -146,26 +115,8 @@ export default function PostCard({
 								{dayjs(new Date(parseInt(post.createdAt) * 1000)).fromNow()}
 							</time>
 						</div>
-						<HoverCardPortal container={document.body}>
+						<HoverCardPortal>
 							<HoverCardContent className="p-2.5 h-fit w-fit z-20 relative">
-								<svg
-									width="9"
-									height="4"
-									viewBox="0 0 9 4"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-									className="absolute top-[-4px] left-[50%] transform translate-x-[-50%]"
-								>
-									<title>arrow</title>
-									<path
-										d="M4.49999 0L9 4H0L4.49999 0Z"
-										className="fill-border"
-									/>
-									<path
-										d="M4.49996 1.32813L7.50001 4H1.50001L4.49996 1.32813Z"
-										className="fill-popover"
-									/>
-								</svg>
 								<UserCard username={post.username} />
 							</HoverCardContent>
 						</HoverCardPortal>
@@ -186,13 +137,12 @@ export default function PostCard({
 									userLikeStatus={post.userLikeStatus}
 									postId={post.postId}
 									userId={post.userId}
-									nanoId={post.nanoId}
 								/>
 								<Link
 									href={`/post/${post.nanoId}`}
 									className="text-xs px-2 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent items-end flex gap-1 justify-center order-2 leading-[1.3] h-fit"
 								>
-									<div className="h-4 w-4 flex items-center justify-center -translate-y-[0.5px]">
+									<div className="h-4 w-4 flex items-center justify-center">
 										<MessageCircle size={14} />
 									</div>
 									<span className="h-fit">
@@ -200,7 +150,6 @@ export default function PostCard({
 									</span>
 								</Link>
 							</div>
-
 							<div className="flex gap-1.5 flex-none items-center justify-end h-fit self-end">
 								{parseInt(post.edited) === 1 && (
 									<TooltipProvider>
@@ -214,58 +163,8 @@ export default function PostCard({
 										</Tooltip>
 									</TooltipProvider>
 								)}
-								<Popover>
-									<PopoverTrigger
-										aria-label="Share"
-										className="border hover:border-ring p-1 h-fit hover:bg-accent rounded-sm transition-colors flex items-center justify-center"
-									>
-										<Repeat2 size={16} />
-									</PopoverTrigger>
-									<PopoverContent
-										align="end"
-										side="top"
-										className="flex flex-col shadow-sm p-0 border-0 w-[100px] group"
-									>
-										<PopoverClose
-											className="border-b-0 text-sm rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10 flex items-end justify-center gap-1.5 leading-[1.3]"
-											onClick={() =>
-												repostMutation.mutate(parseInt(post.userRepostStatus))
-											}
-										>
-											<div className="h-5 w-5 flex items-center justify-center">
-												<Repeat2 size={16} />
-											</div>
-											<span className="h-fit">
-												{parseInt(post.userRepostStatus)
-													? "Unrepost"
-													: "Repost"}
-											</span>
-										</PopoverClose>
-										<div className="border-b border-dashed transition-all group-hover:border-ring group-hover:border-solid" />
-										<PopoverClose
-											onClick={() => {
-												if (navigator.share)
-													navigator.share({
-														title: "Share this post",
-														url: `https://vibe.ambe.dev/post/${post.nanoId}`,
-													});
-											}}
-											className="border-t-0 text-sm text-center rounded-b-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10 flex justify-center gap-1.5 items-end leading-[1.3]"
-										>
-											<div className="h-5 w-5 flex items-center justify-center">
-												<Share size={16} />
-											</div>
-											<span className="h-fit">Share</span>
-										</PopoverClose>
-									</PopoverContent>
-								</Popover>
-								{user?.id === post.userId && (
-									<OptionsButton
-										post={post}
-										postPage={postPage}
-										parentNanoId={parentNanoId}
-									/>
-								)}
+								<ShareButton post={post} />
+								{userId === post.userId && <OptionsButton post={post} />}
 							</div>
 						</div>
 					</div>

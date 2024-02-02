@@ -16,9 +16,12 @@ import {
 } from "@clerk/nextjs";
 import NotificationButton from "./NotificationButton";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import EditProfile from "../EditProfile";
+const EditProfile = dynamic(() => import("../EditProfile"), {
+	ssr: false,
+});
 import Link from "@/components/Link";
 import { LogOut, PencilIcon, User2 } from "lucide-react";
+import dynamic from "next/dynamic";
 
 export default function AccountButton() {
 	const { user } = useUser();
@@ -52,7 +55,7 @@ export default function AccountButton() {
 			<ClerkLoaded>
 				<NotificationButton />
 				<Popover>
-					<PopoverTrigger className="border shadow-sm hover:shadow-none font-medium text-sm hover:bg-accent flex gap-1.5 items-end hover:border-ring transition-colors px-2.5 py-1.5 rounded-md">
+					<PopoverTrigger className="border shadow-sm hover:shadow-none font-medium text-sm hover:bg-accent flex gap-1.5 items-end hover:border-ring transition-colors px-2.5 py-1.5 rounded-md h-full">
 						<div className="h-5 flex items-center justify-center">
 							<Image
 								src={user.imageUrl}

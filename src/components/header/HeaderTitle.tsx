@@ -12,8 +12,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import Link from "@/components/Link";
 
-export default function HeaderTitle() {
-	const [feed, setFeed] = useState<"Home" | "Following">();
+export default function HeaderTitle({ feed }: { feed?: "Home" | "Following" }) {
 	const popoverClose = useRef<HTMLButtonElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [popoverDisabled, setPopoverDisabled] = useState(false);
@@ -27,9 +26,7 @@ export default function HeaderTitle() {
 		setPopoverDisabled(true);
 		containerRef.current?.classList.add(style.animateLetters);
 
-		const localFeed = localStorage.getItem("feed") as "Home" | "Following";
-		setFeed(localFeed);
-		if (localFeed === "Following") {
+		if (feed === "Following") {
 			containerRef.current?.classList.add(style.animateWidth);
 		}
 
@@ -49,7 +46,7 @@ export default function HeaderTitle() {
 					<div
 						ref={containerRef}
 						className={
-							"flex w-[4.5rem] h-[36px] flex-wrap overflow-y-hidden will-change-contents"
+							"flex w-[4.5rem] h-[34px] flex-wrap overflow-y-hidden will-change-contents"
 						}
 					>
 						<span>
@@ -119,14 +116,8 @@ export default function HeaderTitle() {
 							type="button"
 							aria-label="Home"
 							onClick={() => {
-								setFeed("Home");
-								localStorage.setItem("feed", "Home");
 								popoverClose.current?.click();
-								if (location.pathname === "/") {
-									window.dispatchEvent(new Event("feed", { bubbles: true }));
-								} else {
-									push("/");
-								}
+								push("/?feed=Home");
 							}}
 							className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
 								feed === "Home"
@@ -142,14 +133,8 @@ export default function HeaderTitle() {
 							type="button"
 							aria-label="Following"
 							onClick={() => {
-								setFeed("Following");
-								localStorage.setItem("feed", "Following");
 								popoverClose.current?.click();
-								if (location.pathname === "/") {
-									window.dispatchEvent(new Event("feed", { bubbles: true }));
-								} else {
-									push("/");
-								}
+								push("/?feed=Following");
 							}}
 							className={`px-2.5 py-1.5 rounded-sm text-sm transition-colors ${
 								feed === "Following"

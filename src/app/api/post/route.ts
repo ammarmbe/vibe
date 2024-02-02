@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { Post } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
 	const { userId } = auth();
@@ -24,6 +25,12 @@ export async function POST(request: Request) {
 				nanoId: body.nanoId,
 			},
 		);
+	}
+
+	if (body.parentNanoId) {
+		revalidatePath(`/post/${body.parentNanoId}`);
+	} else {
+		revalidatePath("/");
 	}
 
 	return new Response(

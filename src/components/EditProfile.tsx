@@ -10,10 +10,9 @@ import {
 	CardContent,
 	CardFooter,
 } from "./ui/card";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Post, User } from "@/lib/types";
-import { client } from "@/lib/ReactQueryProvider";
+import { User } from "@/lib/types";
 import { usePathname, useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import Link from "@/components/Link";
@@ -29,6 +28,7 @@ export default function EditProfile({
 	const [invalidUsername, setInvalidUsername] = useState(false);
 	const { user } = useUser();
 	const { push } = useRouter();
+	const client = useQueryClient();
 	const pathname = usePathname();
 
 	const usernameMutation = useMutation({
@@ -58,71 +58,15 @@ export default function EditProfile({
 				return;
 			}
 
-			if (pathname.startsWith("/user")) {
+			if (pathname === `/user/${data?.username}`) {
 				push(`/user/${username}`);
-
-				client.setQueryData(
-					["user", user?.username],
-					(data: User | undefined) => {
-						if (!data) return;
-						return {
-							...data,
-							username,
-							bio,
-						};
-					},
-				);
-
-				return;
 			}
 
-			if (pathname.startsWith("/post")) {
-				client.setQueryData(
-					["comments"],
-					(data: { pages: Post[][] } | undefined) => {
-						if (!data) return;
-						return {
-							pages: data.pages.map((page) =>
-								page.map((post) => {
-									if (post.userId === user?.id) {
-										return {
-											...post,
-											username,
-											bio,
-										};
-									}
-									return post;
-								}),
-							),
-						};
-					},
-				);
-
-				client.invalidateQueries({
-					predicate: (query) => query.queryKey[0] === "post",
-				});
-			}
-
-			client.setQueryData(
-				["homeFeed"],
-				(data: { pages: Post[][] } | undefined) => {
-					if (!data) return;
-					return {
-						pages: data.pages.map((page) =>
-							page.map((post) => {
-								if (post.userId === user?.id) {
-									return {
-										...post,
-										username,
-										bio,
-									};
-								}
-								return post;
-							}),
-						),
-					};
+			client.invalidateQueries({
+				predicate: () => {
+					return true;
 				},
-			);
+			});
 		},
 	});
 
@@ -132,6 +76,7 @@ export default function EditProfile({
 			(await (
 				await fetch(`/api/user?username=${user?.username}`)
 			).json()) as User,
+		enabled: !!user,
 	});
 
 	useEffect(() => {
@@ -153,7 +98,7 @@ export default function EditProfile({
 			}}
 			className="flex gap-2.5 flex-col w-fit"
 		>
-			<Card className="w-[360px] h-[375px] bg-popover">
+			<Card className="w-[360px] bg-popover">
 				{isLoading ? (
 					<div className="justify-center h-[375px] items-center flex">
 						<Spinner size="xl" />

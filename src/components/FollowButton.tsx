@@ -1,8 +1,7 @@
 "use client";
-import { client } from "@/lib/ReactQueryProvider";
 import { User } from "@/lib/types";
 import { useAuth } from "@clerk/nextjs";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserPlus2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -22,15 +21,13 @@ export default function FollowButton({
 	const { push } = useRouter();
 	const { userId: currentUserId } = useAuth();
 	const [following, setFollowing] = React.useState(followed);
+	const client = useQueryClient();
 
 	const notificationMutation = useMutation({
 		mutationFn: async () =>
 			await fetch(`/api/notification/followedUser?userId=${userId}`, {
 				method: "POST",
 			}),
-		onSuccess: () => {
-			client.invalidateQueries(["notifications", userId]);
-		},
 	});
 
 	const followMutation = useMutation({
@@ -40,9 +37,33 @@ export default function FollowButton({
 			}),
 		onMutate: () => {
 			setFollowing(!following);
+			client.setQueryData(["user", username], (data: User | undefined) => {
+				if (data) {
+					return {
+						...data,
+						followers: (followed
+							? parseInt(data.followers) - 1
+							: parseInt(data.followers) + 1
+						).toString(),
+					};
+				}
+				return data;
+			});
 		},
 		onError: () => {
 			setFollowing(followed);
+			client.setQueryData(["user", username], (data: User | undefined) => {
+				if (data) {
+					return {
+						...data,
+						followers: (followed
+							? parseInt(data.followers) + 1
+							: parseInt(data.followers) - 1
+						).toString(),
+					};
+				}
+				return data;
+			});
 		},
 		onSuccess: () => {
 			if (userId !== currentUserId && !followed) notificationMutation.mutate();
@@ -51,12 +72,13 @@ export default function FollowButton({
 				if (data) {
 					return {
 						...data,
-						followedByUser: followed ? "0" : "1",
-						followers: followed
-							? (parseInt(data.followers) - 1).toString()
-							: (parseInt(data.followers) + 1).toString(),
+						followers: (followed
+							? parseInt(data.followers) - 1
+							: parseInt(data.followers) + 1
+						).toString(),
 					};
 				}
+				return data;
 			});
 		},
 	});

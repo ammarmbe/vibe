@@ -1,5 +1,5 @@
 import React from "react";
-import { jetBrains } from "@/components/header/Header";
+import { jetBrains } from "@/components/Header/Header";
 import {
 	BellRing,
 	Database,

@@ -33,11 +33,6 @@ export default function NewPost() {
 				{ method: "POST" },
 			);
 		},
-		onSuccess: () => {
-			client.invalidateQueries({
-				predicate: (query) => query.queryKey[0] === "notifications",
-			});
-		},
 	});
 
 	const postMutation = useMutation({
@@ -72,7 +67,7 @@ export default function NewPost() {
 			}
 
 			client.setQueryData(
-				["homeFeed"],
+				["homeFeed", "Home"],
 				(oldData: { pages: Post[][] } | undefined) => {
 					if (oldData?.pages) {
 						return {
@@ -146,7 +141,7 @@ export default function NewPost() {
 				}
 				className="order-2 border disabled:!opacity-50 rounded-sm text-sm px-2 py-1 hover:bg-accent hover:border-ring transition-colors relative top-[0px] self-start flex items-end justify-center gap-1 leading-[1.2]"
 			>
-				<div className="h-4 w-4 flex items-center justify-center -translate-x-[1px] -translate-y-[0.5px]">
+				<div className="h-4 w-4 flex items-center justify-center">
 					<Send size={14} />
 				</div>
 				<span className="h-fit">Post</span>

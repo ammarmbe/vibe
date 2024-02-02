@@ -7,23 +7,27 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { useAuth } from "@clerk/nextjs";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import {
+	useInfiniteQuery,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../Spinner";
 import { Notification } from "@/lib/types";
 import NotificationCard from "./NotificationCard";
-import { client } from "@/lib/ReactQueryProvider";
 
 export default function NotificationButton() {
 	const { userId } = useAuth();
 	const [unread, setUnread] = useState(false);
+	const client = useQueryClient();
 
 	const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
-		queryKey: ["notifications", userId],
-		queryFn: async ({ pageParam = 4294967295 }) =>
-			await (
-				await fetch(`/api/notifications?notificationId=${pageParam}`)
-			).json(),
+		queryKey: ["notifications"],
+		queryFn: async ({ pageParam = 4294967295 }) => {
+			const res = await fetch(`/api/notifications?notificationId=${pageParam}`);
+			return await res.json();
+		},
 		getNextPageParam: (lastPage, _pages) => {
 			if (lastPage?.length >= 11) {
 				return lastPage[lastPage.length - 1].id;
@@ -36,12 +40,12 @@ export default function NotificationButton() {
 	const readNotifications = useMutation({
 		mutationFn: async () =>
 			await fetch("/api/notifications/read", { method: "POST" }),
-		onSuccess: () => {
+		onMutate: () => {
 			setTimeout(() => {
 				setUnread(false);
 
 				client.setQueryData(
-					["notifications", userId],
+					["notifications"],
 					(oldData: { pages: Notification[][] | undefined } | undefined) => {
 						return {
 							pages: oldData?.pages?.map((page) => {

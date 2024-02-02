@@ -3,25 +3,23 @@ import { useUser } from "@clerk/nextjs";
 import React, { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
-import { Post } from "@/lib/types";
 import Input from "./Input";
 import { Send } from "lucide-react";
+import { Post } from "@/lib/types";
 
 export default function NewComment({
 	parentNanoId,
-	nanoId,
 	userId,
 	parentPostId,
 	parentPostUsername,
 }: {
 	parentNanoId: string;
-	nanoId: string;
 	userId: string;
 	parentPostId: string;
 	parentPostUsername: string;
 }) {
-	const client = useQueryClient();
 	const { user } = useUser();
+	const queryClient = useQueryClient();
 
 	const inputRef = useRef<HTMLElement>(null);
 	const [value, setValue] = useState<
@@ -35,18 +33,15 @@ export default function NewComment({
 
 	const [inputFocus, setInputFocus] = useState(false);
 
-	const notificationMutation = useMutation({
+	const commentNotificationMutation = useMutation({
 		mutationFn: async () =>
 			await fetch(
 				`/api/notification/commentedOnPost?postId=${parentPostId}&userId=${user?.id}`,
 				{ method: "POST" },
 			),
-		onSuccess: () => {
-			client.invalidateQueries(["notifications", userId]);
-		},
 	});
 
-	const notificationMutation2 = useMutation({
+	const mentionNotificationMutation = useMutation({
 		mutationFn: async (d: string) => {
 			const [username, data] = JSON.parse(d);
 
@@ -54,11 +49,6 @@ export default function NewComment({
 				`/api/notification/mentioned?username=${username}&postId=${data}&userId=${user?.id}&type=comment`,
 				{ method: "POST" },
 			);
-		},
-		onSuccess: () => {
-			client.invalidateQueries({
-				predicate: (query) => query.queryKey[0] === "notifications",
-			});
 		},
 	});
 
@@ -78,17 +68,20 @@ export default function NewComment({
 			return id.json();
 		},
 		onSuccess: (data) => {
-			if (userId !== user?.id) notificationMutation.mutate();
+			if (userId !== user?.id) commentNotificationMutation.mutate();
 
-			client.invalidateQueries(["comments"]);
-			client.setQueryData(["post", nanoId], (data?: Post) => {
-				if (data) {
-					return {
-						...data,
-						comments: String(parseInt(data.commentCount) + 1),
-					};
-				}
-			});
+			queryClient.invalidateQueries(["comments", parentNanoId]);
+			queryClient.setQueryData(
+				["postPage", parentNanoId],
+				(old: Post | undefined) => {
+					if (old) {
+						return {
+							...old,
+							commentCount: (parseInt(old.commentCount) + 1).toString(),
+						};
+					}
+				},
+			);
 
 			// send a notification for all users mentioned in the post
 			const mentionedUsers = value
@@ -97,7 +90,7 @@ export default function NewComment({
 
 			for (const username of mentionedUsers) {
 				if (parentPostUsername !== username && user?.username !== username)
-					notificationMutation2.mutate(JSON.stringify([username, data]));
+					mentionNotificationMutation.mutate(JSON.stringify([username, data]));
 			}
 
 			setValue([]);
@@ -129,7 +122,7 @@ export default function NewComment({
 				}
 				className="order-2 border disabled:!opacity-50 rounded-sm text-sm px-2 py-1 hover:bg-accent hover:border-ring transition-colors relative top-[0px] self-start flex items-end justify-center gap-1 leading-[1.2]"
 			>
-				<div className="h-4 w-4 flex items-center justify-center -translate-x-[1px] -translate-y-[0.5px]">
+				<div className="h-4 w-4 flex items-center justify-center">
 					<Send size={14} />
 				</div>
 				<span className="h-fit">Reply</span>
