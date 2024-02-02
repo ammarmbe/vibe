@@ -232,7 +232,7 @@ export default function LikeButton({
 	return (
 		<>
 			<HoverCard open={hoverCardOpen} onOpenChange={setHoverCardOpen}>
-				<HoverCardTrigger>
+				<HoverCardTrigger asChild>
 					<button
 						type="button"
 						aria-label="like"
