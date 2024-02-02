@@ -51,35 +51,11 @@ export default function FollowButton({
 			});
 		},
 		onError: () => {
-			setFollowing(followed);
-			client.setQueryData(["user", username], (data: User | undefined) => {
-				if (data) {
-					return {
-						...data,
-						followers: (followed
-							? parseInt(data.followers) + 1
-							: parseInt(data.followers) - 1
-						).toString(),
-					};
-				}
-				return data;
-			});
+			setFollowing(!following);
+			client.invalidateQueries(["user", username]);
 		},
 		onSuccess: () => {
 			if (userId !== currentUserId && !followed) notificationMutation.mutate();
-
-			client.setQueryData(["user", username], (data: User | undefined) => {
-				if (data) {
-					return {
-						...data,
-						followers: (followed
-							? parseInt(data.followers) - 1
-							: parseInt(data.followers) + 1
-						).toString(),
-					};
-				}
-				return data;
-			});
 		},
 	});
 
