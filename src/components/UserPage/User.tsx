@@ -2,16 +2,23 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { PencilIcon } from "lucide-react";
-import EditProfile from "../EditProfile";
-import FollowButton from "../FollowButton";
+import { PencilIcon, UserPlus2 } from "lucide-react";
+const EditProfile = dynamic(() => import("../EditProfile"), {
+	ssr: false,
+});
+const FollowButton = dynamic(() => import("../FollowButton"), {
+	ssr: false,
+});
 import { useAuth } from "@clerk/nextjs";
 import Posts from "./Posts";
 import { User } from "@/lib/types";
 import Spinner from "../Spinner";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 export default function Page({ username }: { username: string }) {
 	const { userId } = useAuth();
+	const { push } = useRouter();
 
 	const { data: user, isLoading } = useQuery({
 		queryKey: ["user", username],
@@ -90,12 +97,24 @@ export default function Page({ username }: { username: string }) {
 											</DialogContent>
 										</Dialog>
 									</>
-								) : (
+								) : userId ? (
 									<FollowButton
 										userId={user.id}
 										username={user.username}
 										followed={parseInt(user.followedByUser) === 1}
 									/>
+								) : (
+									<button
+										type="button"
+										aria-label="Follow"
+										className="py-1 px-2.5 border w-fit h-fit rounded-md text-xs flex items-end justify-center gap-1 leading-[1.2] bg-main text-white border-main/50 hover:bg-main/90"
+										onClick={() => push("/sign-up")}
+									>
+										<div className="h-4 w-4 flex items-center justify-center">
+											<UserPlus2 size={12} />
+										</div>
+										<span className="h-fit">Follow</span>
+									</button>
 								)}
 							</div>
 						</div>
