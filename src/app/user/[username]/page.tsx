@@ -3,8 +3,6 @@ import { Metadata } from "next/types";
 import getQueryClient from "@/lib/utils";
 import User from "@/components/UserPage/User";
 
-export const runtime = "edge";
-
 interface Props {
 	params: {
 		username: string;
