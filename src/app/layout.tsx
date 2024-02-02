@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -20,10 +20,6 @@ export const metadata: Metadata = {
 		capable: true,
 		statusBarStyle: "default",
 	},
-};
-
-export const viewport: Viewport = {
-	themeColor: "#d42148",
 };
 
 export default function RootLayout({
