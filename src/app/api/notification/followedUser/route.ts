@@ -13,14 +13,18 @@ export async function POST(request: Request) {
 	}
 
 	if (userId && currentUserId) {
-		await db.execute(
-			"INSERT INTO notifications (type, notifier, notified, postId) VALUES ('followedUser', :currentUserId, :userId, :postId)",
-			{
-				userId,
-				currentUserId,
-				postId: 0, // used for unique key constraint
-			},
-		);
+		try {
+			await db.execute(
+				"INSERT INTO notifications (type, notifier, notified, postId) VALUES ('followedUser', :currentUserId, :userId, :postId)",
+				{
+					userId,
+					currentUserId,
+					postId: 0, // used for unique key constraint
+				},
+			);
+		} catch (e) {
+			// ignore unique constraint error
+		}
 	}
 
 	return new Response("OK");

@@ -44,6 +44,7 @@ export default function FollowButton({
 						followers: followed
 							? (parseInt(data.followers) - 1).toString()
 							: (parseInt(data.followers) + 1).toString(),
+						followedByUser: followed ? "0" : "1",
 					};
 				}
 				return data;
