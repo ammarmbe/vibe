@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -15,6 +15,15 @@ export const metadata: Metadata = {
 	description:
 		"Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
 	metadataBase: new URL("https://vibe.ambe.dev"),
+	appleWebApp: {
+		title: "Vibe",
+		capable: true,
+		statusBarStyle: "default",
+	},
+};
+
+export const viewport: Viewport = {
+	themeColor: "#d42148",
 };
 
 export default function RootLayout({
@@ -24,6 +33,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
+			<head />
 			<ClerkProvider
 				appearance={{ variables: { colorPrimary: "#cd002b" } }}
 				publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
