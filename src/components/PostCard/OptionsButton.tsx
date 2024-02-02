@@ -19,11 +19,8 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Input from "../Input";
 import sanitize from "sanitize-html";
-dayjs.extend(relativeTime);
 
 export default function OptionsButton({
 	post,
