@@ -3,7 +3,6 @@ import Image from "next/image";
 import React from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import OptionsButton from "./OptionsButton";
 import { Heart, MessageCircle, Pencil, Repeat2 } from "lucide-react";
 import Link from "@/components/Link";
 import {
@@ -27,6 +26,9 @@ const ShareButton = dynamic(() => import("./ShareButton"), {
 	ssr: false,
 });
 const LikeButton = dynamic(() => import("./LikeButton"), {
+	ssr: false,
+});
+const OptionsButton = dynamic(() => import("./OptionsButton"), {
 	ssr: false,
 });
 dayjs.extend(relativeTime);
