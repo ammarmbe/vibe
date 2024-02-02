@@ -172,8 +172,8 @@ export default function PostCard({
 							} break-words w-full mb-4`}
 							dangerouslySetInnerHTML={{ __html: post.content }}
 						/>
-						<div className="flex justify-between w-full">
-							<div className="flex gap-1.5 items-center">
+						<div className="flex justify-between w-full gap-1">
+							<div className="flex gap-1.5 items-center flex-wrap-reverse w-fit">
 								<LikeButton
 									likeCount={parseInt(post.likeCount)}
 									cryCount={parseInt(post.cryCount)}
@@ -187,7 +187,7 @@ export default function PostCard({
 								/>
 								<Link
 									href={`/post/${post.nanoId}`}
-									className="text-xs px-2 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent h-full items-end flex gap-1 justify-center order-2 leading-[1.3]"
+									className="text-xs px-2 py-1 border rounded-md transition-colors hover:border-ring hover:bg-accent items-end flex gap-1 justify-center order-2 leading-[1.3] h-fit"
 								>
 									<div className="h-4 w-4 flex items-center justify-center -translate-y-[0.5px]">
 										<MessageCircle size={14} />
@@ -198,11 +198,7 @@ export default function PostCard({
 								</Link>
 							</div>
 
-							<div
-								className={`flex gap-1.5 ${
-									user?.id === post.userId ? "items-center" : "items-end"
-								} justify-end`}
-							>
+							<div className="flex gap-1.5 flex-none items-center justify-end h-fit self-end">
 								{parseInt(post.edited) === 1 && (
 									<TooltipProvider>
 										<Tooltip>
@@ -218,7 +214,7 @@ export default function PostCard({
 								<Popover>
 									<PopoverTrigger
 										name="Share"
-										className="h-full border hover:border-ring hover:bg-accent rounded-sm transition-colors aspect-square flex items-center justify-center"
+										className="border hover:border-ring p-1 h-fit hover:bg-accent rounded-sm transition-colors flex items-center justify-center"
 									>
 										<Repeat2 size={16} />
 									</PopoverTrigger>

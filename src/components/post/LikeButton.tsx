@@ -347,7 +347,7 @@ export default function LikeButton({
 				<button
 					name="heart"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-3 ${
+					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-3 ${
 						currentStatus === "heart"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -357,14 +357,14 @@ export default function LikeButton({
 						isSignedIn ? () => toggleLike("heart") : () => push("/sign-up")
 					}
 				>
-					❤️ {buttonCounts.heartCount}
+					<span className="h-fit">❤️ {buttonCounts.heartCount}</span>
 				</button>
 			) : null}
 			{buttonCounts.laughCount ? (
 				<button
 					name="laugh"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-4 ${
+					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-4 ${
 						currentStatus === "laugh"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -374,14 +374,14 @@ export default function LikeButton({
 						isSignedIn ? () => toggleLike("laugh") : () => push("/sign-up")
 					}
 				>
-					😂 {buttonCounts.laughCount}
+					<span className="h-fit">😂 {buttonCounts.laughCount}</span>
 				</button>
 			) : null}
 			{buttonCounts.cryCount ? (
 				<button
 					name="cry"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-6 ${
+					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-6 ${
 						currentStatus === "cry"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -391,14 +391,14 @@ export default function LikeButton({
 						isSignedIn ? () => toggleLike("cry") : () => push("/sign-up")
 					}
 				>
-					😭 {buttonCounts.cryCount}
+					<span className="h-fit">😭 {buttonCounts.cryCount}</span>
 				</button>
 			) : null}
 			{buttonCounts.surpriseCount ? (
 				<button
 					name="surprise"
 					type="button"
-					className={`border p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-5 ${
+					className={`border h-fit min-h-[calc(1.5rem+2px)] p-1.5 py-1 text-xs rounded-md leading-[1.3] flex items-end justify-center order-5 ${
 						currentStatus === "surprise"
 							? "bg-secondary border-ring"
 							: "hover:bg-secondary hover:border-ring"
@@ -408,7 +408,7 @@ export default function LikeButton({
 						isSignedIn ? () => toggleLike("surprise") : () => push("/sign-up")
 					}
 				>
-					😮 {buttonCounts.surpriseCount}
+					<span className="h-fit">😮 {buttonCounts.surpriseCount}</span>
 				</button>
 			) : null}
 		</>
