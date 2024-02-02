@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { Post } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const parentNanoId = searchParams.get("parentNanoId");

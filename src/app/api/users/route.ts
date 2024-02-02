@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const value = searchParams.get("value");

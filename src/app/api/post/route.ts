@@ -3,6 +3,8 @@ import { Post } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
 import { revalidatePath } from "next/cache";
 
+export const runtime = "edge";
+
 export async function POST(request: Request) {
 	const { userId } = auth();
 

@@ -3,6 +3,8 @@ import { User } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
 import { nanoid } from "nanoid";
 
+export const runtime = "edge";
+
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const username = searchParams.get("username");

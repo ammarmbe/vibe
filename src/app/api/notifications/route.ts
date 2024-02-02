@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { Notification } from "@/lib/types";
 import { auth } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	let notificationId = searchParams.get("notificationId");

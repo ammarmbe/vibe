@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 export async function POST() {
 	const { userId } = auth();
 
