@@ -35,7 +35,7 @@ export default function RootLayout({
 		<html lang="en">
 			<head />
 			<ClerkProvider
-				appearance={{ variables: { colorPrimary: "#cd002b" } }}
+				appearance={{ variables: { colorPrimary: "#cf202f" } }}
 				publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
 			>
 				<ReactQueryProvider>
