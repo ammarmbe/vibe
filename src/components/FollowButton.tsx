@@ -41,10 +41,9 @@ export default function FollowButton({
 				if (data) {
 					return {
 						...data,
-						followers: (followed
-							? parseInt(data.followers) - 1
-							: parseInt(data.followers) + 1
-						).toString(),
+						followers: followed
+							? (parseInt(data.followers) - 1).toString()
+							: (parseInt(data.followers) + 1).toString(),
 					};
 				}
 				return data;
