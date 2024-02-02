@@ -5,8 +5,6 @@ import Header from "@/components/Header/Header";
 import getQueryClient from "@/lib/utils";
 import Post from "@/components/PostPage/Post";
 
-export const runtime = "edge";
-
 interface Props {
 	params: {
 		nanoId: string;
