@@ -21,7 +21,7 @@ export default async function sitemap({
 	const end = start + 50000;
 	const users = (
 		await db.execute(
-			`SELECT id, username FROM users WHERE id BETWEEN ${start} AND ${end} AND deleted = 0 ORDER BY id DESC`,
+			`SELECT id, username FROM users WHERE id BETWEEN ${start} AND ${end} ORDER BY id DESC`,
 		)
 	).rows;
 
