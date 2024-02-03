@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 				},
 			)) as { rows: Notification[] };
 
-			sendPushNotification(notification.rows[0], userId);
+			await sendPushNotification(notification.rows[0], userId);
 		} catch (e) {
 			// ignore unique constraint error
 		}
