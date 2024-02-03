@@ -9,7 +9,15 @@ const sendPushNotification = async (
 ) => {
 	console.log("sending push notification");
 
-	if (!notification || !userId) return;
+	if (!notification) {
+		console.log("no notification passed");
+		return;
+	}
+
+	if (!userId) {
+		console.log("no userId passed");
+		return;
+	}
 
 	let content = notification.notifierName;
 
@@ -72,7 +80,9 @@ const sendPushNotification = async (
 		})
 	).rows[0];
 
-	if (!subscription) return;
+	if (!subscription) {
+		console.log("no subscription found");
+	}
 
 	const payload = JSON.stringify({
 		title: "Vibe",
