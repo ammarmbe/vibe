@@ -7,6 +7,8 @@ const sendPushNotification = async (
 	notification: Notification,
 	userId: string,
 ) => {
+	console.log("sending push notification");
+
 	if (!notification || !userId) return;
 
 	let content = notification.notifierName;
