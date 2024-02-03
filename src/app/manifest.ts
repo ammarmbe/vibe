@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
 	return {
 		name: "Vibe",
 		short_name: "Vibe",
-		theme_color: "#ffffff",
+		theme_color: "#cf202f",
 		background_color: "#cf202f",
 		display: "standalone",
 		orientation: "portrait",
