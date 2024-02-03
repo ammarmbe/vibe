@@ -87,6 +87,8 @@ const sendPushNotification = async (
 	const payload = JSON.stringify({
 		title: "Vibe",
 		body: content,
+		icon: notification.notifierImage ?? "/images/icon-192x192.png",
+		badge: "/images/badge.png",
 	});
 
 	webpush.setVapidDetails(
