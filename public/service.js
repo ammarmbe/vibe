@@ -8,6 +8,7 @@ self.addEventListener("push", async (event) => {
 const showLocalNotification = (title, body, swRegistration) => {
 	swRegistration.showNotification(title, {
 		body,
-		icon: "/images/icon-192.png",
+		icon: "/images/icon-192x192.png",
+		badge: "/images/badge.png",
 	});
 };
