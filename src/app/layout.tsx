@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -22,6 +22,10 @@ export const metadata: Metadata = {
 	},
 };
 
+export const viewport: Viewport = {
+	themeColor: "#0f0f0f",
+};
+
 export default function RootLayout({
 	children,
 }: {
@@ -29,9 +33,6 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<head>
-				<link rel="manifest" href="/manifest.json" />
-			</head>
 			<ClerkProvider
 				appearance={{ variables: { colorPrimary: "#cf202f" } }}
 				publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
