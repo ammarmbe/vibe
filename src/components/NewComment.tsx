@@ -35,10 +35,9 @@ export default function NewComment({
 
 	const commentNotificationMutation = useMutation({
 		mutationFn: async () =>
-			await fetch(
-				`/api/notification/commentedOnPost?postId=${parentPostId}&userId=${user?.id}`,
-				{ method: "POST" },
-			),
+			await fetch(`/api/notification/commentedOnPost?postId=${parentPostId}`, {
+				method: "POST",
+			}),
 	});
 
 	const mentionNotificationMutation = useMutation({
@@ -46,7 +45,7 @@ export default function NewComment({
 			const [username, data] = JSON.parse(d);
 
 			await fetch(
-				`/api/notification/mentioned?username=${username}&postId=${data}&userId=${user?.id}&type=comment`,
+				`/api/notification/mentioned?username=${username}&postId=${data}&userId=${userId}&type=comment`,
 				{ method: "POST" },
 			);
 		},

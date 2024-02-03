@@ -29,7 +29,9 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<head />
+			<head>
+				<link rel="manifest" href="/manifest.json" />
+			</head>
 			<ClerkProvider
 				appearance={{ variables: { colorPrimary: "#cf202f" } }}
 				publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}

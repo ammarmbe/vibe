@@ -29,7 +29,7 @@ export default function NewPost() {
 			const [username, data] = JSON.parse(d);
 
 			await fetch(
-				`/api/notification/mentioned?username=${username}&postId=${data}&userId=${user?.id}&type=post`,
+				`/api/notification/mentioned?username=${username}&postId=${data}&type=post`,
 				{ method: "POST" },
 			);
 		},
@@ -111,7 +111,7 @@ export default function NewPost() {
 
 			for (const username of mentionedUsers) {
 				if (user?.username !== username)
-					notificationMutation.mutate(JSON.stringify([username, data]));
+					notificationMutation.mutate(JSON.stringify([username, data.id]));
 			}
 		},
 	});

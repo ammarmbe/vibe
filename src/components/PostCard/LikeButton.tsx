@@ -40,17 +40,6 @@ export default function LikeButton({
 		surpriseCount,
 		cryCount,
 	});
-	let timeoutId: NodeJS.Timeout;
-
-	const handleTouchStart = () => {
-		timeoutId = setTimeout(() => {
-			setHoverCardOpen(true);
-		}, 500);
-	};
-
-	const handleTouchEnd = () => {
-		clearTimeout(timeoutId);
-	};
 
 	const notificationMutation = useMutation({
 		mutationFn: async (type: "like" | "cry" | "laugh" | "heart" | "surprise") =>
@@ -153,8 +142,6 @@ export default function LikeButton({
 								  }
 								: () => push("/sign-up")
 						}
-						onTouchStart={handleTouchStart}
-						onTouchEnd={handleTouchEnd}
 					>
 						<div className="h-4 w-4 flex items-center justify-center">
 							<Heart size={14} />

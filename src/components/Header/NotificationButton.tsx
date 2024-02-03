@@ -16,6 +16,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../Spinner";
 import { Notification } from "@/lib/types";
 import NotificationCard from "./NotificationCard";
+import { registerServiceWorker, saveSubscription } from "@/lib/utils";
 
 export default function NotificationButton() {
 	const { userId } = useAuth();
@@ -69,6 +70,19 @@ export default function NotificationButton() {
 			setUnread(true);
 		}
 	}, [data]);
+
+	const notificationsSupported =
+		"Notification" in window &&
+		"serviceWorker" in navigator &&
+		"PushManager" in window;
+
+	if (notificationsSupported) {
+		useEffect(() => {
+			if (userId) {
+				subscribe(userId);
+			}
+		}, [userId]);
+	}
 
 	return (
 		<Popover>
@@ -130,3 +144,26 @@ export default function NotificationButton() {
 		</Popover>
 	);
 }
+
+const subscribe = async (userId: string | null | undefined) => {
+	if (!userId) return;
+
+	// check if a service worker is already registered
+	let swRegistration = await navigator.serviceWorker.getRegistration();
+
+	if (!swRegistration) {
+		swRegistration = await registerServiceWorker();
+	}
+
+	await window?.Notification.requestPermission();
+
+	try {
+		const options = {
+			applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+			userVisibleOnly: true,
+		};
+		const subscription = await swRegistration.pushManager.subscribe(options);
+
+		await saveSubscription(subscription, userId);
+	} catch (err) {}
+};

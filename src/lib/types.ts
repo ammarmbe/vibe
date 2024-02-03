@@ -39,6 +39,7 @@ export type Notification = {
 	type:
 		| "likedPost.surprise"
 		| "likedPost.laugh"
+		| "likedPost.heart"
 		| "likedPost.cry"
 		| "likedPost.like"
 		| "commentedOnPost"

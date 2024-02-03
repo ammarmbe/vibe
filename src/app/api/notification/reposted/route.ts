@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
+import { sendPushNotification } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
-
-export const runtime = "edge";
+import { Notification } from "@/lib/types";
 
 export async function POST(request: Request) {
 	const { searchParams } = new URL(request.url);
@@ -22,6 +22,17 @@ export async function POST(request: Request) {
 				currentUserId,
 			},
 		);
+
+		const notification = (await db.execute(
+			"SELECT notifications.id, notifications.read, posts.nanoId, posts.deleted, notifications.type, notifications.notifier, notifications.postId, UNIX_TIMESTAMP(notifications.createdAt) AS createdAt, users.image AS notifierImage, users.username AS notifierUsername, users.name AS notifierName, posts.content FROM notifications JOIN users ON users.id = notifications.notifier LEFT JOIN posts ON posts.id = notifications.postId WHERE notifications.notified = :userId AND notifier = :currentUserId AND postId = :postId AND type = 'reposted'",
+			{
+				userId,
+				postId,
+				currentUserId,
+			},
+		)) as { rows: Notification[] };
+
+		sendPushNotification(notification.rows[0], userId);
 	}
 
 	return new Response("OK");

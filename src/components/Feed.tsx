@@ -45,7 +45,7 @@ export default function Feed({ feed }: { feed: "Home" | "Following" }) {
 					next={fetchNextPage}
 					className="flex flex-col gap-2.5 pb-2.5"
 				>
-					{data.pages.map((page) => {
+					{data.pages.map((page: (Post | Repost)[]) => {
 						return page
 							.sort((a: Post | Repost, b: Post | Repost) => {
 								let acreatedAt: string;
@@ -69,7 +69,10 @@ export default function Feed({ feed }: { feed: "Home" | "Following" }) {
 								return (
 									<PostCard
 										key={
-											post.postId + ("repostCreatedAt" in post ? "repost" : "")
+											post.postId +
+											("repostCreatedAt" in post
+												? `repost${post.reposterUsername}`
+												: "")
 										}
 										post={post}
 									/>
