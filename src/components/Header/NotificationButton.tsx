@@ -21,7 +21,7 @@ import { registerServiceWorker, saveSubscription } from "@/lib/utils";
 export default function NotificationButton() {
 	const { userId } = useAuth();
 	const [unread, setUnread] = useState(false);
-	const client = useQueryClient();
+	const queryClient = useQueryClient();
 
 	const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
 		queryKey: ["notifications"],
@@ -45,7 +45,7 @@ export default function NotificationButton() {
 			setTimeout(() => {
 				setUnread(false);
 
-				client.setQueryData(
+				queryClient.setQueryData(
 					["notifications"],
 					(oldData: { pages: Notification[][] | undefined } | undefined) => {
 						return {
@@ -58,6 +58,9 @@ export default function NotificationButton() {
 					},
 				);
 			}, 1000);
+		},
+		onError: () => {
+			queryClient.invalidateQueries(["notifications"]);
 		},
 	});
 

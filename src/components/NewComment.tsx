@@ -30,6 +30,7 @@ export default function NewComment({
 			selected: boolean;
 		}[]
 	>([]);
+	const [commentContent, setCommentContent] = useState("");
 
 	const [inputFocus, setInputFocus] = useState(false);
 
@@ -52,13 +53,11 @@ export default function NewComment({
 	});
 
 	const commentMutation = useMutation({
-		mutationFn: async () => {
-			const nanoId = nanoid(12);
-
+		mutationFn: async (nanoId: string) => {
 			const id = await fetch("/api/post", {
 				method: "POST",
 				body: JSON.stringify({
-					content: value.map((v) => v.unsanitized).join(" "),
+					content: commentContent,
 					nanoId,
 					parentNanoId,
 				}),
@@ -66,10 +65,9 @@ export default function NewComment({
 
 			return id.json();
 		},
-		onSuccess: (data) => {
-			if (userId !== user?.id) commentNotificationMutation.mutate();
+		onMutate: (nanoId) => {
+			setValue([]);
 
-			queryClient.invalidateQueries(["comments", parentNanoId]);
 			queryClient.setQueryData(
 				["postPage", parentNanoId],
 				(old: Post | undefined) => {
@@ -82,6 +80,60 @@ export default function NewComment({
 				},
 			);
 
+			const name: string[] = [];
+
+			user?.firstName && name.push(user.firstName);
+			user?.lastName && name.push(user.lastName);
+
+			if (!name.length) {
+				user?.emailAddresses[0].emailAddress.split("@")[0] &&
+					name.push(user?.emailAddresses[0].emailAddress.split("@")[0]);
+			}
+
+			queryClient.setQueryData(
+				["comments", parentNanoId],
+				(oldData: { pages: Post[][] } | undefined) => {
+					if (oldData) {
+						return {
+							pages: [
+								[
+									{
+										postId: "0", // will be invalidated
+										nanoId: nanoId,
+										content: value.map((v) => v.unsanitized).join(" "),
+										createdAt: (Date.now() / 1000).toString(),
+										parentNanoId: null,
+										name: name.join(" "),
+										username: user?.username || "",
+										image: user?.imageUrl || "",
+										userId: user?.id || "",
+										likeCount: "0",
+										cryCount: "0",
+										laughCount: "0",
+										heartCount: "0",
+										surpriseCount: "0",
+										commentCount: "0",
+										userLikeStatus: null,
+										userRepostStatus: "",
+										deleted: "0",
+										edited: "0",
+									},
+									...oldData.pages[0],
+								],
+								...oldData.pages.slice(1),
+							],
+						};
+					}
+					return oldData;
+				},
+			);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries(["comments", parentNanoId]);
+		},
+		onSuccess: (data) => {
+			if (userId !== user?.id) commentNotificationMutation.mutate();
+
 			// send a notification for all users mentioned in the post
 			const mentionedUsers = value
 				.filter((v) => v.mention)
@@ -91,8 +143,6 @@ export default function NewComment({
 				if (parentPostUsername !== username && user?.username !== username)
 					mentionNotificationMutation.mutate(JSON.stringify([username, data]));
 			}
-
-			setValue([]);
 		},
 	});
 
@@ -113,7 +163,8 @@ export default function NewComment({
 				aria-label="Reply"
 				type="button"
 				onClick={() => {
-					commentMutation.mutate();
+					setCommentContent(value.map((v) => v.sanitized).join(" "));
+					commentMutation.mutate(nanoid(12));
 				}}
 				disabled={
 					commentMutation.isLoading ||

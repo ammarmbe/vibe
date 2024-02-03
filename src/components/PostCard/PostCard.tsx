@@ -52,7 +52,11 @@ export default function PostCard({
 		parseInt(post.commentCount) === 1 ? "Comment" : "Comments";
 
 	return (
-		<div>
+		<div
+			className={
+				post.postId === "0" ? "opacity-50 pointer-events-none" : undefined
+			}
+		>
 			{"reposterName" in post ? (
 				<div className="bg-border rounded-t-md p-1 px-2 text-xs -mb-2 pb-[calc(0.75rem-1px)] flex items-center gap-1">
 					<Repeat2

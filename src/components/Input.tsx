@@ -62,7 +62,7 @@ export default function Input({
 	inputRef: RefObject<HTMLElement>;
 	setInputFocus?: Dispatch<SetStateAction<boolean>>;
 	// biome-ignore lint/suspicious/noExplicitAny:
-	postMutation: UseMutationResult<any, unknown, void, unknown>;
+	postMutation: UseMutationResult<any, any, any, any>;
 	className?: string;
 	relativeParent?: string;
 }) {

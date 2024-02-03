@@ -1,14 +1,15 @@
 "use client";
 import { useAuth } from "@clerk/nextjs";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "../ui/hover-card";
+import { Post } from "@/lib/types";
 
 export default function LikeButton({
 	likeCount,
@@ -29,6 +30,8 @@ export default function LikeButton({
 	postId: string;
 	userId: string;
 }) {
+	const queryClient = useQueryClient();
+
 	const [hoverCardOpen, setHoverCardOpen] = useState(false);
 	const { userId: currentUserId, isSignedIn } = useAuth();
 	const { push } = useRouter();
@@ -40,6 +43,20 @@ export default function LikeButton({
 		surpriseCount,
 		cryCount,
 	});
+
+	useEffect(() => {
+		setButtonCounts({
+			likeCount,
+			heartCount,
+			laughCount,
+			surpriseCount,
+			cryCount,
+		});
+	}, [likeCount, heartCount, laughCount, surpriseCount, cryCount]);
+
+	useEffect(() => {
+		setCurrentStatus(userLikeStatus);
+	}, [userLikeStatus]);
 
 	const notificationMutation = useMutation({
 		mutationFn: async (type: "like" | "cry" | "laugh" | "heart" | "surprise") =>
@@ -61,6 +78,59 @@ export default function LikeButton({
 			);
 		},
 		onMutate: (type) => {
+			function updater(oldData: { pages: Post[][] } | undefined) {
+				if (oldData?.pages) {
+					return {
+						pages: oldData.pages.map((page) => {
+							return page.map((post) => {
+								if (post.postId === postId) {
+									return {
+										...post,
+										userLikeStatus: type === currentStatus ? null : type,
+										likeCount:
+											currentStatus === "like"
+												? (parseInt(post.likeCount) - 1).toString()
+												: type === "like"
+												  ? (parseInt(post.likeCount) + 1).toString()
+												  : post.likeCount,
+										laughCount:
+											currentStatus === "laugh"
+												? (parseInt(post.laughCount) - 1).toString()
+												: type === "laugh"
+												  ? (parseInt(post.laughCount) + 1).toString()
+												  : post.laughCount,
+										heartCount:
+											currentStatus === "heart"
+												? (parseInt(post.heartCount) - 1).toString()
+												: type === "heart"
+												  ? (parseInt(post.heartCount) + 1).toString()
+												  : post.heartCount,
+										surpriseCount:
+											currentStatus === "surprise"
+												? (parseInt(post.surpriseCount) - 1).toString()
+												: type === "surprise"
+												  ? (parseInt(post.surpriseCount) + 1).toString()
+												  : post.surpriseCount,
+										cryCount:
+											currentStatus === "cry"
+												? (parseInt(post.cryCount) - 1).toString()
+												: type === "cry"
+												  ? (parseInt(post.cryCount) + 1).toString()
+												  : post.cryCount,
+									};
+								}
+								return post;
+							});
+						}),
+					};
+				}
+				return oldData;
+			}
+
+			queryClient.setQueryData(["homeFeed", "Home"], updater);
+			queryClient.setQueryData(["homeFeed", "Following"], updater);
+			queryClient.setQueryData(["userPosts", userId], updater);
+
 			setCurrentStatus(type === currentStatus ? null : type);
 			setButtonCounts((prev) => {
 				return {
@@ -106,6 +176,10 @@ export default function LikeButton({
 				surpriseCount,
 				cryCount,
 			});
+
+			queryClient.invalidateQueries(["homeFeed", "Home"]);
+			queryClient.invalidateQueries(["homeFeed", "Following"]);
+			queryClient.invalidateQueries(["userPosts", userId]);
 		},
 		onSuccess: (_data, type) => {
 			if (currentStatus !== null && userId !== currentUserId)
@@ -134,14 +208,11 @@ export default function LikeButton({
 								? "bg-main text-white border-main/50 hover:bg-main/90"
 								: "hover:bg-main/10 hover:border-main/50 dark:text-[#f5315c] text-main"
 						}`}
-						onClick={
-							isSignedIn
-								? () => {
-										toggleLike("like");
-										setHoverCardOpen(false);
-								  }
-								: () => push("/sign-up")
-						}
+						onClick={() => {
+							if (isSignedIn) {
+								toggleLike("like");
+							} else push("/sign-up");
+						}}
 					>
 						<div className="h-4 w-4 flex items-center justify-center">
 							<Heart size={14} />

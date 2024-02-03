@@ -28,7 +28,7 @@ export default function OptionsButton({
 	post: Post;
 }) {
 	const [border, setBorder] = useState<"delete" | "edit" | "">("");
-	const client = useQueryClient();
+	const queryClient = useQueryClient();
 
 	const [value, setValue] = useState<
 		{
@@ -72,7 +72,7 @@ export default function OptionsButton({
 				method: "DELETE",
 			});
 		},
-		onSuccess: () => {
+		onMutate: () => {
 			function updater(oldData: { pages: Post[][] } | undefined) {
 				if (oldData)
 					return {
@@ -82,11 +82,11 @@ export default function OptionsButton({
 					};
 			}
 
-			client.setQueryData(["homeFeed", "Home"], updater);
-			client.setQueryData(["comments", post.parentNanoId], updater);
-			client.setQueryData(["userPosts", post.userId], updater);
+			queryClient.setQueryData(["homeFeed", "Home"], updater);
+			queryClient.setQueryData(["comments", post.parentNanoId], updater);
+			queryClient.setQueryData(["userPosts", post.userId], updater);
 
-			client.setQueryData(
+			queryClient.setQueryData(
 				["postPage", post.parentNanoId],
 				(oldData: Post | undefined) => {
 					if (oldData) {
@@ -98,13 +98,20 @@ export default function OptionsButton({
 				},
 			);
 
-			client.setQueryData(["postPage", post.nanoId], () => {
+			queryClient.setQueryData(["postPage", post.nanoId], () => {
 				return {
 					postId: post.postId,
 					deleted: "1",
 					nanoId: post.nanoId,
 				};
 			});
+		},
+		onError: () => {
+			queryClient.invalidateQueries(["homeFeed", "Home"]);
+			queryClient.invalidateQueries(["comments", post.parentNanoId]);
+			queryClient.invalidateQueries(["userPosts", post.userId]);
+			queryClient.invalidateQueries(["postPage", post.parentNanoId]);
+			queryClient.invalidateQueries(["postPage", post.nanoId]);
 		},
 	});
 
@@ -118,7 +125,7 @@ export default function OptionsButton({
 				}),
 			});
 		},
-		onSuccess: () => {
+		onMutate: () => {
 			function updater(oldData: { pages: Post[][] } | undefined) {
 				if (oldData)
 					return {
@@ -137,11 +144,11 @@ export default function OptionsButton({
 					};
 			}
 
-			client.setQueryData(["homeFeed", "Home"], updater);
-			client.setQueryData(["comments", post.parentNanoId], updater);
-			client.setQueryData(["userPosts", post.userId], updater);
+			queryClient.setQueryData(["homeFeed", "Home"], updater);
+			queryClient.setQueryData(["comments", post.parentNanoId], updater);
+			queryClient.setQueryData(["userPosts", post.userId], updater);
 
-			client.setQueryData(
+			queryClient.setQueryData(
 				["post", post.nanoId],
 				(oldData: Post | undefined) => {
 					if (oldData) {
@@ -153,6 +160,12 @@ export default function OptionsButton({
 					}
 				},
 			);
+		},
+		onError: () => {
+			queryClient.invalidateQueries(["homeFeed", "Home"]);
+			queryClient.invalidateQueries(["comments", post.parentNanoId]);
+			queryClient.invalidateQueries(["userPosts", post.userId]);
+			queryClient.invalidateQueries(["post", post.nanoId]);
 		},
 	});
 

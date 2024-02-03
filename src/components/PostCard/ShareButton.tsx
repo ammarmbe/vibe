@@ -1,6 +1,6 @@
 "use client";
 import { Post, Repost } from "@/lib/types";
-import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import {
 	Popover,
 	PopoverTrigger,
@@ -12,7 +12,7 @@ import { Repeat2, Share } from "lucide-react";
 
 export default function ShareButton({ post }: { post: Post | Repost }) {
 	const queryClient = useQueryClient();
-	const { userId } = useAuth();
+	const { user } = useUser();
 
 	const notificationMutation = useMutation(async () => {
 		await fetch(
@@ -33,13 +33,61 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 			);
 		},
 		{
+			onMutate: (userRepostStatus) => {
+				function updater(data: { pages: (Post | Repost)[][] } | undefined) {
+					if (data)
+						return {
+							pages: data.pages.map((page, index) => {
+								const array = [
+									...page.map((p) => {
+										if (p.postId === post.postId) {
+											return {
+												...p,
+												userRepostStatus: userRepostStatus ? "0" : "1",
+											};
+										}
+										return p;
+									}),
+								];
+
+								const name: string[] = [];
+
+								user?.firstName && name.push(user.firstName);
+								user?.lastName && name.push(user.lastName);
+
+								if (!name.length) {
+									user?.emailAddresses[0].emailAddress.split("@")[0] &&
+										name.push(
+											user?.emailAddresses[0].emailAddress.split("@")[0],
+										);
+								}
+
+								if (index === 0 && user) {
+									array.unshift({
+										...post,
+										reposterName: name.join(" "),
+										repostCreatedAt: new Date().toISOString(),
+										reposterUsername: user.username,
+									} as Repost);
+
+									return array as (Post | Repost)[];
+								}
+
+								return array as (Post | Repost)[];
+							}),
+						};
+				}
+
+				queryClient.setQueryData(["homeFeed", "Home"], updater);
+				queryClient.setQueryData(["userPosts", user?.id], updater);
+			},
 			onSuccess: () => {
 				notificationMutation.mutate();
 
 				queryClient.invalidateQueries({
 					predicate: (query) => query.queryKey[0] === "homeFeed",
 				});
-				queryClient.invalidateQueries(["userPosts", userId]);
+				queryClient.invalidateQueries(["userPosts", user?.id]);
 			},
 		},
 	);

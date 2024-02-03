@@ -28,7 +28,7 @@ export default function EditProfile({
 	const [invalidUsername, setInvalidUsername] = useState(false);
 	const { user } = useUser();
 	const { push } = useRouter();
-	const client = useQueryClient();
+	const queryClient = useQueryClient();
 	const pathname = usePathname();
 
 	const usernameMutation = useMutation({
@@ -62,7 +62,7 @@ export default function EditProfile({
 				push(`/user/${username}`);
 			}
 
-			client.invalidateQueries({
+			queryClient.invalidateQueries({
 				predicate: () => {
 					return true;
 				},

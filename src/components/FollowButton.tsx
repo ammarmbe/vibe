@@ -21,7 +21,7 @@ export default function FollowButton({
 	const { push } = useRouter();
 	const { userId: currentUserId } = useAuth();
 	const [following, setFollowing] = React.useState(followed);
-	const client = useQueryClient();
+	const queryClient = useQueryClient();
 
 	const notificationMutation = useMutation({
 		mutationFn: async () =>
@@ -37,7 +37,7 @@ export default function FollowButton({
 			}),
 		onMutate: () => {
 			setFollowing(!following);
-			client.setQueryData(["user", username], (data: User | undefined) => {
+			queryClient.setQueryData(["user", username], (data: User | undefined) => {
 				if (data) {
 					return {
 						...data,
@@ -52,7 +52,7 @@ export default function FollowButton({
 		},
 		onError: () => {
 			setFollowing(!following);
-			client.invalidateQueries(["user", username]);
+			queryClient.invalidateQueries(["user", username]);
 		},
 		onSuccess: () => {
 			if (userId !== currentUserId && following) notificationMutation.mutate();

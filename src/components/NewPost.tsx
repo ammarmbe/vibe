@@ -1,15 +1,14 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { nanoid } from "nanoid";
 import { useUser } from "@clerk/nextjs";
 import Input from "./Input";
 import { Post } from "@/lib/types";
 import { Send } from "lucide-react";
-import { updateInputSize } from "@/lib/utils";
+import { nanoid } from "nanoid";
 
 export default function NewPost() {
-	const client = useQueryClient();
+	const queryClient = useQueryClient();
 	const { user } = useUser();
 
 	const inputRef = useRef<HTMLElement>(null);
@@ -21,6 +20,7 @@ export default function NewPost() {
 			selected: boolean;
 		}[]
 	>([]);
+	const [postContent, setPostContent] = useState("");
 
 	const [inputFocus, setInputFocus] = useState(false);
 
@@ -36,26 +36,20 @@ export default function NewPost() {
 	});
 
 	const postMutation = useMutation({
-		mutationFn: async () => {
-			const nanoId = nanoid(12);
-
+		mutationFn: async (nanoId: string) => {
 			const id = await fetch("/api/post", {
 				method: "POST",
 				body: JSON.stringify({
-					content: value.map((v) => v.unsanitized).join(" "),
+					content: postContent,
 					nanoId,
 				}),
 			});
 
 			return {
 				id: await id.json(),
-				nanoId,
 			};
 		},
-		onSuccess: (data) => {
-			setValue([]);
-			updateInputSize(inputRef.current);
-
+		onMutate: (nanoId) => {
 			const name: string[] = [];
 
 			user?.firstName && name.push(user.firstName);
@@ -66,7 +60,7 @@ export default function NewPost() {
 					name.push(user?.emailAddresses[0].emailAddress.split("@")[0]);
 			}
 
-			client.setQueryData(
+			queryClient.setQueryData(
 				["homeFeed", "Home"],
 				(oldData: { pages: Post[][] } | undefined) => {
 					if (oldData?.pages) {
@@ -74,8 +68,8 @@ export default function NewPost() {
 							pages: [
 								[
 									{
-										postId: JSON.parse(data.id),
-										nanoId: data.nanoId,
+										postId: "0", // will be invalidated
+										nanoId: nanoId,
 										content: value.map((v) => v.unsanitized).join(" "),
 										createdAt: (Date.now() / 1000).toString(),
 										parentNanoId: null,
@@ -104,6 +98,12 @@ export default function NewPost() {
 				},
 			);
 
+			setValue([]);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries(["homeFeed", "Home"]);
+		},
+		onSuccess: (data) => {
 			// send a notification for all users mentioned in the post
 			const mentionedUsers = value
 				.filter((v) => v.mention)
@@ -133,7 +133,8 @@ export default function NewPost() {
 				type="button"
 				aria-label="Post"
 				onClick={() => {
-					postMutation.mutate();
+					setPostContent(value.map((v) => v.sanitized).join(" "));
+					postMutation.mutate(nanoid(12));
 				}}
 				disabled={
 					postMutation.isLoading ||
