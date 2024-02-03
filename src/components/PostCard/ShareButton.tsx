@@ -38,7 +38,7 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 					if (data)
 						return {
 							pages: data.pages.map((page, index) => {
-								const array = [
+								let array = [
 									...page.map((p) => {
 										if (p.postId === post.postId) {
 											return {
@@ -48,7 +48,7 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 										}
 										return p;
 									}),
-								];
+								] as (Post | Repost)[];
 
 								const name: string[] = [];
 
@@ -62,11 +62,21 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 										);
 								}
 
-								if (index === 0 && user) {
+								if (userRepostStatus) {
+									console.log("removing");
+									array = array.filter(
+										(p) =>
+											!(
+												p.postId === post.postId &&
+												"reposterUsername" in p &&
+												p.reposterUsername === user?.username
+											),
+									);
+								} else if (index === 0 && user) {
 									array.unshift({
 										...post,
 										reposterName: name.join(" "),
-										repostCreatedAt: new Date().toISOString(),
+										repostCreatedAt: (Date.now() / 1000).toString(),
 										reposterUsername: user.username,
 									} as Repost);
 
@@ -83,11 +93,6 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 			},
 			onSuccess: () => {
 				notificationMutation.mutate();
-
-				queryClient.invalidateQueries({
-					predicate: (query) => query.queryKey[0] === "homeFeed",
-				});
-				queryClient.invalidateQueries(["userPosts", user?.id]);
 			},
 		},
 	);
@@ -107,13 +112,28 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
 			>
 				<PopoverClose
 					className="border-b-0 text-sm rounded-t-sm transition-colors hover:bg-accent hover:border-ring border p-2 disabeld:cursor-not-allowed disabled:text-foreground/50 disabled:hover:bg-accent/10 flex items-end justify-center gap-1.5 leading-[1.3]"
-					onClick={() => repostMutation.mutate(parseInt(post.userRepostStatus))}
+					onClick={() =>
+						repostMutation.mutate(
+							parseInt(
+								"reposterName" in post &&
+									post.reposterUsername === user?.username
+									? "1"
+									: post.userRepostStatus,
+							),
+						)
+					}
 				>
 					<div className="h-5 w-5 flex items-center justify-center">
 						<Repeat2 size={16} />
 					</div>
 					<span className="h-fit">
-						{parseInt(post.userRepostStatus) ? "Unrepost" : "Repost"}
+						{parseInt(
+							"reposterName" in post && post.reposterUsername === user?.username
+								? "1"
+								: post.userRepostStatus,
+						)
+							? "Unrepost"
+							: "Repost"}
 					</span>
 				</PopoverClose>
 				<div className="border-b border-dashed transition-all group-hover:border-ring group-hover:border-solid" />

@@ -117,7 +117,6 @@ export default function PostCard({
 									</Link>
 								</div>
 							</HoverCardTrigger>
-
 							<time
 								dateTime={dayjs(
 									new Date(parseInt(post.createdAt) * 1000),
