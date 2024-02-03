@@ -203,7 +203,7 @@ export default function LikeButton({
 						type="button"
 						aria-label="like"
 						disabled={likeMutation.isLoading}
-						className={`text-xs px-2 gap-1 leading-[1.3] py-1 border transition-colors rounded-md h-full select-none order-1 items-end flex justify-center ${
+						className={`text-xs px-2 gap-1 leading-[1.3] py-1 border transition-colors rounded-md h-fit select-none order-1 items-end flex justify-center ${
 							currentStatus === "like"
 								? "bg-main text-white border-main/50 hover:bg-main/90"
 								: "hover:bg-main/10 hover:border-main/50 dark:text-[#f5315c] text-main"
