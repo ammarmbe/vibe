@@ -33,6 +33,7 @@ export async function POST(request: Request) {
 			},
 		)) as { rows: Notification[] };
 
+		console.log(notification, userId, postId, currentUserId);
 		sendPushNotification(notification.rows[0], userId);
 	}
 
