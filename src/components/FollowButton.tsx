@@ -55,7 +55,7 @@ export default function FollowButton({
 			client.invalidateQueries(["user", username]);
 		},
 		onSuccess: () => {
-			if (userId !== currentUserId && !followed) notificationMutation.mutate();
+			if (userId !== currentUserId && following) notificationMutation.mutate();
 		},
 	});
 
