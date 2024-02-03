@@ -108,7 +108,7 @@ export default function LikeButton({
 			});
 		},
 		onSuccess: (_data, type) => {
-			if (type !== userLikeStatus && userId !== currentUserId)
+			if (currentStatus !== null && userId !== currentUserId)
 				notificationMutation.mutate(type);
 		},
 	});
