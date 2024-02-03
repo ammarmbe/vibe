@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { sendPushNotification } from "@/lib/utils";
+import sendPushNotification from "@/lib/sendPushNotification";
 import { auth } from "@clerk/nextjs";
 import { Notification } from "@/lib/types";
 
