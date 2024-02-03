@@ -100,7 +100,7 @@ export default function NewComment({
 									{
 										postId: "0", // will be invalidated
 										nanoId: nanoId,
-										content: value.map((v) => v.unsanitized).join(" "),
+										content: commentContent,
 										createdAt: (Date.now() / 1000).toString(),
 										parentNanoId: null,
 										name: name.join(" "),
@@ -163,7 +163,19 @@ export default function NewComment({
 				aria-label="Reply"
 				type="button"
 				onClick={() => {
-					setCommentContent(value.map((v) => v.sanitized).join(" "));
+					if (
+						!value
+							.map((v) => v.sanitized)
+							.join(" ")
+							.trim()
+					)
+						return;
+					setCommentContent(
+						value
+							.map((v) => v.sanitized)
+							.join(" ")
+							.trim(),
+					);
 					commentMutation.mutate(nanoid(12));
 				}}
 				disabled={

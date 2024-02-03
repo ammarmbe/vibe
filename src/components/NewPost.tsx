@@ -70,7 +70,7 @@ export default function NewPost() {
 									{
 										postId: "0", // will be invalidated
 										nanoId: nanoId,
-										content: value.map((v) => v.unsanitized).join(" "),
+										content: postContent,
 										createdAt: (Date.now() / 1000).toString(),
 										parentNanoId: null,
 										name: name.join(" "),
@@ -133,7 +133,19 @@ export default function NewPost() {
 				type="button"
 				aria-label="Post"
 				onClick={() => {
-					setPostContent(value.map((v) => v.sanitized).join(" "));
+					if (
+						!value
+							.map((v) => v.sanitized)
+							.join(" ")
+							.trim()
+					)
+						return;
+					setPostContent(
+						value
+							.map((v) => v.sanitized)
+							.join(" ")
+							.trim(),
+					);
 					postMutation.mutate(nanoid(12));
 				}}
 				disabled={

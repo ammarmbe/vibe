@@ -121,7 +121,10 @@ export default function OptionsButton({
 				method: "PUT",
 				body: JSON.stringify({
 					postId: post.postId,
-					content: value.map((v) => v.unsanitized).join(" "),
+					content: value
+						.map((v) => v.unsanitized)
+						.join(" ")
+						.trim(),
 				}),
 			});
 		},
@@ -134,7 +137,10 @@ export default function OptionsButton({
 								if (oldPost.postId === post.postId) {
 									return {
 										...oldPost,
-										content: value.map((v) => v.unsanitized).join(" "),
+										content: value
+											.map((v) => v.unsanitized)
+											.join(" ")
+											.trim(),
 										edited: "1",
 									};
 								}
@@ -154,7 +160,10 @@ export default function OptionsButton({
 					if (oldData) {
 						return {
 							...oldData,
-							content: value.map((v) => v.unsanitized).join(" "),
+							content: value
+								.map((v) => v.unsanitized)
+								.join(" ")
+								.trim(),
 							edited: "1",
 						};
 					}
