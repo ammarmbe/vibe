@@ -83,7 +83,11 @@ const sendPushNotification = async (
 		process.env.VAPID_PRIVATE_KEY as string,
 	);
 
-	webpush.sendNotification(subscription.subscription, payload);
+	const result = await webpush.sendNotification(
+		subscription.subscription,
+		payload,
+	);
+	console.log(result);
 };
 
 export default sendPushNotification;
