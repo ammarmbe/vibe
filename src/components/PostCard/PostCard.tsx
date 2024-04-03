@@ -43,9 +43,9 @@ export default function PostCard({
   let userid: string | undefined | null;
 
   if (typeof window === "undefined") {
-    userid = auth().userid;
+    userid = auth().userId;
   } else {
-    userid = useAuth().userid;
+    userid = useAuth().userId;
   }
 
   const commentOrComments =
