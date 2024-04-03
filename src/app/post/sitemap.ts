@@ -4,11 +4,11 @@ import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await sql(
-    "SELECT EXTRACT(epoch FROM createdat), nanoid FROM posts WHERE deleted = false ORDER BY id DESC LIMIT 50000",
+    "SELECT EXTRACT(epoch FROM createdat) as createdat, nanoid FROM posts WHERE deleted = false ORDER BY id DESC LIMIT 50000",
   );
 
   return posts.map((post) => ({
     url: `${process.env.NEXT_PUBLIC_URL}/post/${post.nanoid}`,
-    lastModified: dayjs(new Date(parseInt(post.createdat) * 1000)).toDate(),
+    lastModified: dayjs.unix(post.createdat).toDate(),
   }));
 }
