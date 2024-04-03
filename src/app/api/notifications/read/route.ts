@@ -1,17 +1,16 @@
-import { db } from "@/lib/db";
+import sql from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 
 export const runtime = "edge";
 
 export async function POST() {
-	const { userId } = auth();
+  const { userId } = auth();
 
-	if (userId) {
-		await db.execute(
-			"UPDATE notifications SET `read` = true WHERE notified = :userId",
-			{ userId },
-		);
-	}
+  if (userId) {
+    await sql("UPDATE notifications SET `read` = true WHERE notified = $1", [
+      userId,
+    ]);
+  }
 
-	return new Response("OK");
+  return new Response("OK");
 }

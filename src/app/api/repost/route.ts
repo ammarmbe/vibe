@@ -1,33 +1,27 @@
-import { db } from "@/lib/db";
+import sql from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 
 export const runtime = "edge";
 
 export async function POST(request: Request) {
-	const { searchParams } = new URL(request.url);
-	const postId = searchParams.get("postId");
-	const userRepostStatus = searchParams.get("userRepostStatus");
-	const { userId } = auth();
+  const { searchParams } = new URL(request.url);
+  const postid = searchParams.get("postid");
+  const userrepoststatus = searchParams.get("userrepoststatus");
+  const { userId } = auth();
 
-	if (postId && userId) {
-		if (parseInt(userRepostStatus || "0")) {
-			await db.execute(
-				"DELETE FROM reposts WHERE postId = :postId AND userId = :userId",
-				{
-					postId,
-					userId,
-				},
-			);
-		} else {
-			await db.execute(
-				"INSERT INTO reposts (postId, userId) VALUES (:postId, :userId)",
-				{
-					postId,
-					userId,
-				},
-			);
-		}
-	}
+  if (postid && userId) {
+    if (parseInt(userrepoststatus || "0")) {
+      await sql("DELETE FROM reposts WHERE postid = $1 AND userid = $2", [
+        postid,
+        userId,
+      ]);
+    } else {
+      await sql("INSERT INTO reposts (postid, userid) VALUES ($1, $2)", [
+        postid,
+        userId,
+      ]);
+    }
+  }
 
-	return new Response("OK");
+  return new Response("OK");
 }

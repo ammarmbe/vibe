@@ -8,10 +8,13 @@
 		"start": "next start",
 		"lint": "next lint"
 	},
+	"prettier": {
+		"tabWidth": 2
+	},
 	"license": "MIT",
 	"dependencies": {
 		"@clerk/nextjs": "^4.29.5",
-		"@planetscale/database": "^1.14.0",
+		"@neondatabase/serverless": "^0.9.0",
 		"@radix-ui/react-dialog": "^1.0.5",
 		"@radix-ui/react-hover-card": "^1.0.7",
 		"@radix-ui/react-label": "^2.0.2",
@@ -42,12 +45,12 @@
 		"web-push": "^3.6.7"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.5.3",
 		"@types/he": "^1.2.3",
 		"@types/node": "20.11.8",
 		"@types/react": "18.2.48",
 		"@types/react-dom": "18.2.18",
 		"@types/sanitize-html": "^2.9.5",
-		"@types/web-push": "^3.6.3"
+		"@types/web-push": "^3.6.3",
+		"prettier": "^3.2.5"
 	}
 }

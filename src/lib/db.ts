@@ -1,9 +1,5 @@
-import { connect } from "@planetscale/database";
+import { neon } from "@neondatabase/serverless";
 
-const config = {
-	host: "aws.connect.psdb.cloud",
-	username: process.env.DATABASE_USERNAME,
-	password: process.env.DATABASE_PASSWORD,
-};
+const sql = neon(process.env.DATABASE_URL as string);
 
-export const db = connect(config);
+export default sql;
