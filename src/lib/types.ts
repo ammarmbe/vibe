@@ -1,66 +1,66 @@
 export type Post = {
-	postId: string;
-	nanoId: string;
-	content: string;
-	createdAt: string;
-	parentNanoId: string | null;
+  postid: string;
+  nanoid: string;
+  content: string;
+  createdat: string;
+  parentnanoid: string | null;
 
-	name: string;
-	username: string;
-	image: string;
-	userId: string;
+  name: string;
+  username: string;
+  image: string;
+  userid: string;
 
-	likeCount: string;
-	cryCount: string;
-	laughCount: string;
-	heartCount: string;
-	surpriseCount: string;
-	commentCount: string;
-	userLikeStatus: "like" | "cry" | "laugh" | "heart" | "surprise" | null;
-	userRepostStatus: string;
+  likecount: string;
+  crycount: string;
+  laughcount: string;
+  heartcount: string;
+  surprisecount: string;
+  commentcount: string;
+  userlikestatus: "like" | "cry" | "laugh" | "heart" | "surprise" | null;
+  userrepoststatus: string;
 
-	deleted: string;
-	edited: string;
+  deleted: string;
+  edited: string;
 };
 
 export type User = {
-	id: string;
-	name: string;
-	bio: string;
-	username: string;
-	image: string;
-	followers: string;
-	followedByUser: string;
-	followsUser: string;
+  id: string;
+  name: string;
+  bio: string;
+  username: string;
+  image: string;
+  followers: string;
+  followedbyuser: string;
+  followsuser: string;
 };
 
 export type Notification = {
-	id: string;
-	type:
-		| "likedPost.surprise"
-		| "likedPost.laugh"
-		| "likedPost.heart"
-		| "likedPost.cry"
-		| "likedPost.like"
-		| "commentedOnPost"
-		| "followedUser"
-		| "mentioned.post"
-		| "mentioned.comment"
-		| "reposted";
-	createdAt: string;
-	notifier: string;
-	postId: string;
-	notifierImage: string;
-	notifierUsername: string;
-	notifierName: string;
-	content: string;
-	read: string;
-	nanoId: string;
-	deleted: string;
+  id: string;
+  type:
+    | "likedPost.surprise"
+    | "likedPost.laugh"
+    | "likedPost.heart"
+    | "likedPost.cry"
+    | "likedPost.like"
+    | "commentedOnPost"
+    | "followedUser"
+    | "mentioned.post"
+    | "mentioned.comment"
+    | "reposted";
+  createdat: string;
+  notifier: string;
+  postid: string;
+  notifierimage: string;
+  notifierusername: string;
+  notifiername: string;
+  content: string;
+  read: string;
+  nanoid: string;
+  deleted: string;
 };
 
 export interface Repost extends Post {
-	reposterName: string;
-	reposterUsername: string;
-	repostCreatedAt: string;
+  repostername: string;
+  reposterusername: string;
+  repostcreatedat: string;
 }

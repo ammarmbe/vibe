@@ -1,28 +1,25 @@
-import { db } from "@/lib/db";
+import sql from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import webpush, { PushSubscription } from "web-push";
 
 webpush.setVapidDetails(
-	"https://vibe.ambe.dev",
-	process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY as string,
-	process.env.VAPID_PRIVATE_KEY as string,
+  "https://vibe.ambe.dev",
+  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY as string,
+  process.env.VAPID_PRIVATE_KEY as string,
 );
 
 export async function POST(request: NextRequest) {
-	const { subscription, userId } = (await request.json()) as {
-		subscription: PushSubscription;
-		userId: string;
-	};
+  const { subscription, userid } = (await request.json()) as {
+    subscription: PushSubscription;
+    userid: string;
+  };
 
-	if (!subscription || !userId) return;
+  if (!subscription || !userid) return;
 
-	await db.execute(
-		"INSERT INTO subscriptions (subscription, userId) VALUES (:subscription, :userId) ON DUPLICATE KEY UPDATE subscription = :subscription",
-		{
-			subscription: JSON.stringify(subscription),
-			userId,
-		},
-	);
+  await sql(
+    "INSERT INTO subscriptions (subscription, userid) VALUES ($1, $2) ON DUPLICATE KEY UPDATE subscription = $1",
+    [JSON.stringify(subscription), userid],
+  );
 
-	return NextResponse.json("OK");
+  return NextResponse.json("OK");
 }
