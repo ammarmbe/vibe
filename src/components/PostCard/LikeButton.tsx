@@ -33,7 +33,7 @@ export default function LikeButton({
   const queryClient = useQueryClient();
 
   const [hoverCardOpen, setHoverCardOpen] = useState(false);
-  const { userid: currentUserId, isSignedIn } = useAuth();
+  const { userId: currentUserId, isSignedIn } = useAuth();
   const { push } = useRouter();
   const [currentStatus, setCurrentStatus] = useState(userlikestatus);
   const [buttonCounts, setButtonCounts] = useState({

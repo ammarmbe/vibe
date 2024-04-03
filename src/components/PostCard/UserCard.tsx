@@ -12,7 +12,7 @@ import { UserPlus2 } from "lucide-react";
 import dynamic from "next/dynamic";
 
 export default function UserCard({ username }: { username: string }) {
-  const { userid: currentUserId } = useAuth();
+  const { userId: currentUserId } = useAuth();
 
   const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ["user", username],

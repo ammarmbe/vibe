@@ -19,7 +19,7 @@ export default function FollowButton({
 }) {
   const { isSignedIn } = useAuth();
   const { push } = useRouter();
-  const { userid: currentUserId } = useAuth();
+  const { userId: currentUserId } = useAuth();
   const [following, setFollowing] = React.useState(followed);
   const queryClient = useQueryClient();
 
