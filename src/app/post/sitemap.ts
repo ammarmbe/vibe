@@ -4,7 +4,7 @@ import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await sql(
-    "SELECT createdat, nanoid FROM posts WHERE deleted = false ORDER BY id DESC LIMIT 50000",
+    "SELECT EXTRACT(epoch FROM createdat), nanoid FROM posts WHERE deleted = false ORDER BY id DESC LIMIT 50000",
   );
 
   return posts.map((post) => ({
