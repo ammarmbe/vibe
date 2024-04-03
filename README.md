@@ -1,6 +1,6 @@
 # Vibe 🚀
 
-Vibe is a social media web app created using Next.js 14, PlanetScale's databasejs, and Clerk. <br> Deployed at: [vibe.ambe.dev](https://vibe.ambe.dev/).
+Vibe is a social media web app created using Next.js 14, Neon's serverless driver, and Clerk. <br> Deployed at: [vibe.ambe.dev](https://vibe.ambe.dev/).
 
 ![vibe](https://github.com/ammarmbe/vibe/assets/117791580/abeaff9b-621e-4c25-b82b-45dd996dfed2)
 
@@ -16,9 +16,9 @@ Vibe is a social media web app created using Next.js 14, PlanetScale's databasej
 
 ## Tech Stack
 
-Next.js, PlanetScale's databasejs (MySQL), Clerk, React Query, TailwindCSS. <br> _Shadcn/ui is used for the popover and dialog components and the CSS variables._
+Next.js, Neon's serverless driver (PostgreSQL), Clerk, React Query, TailwindCSS. <br> _Shadcn/ui is used for the popover and dialog components and the CSS variables._
 
-Deployed on Vercel and PlanetScale.
+Deployed on Vercel and Neon.
 
 ## License
 
