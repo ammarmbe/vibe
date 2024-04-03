@@ -26,7 +26,7 @@ export default function PostComponent({ nanoid }: { nanoid: string }) {
   if (post)
     return (
       <>
-        <div className="border rounded-md mb-2">
+        <div className="mb-2">
           {post.parentnanoid && (
             <Parent
               nanoid={post.parentnanoid}
@@ -34,7 +34,7 @@ export default function PostComponent({ nanoid }: { nanoid: string }) {
             />
           )}
           {parseInt(post.deleted) ? (
-            <div className="text-center text-sm text-foreground/30 p-2.5">
+            <div className="text-center text-sm rounded-b-md border border-t-0 text-foreground/30 p-2.5">
               This post has been deleted
             </div>
           ) : (
