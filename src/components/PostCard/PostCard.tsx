@@ -76,9 +76,7 @@ export default function PostCard({
         </div>
       ) : null}
       <article
-        className={`rounded-md bg-background p-2.5 gap-1.5 flex shadow-sm z-10 relative ${
-          !postPage && "border"
-        }`}
+        className={`rounded-md bg-background p-2.5 gap-1.5 flex shadow-sm z-10 relative border ${post.parentnanoid ? "rounded-t-none border-t-0" : ""}`}
       >
         <Link className="flex-none h-fit" href={`/user/${post.username}`}>
           <Image
