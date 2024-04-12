@@ -63,7 +63,6 @@ export default function ShareButton({ post }: { post: Post | Repost }) {
                 }
 
                 if (userrepoststatus) {
-                  console.log("removing");
                   array = array.filter(
                     (p) =>
                       !(
