@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   if (!subscription || !userid) return;
 
   await sql(
-    "INSERT INTO subscriptions (subscription, userid) VALUES ($1, $2) ON DUPLICATE KEY UPDATE subscription = $1",
+    "INSERT INTO subscriptions (subscription, userid) VALUES ($1, $2) ON CONFLICT DO UPDATE subscription = $1",
     [JSON.stringify(subscription), userid],
   );
 
