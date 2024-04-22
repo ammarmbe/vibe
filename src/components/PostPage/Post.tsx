@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 const Parent = dynamic(() => import("./Parent"));
-import PostCard from "../PostCard/PostCard";
+import PostCard from "./PostCard";
 import { Comments } from "./Comments";
 import { Post } from "@/lib/types";
 import Spinner from "../Spinner";
@@ -38,7 +38,7 @@ export default function PostComponent({ nanoid }: { nanoid: string }) {
               This post has been deleted
             </div>
           ) : (
-            <PostCard post={post} postPage={true} />
+            <PostCard post={post} />
           )}
         </div>
         {!parseInt(post.deleted) ? <Comments post={post} /> : null}

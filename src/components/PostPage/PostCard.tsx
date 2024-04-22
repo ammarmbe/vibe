@@ -19,16 +19,16 @@ import {
 } from "../ui/hover-card";
 import dynamic from "next/dynamic";
 import { auth, useAuth } from "@clerk/nextjs";
-const UserCard = dynamic(() => import("./UserCard"), {
+const UserCard = dynamic(() => import("../PostCard/UserCard"), {
   ssr: false,
 });
-const ShareButton = dynamic(() => import("./ShareButton"), {
+const ShareButton = dynamic(() => import("../PostCard/ShareButton"), {
   ssr: false,
 });
-const LikeButton = dynamic(() => import("./LikeButton"), {
+const LikeButton = dynamic(() => import("../PostCard/LikeButton"), {
   ssr: false,
 });
-const OptionsButton = dynamic(() => import("./OptionsButton"), {
+const OptionsButton = dynamic(() => import("../PostCard/OptionsButton"), {
   ssr: false,
 });
 dayjs.extend(relativeTime);
@@ -69,7 +69,9 @@ export default function PostCard({ post }: { post: Post | Repost }) {
           </p>
         </div>
       ) : null}
-      <article className="rounded-md bg-background p-2.5 gap-1.5 flex shadow-sm z-10 relative border">
+      <article
+        className={`rounded-md bg-background p-2.5 gap-1.5 flex shadow-sm z-10 relative border ${post.parentnanoid ? "rounded-t-none border-t-0" : ""}`}
+      >
         <Link className="flex-none h-fit" href={`/user/${post.username}`}>
           <Image
             src={post.image}
@@ -83,15 +85,15 @@ export default function PostCard({ post }: { post: Post | Repost }) {
           <div className="flex flex-col flex-grow w-[calc(100%-39px)]">
             <div className="grid grid-cols-[1fr,auto] grid-rows-[auto,auto]">
               <HoverCardTrigger
-                className="text-sm p-0 m-0 w-fit h-fit leading-tight"
+                className="p-0 m-0 w-fit h-fit leading-tight"
                 asChild
               >
                 <div>
                   <Link href={`/user/${post.username}`}>
-                    <span className="leading-tight font-medium self-baseline block">
+                    <span className="leading-tight font-medium self-baseline block text-lg truncate">
                       {post.name}
                     </span>
-                    <span className="text-sm hover:underline text-muted-foreground w-fit leading-tight block">
+                    <span className="hover:underline text-muted-foreground w-fit leading-tight block">
                       @{post.username}
                     </span>
                   </Link>
@@ -112,7 +114,7 @@ export default function PostCard({ post }: { post: Post | Repost }) {
               </HoverCardContent>
             </HoverCardPortal>
             <p
-              className="mt-2.5 text-sm break-words w-full mb-4"
+              className="mt-2.5 break-words w-full mb-4"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
             <div className="flex justify-between w-full gap-1">

@@ -1,9 +1,11 @@
 import Feed from "@/components/Feed";
 import Header from "@/components/Header/Header";
+import Spinner from "@/components/Spinner";
 const NewPost = dynamic(() => import("@/components/NewPost"), { ssr: false });
 import getQueryClient from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 export default async function Home({
   searchParams,
@@ -42,13 +44,21 @@ export default async function Home({
         }
       />
       {userId && <NewPost />}
-      <Feed
-        feed={
-          searchParams.feed === "Home" || searchParams.feed === "Following"
-            ? searchParams.feed
-            : "Home"
+      <Suspense
+        fallback={
+          <div className="w-full flex h-full items-center justify-center">
+            <Spinner size="xl" />
+          </div>
         }
-      />
+      >
+        <Feed
+          feed={
+            searchParams.feed === "Home" || searchParams.feed === "Following"
+              ? searchParams.feed
+              : "Home"
+          }
+        />
+      </Suspense>
     </main>
   );
 }

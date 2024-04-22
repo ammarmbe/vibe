@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Metadata } from "next/types";
 import sanitize from "sanitize-html";
 import Header from "@/components/Header/Header";
 import getQueryClient from "@/lib/utils";
 import Post from "@/components/PostPage/Post";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   params: {
@@ -58,7 +59,15 @@ export default async function Page({ params }: Props) {
   return (
     <main className="max-w-2xl h-full flex flex-col w-full mx-auto px-2.5">
       <Header />
-      <Post nanoid={params.nanoid} />
+      <Suspense
+        fallback={
+          <div className="w-full flex h-full items-center justify-center">
+            <Spinner size="xl" />
+          </div>
+        }
+      >
+        <Post nanoid={params.nanoid} />
+      </Suspense>
     </main>
   );
 }
