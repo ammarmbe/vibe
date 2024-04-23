@@ -135,14 +135,14 @@ export default function NewPost() {
         onClick={() => {
           if (
             !value
-              .map((v) => v.sanitized)
+              .map((v) => v.unsanitized)
               .join(" ")
               .trim()
           )
             return;
           setPostContent(
             value
-              .map((v) => v.sanitized)
+              .map((v) => v.unsanitized)
               .join(" ")
               .trim(),
           );

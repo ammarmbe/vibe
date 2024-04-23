@@ -165,14 +165,14 @@ export default function NewComment({
         onClick={() => {
           if (
             !value
-              .map((v) => v.sanitized)
+              .map((v) => v.unsanitized)
               .join(" ")
               .trim()
           )
             return;
           setCommentContent(
             value
-              .map((v) => v.sanitized)
+              .map((v) => v.unsanitized)
               .join(" ")
               .trim(),
           );

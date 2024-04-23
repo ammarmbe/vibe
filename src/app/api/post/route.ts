@@ -17,13 +17,15 @@ export async function POST(request: Request) {
   body.content = body.content.replace(/^&nbsp;|&nbsp;$/g, "");
 
   if (userId && body.content) {
-    await sql(
-      "INSERT INTO posts (userid, content, parentnanoid, nanoid) VALUES ($1, $2, $3, $4)",
+    const [id] = await sql(
+      "INSERT INTO posts (userid, content, parentnanoid, nanoid) VALUES ($1, $2, $3, $4) RETURNING id",
       [userId, body.content, body.parentnanoid ?? null, body.nanoid],
     );
+
+    return new Response(id?.id);
   }
 
-  return new Response((await sql("SELECT LAST_INSERT_ID() AS id"))[0]?.id);
+  return new Response(null, { status: 400 });
 }
 
 export async function GET(request: Request) {
