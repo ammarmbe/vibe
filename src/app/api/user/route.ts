@@ -52,7 +52,7 @@ export async function POST(request: Request) {
   }
 
   await sql(
-    "INSERT INTO `users` (id, name, email, image, username) VALUES ($1, $2, $3, $4, $5)",
+    `INSERT INTO "users" (id, name, email, image, username) VALUES ($1, $2, $3, $4, $5)`,
     [
       body.data.id,
       name.join(" "),
