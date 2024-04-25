@@ -14,6 +14,31 @@ Vibe is a social media web app created using Next.js 14, Neon's serverless drive
 - **Notifications:** users get notified when someone likes their post or follows them.
 - **Responsive design**: the website is built with a beautiful mobile first design, which also works on larger desktop monitors.
 
+## Setup Locally
+
+1. Run the following command to copy the application's code.
+
+   ```
+   git clone https://github.com/ammarmbe/vibe/
+   ```
+
+2. Create a `.env.local` file in the root directory.
+3. Create a [Neon](http://neon.tech/) account, create a new database and add the `DATABASE_URL` to the `.env.local` file.
+4. Setup [Clerk](https://clerk.com), add the `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to the `.env.local` file.
+5. Add the following to the `.env.local` file:
+
+   ```
+   NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+   NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+   NEXT_PUBLIC_URL=http://localhost:3000
+   ```
+
+6. Generate `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`, and add them to the `.env.local` file (for push notifications).
+7. Run the queries in the [Database Schema](https://github.com/ammarmbe/vibe#database-schema) in your database.
+8. Run `pnpm install` then `pnpm dev` in the root directory to start a local development server.
+
 ## Tech Stack
 
 Next.js, Neon's serverless driver (PostgreSQL), Clerk, React Query, TailwindCSS. <br> _Shadcn/ui is used for the popover and dialog components and the CSS variables._
