@@ -61,13 +61,10 @@ CREATE TABLE reposts (
     createdat timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
-
 CREATE TABLE subscriptions (
     userid character varying(200) NOT NULL,
     subscription json NOT NULL
 );
-
-
 
 CREATE TABLE users (
     id character varying(200) NOT NULL,
