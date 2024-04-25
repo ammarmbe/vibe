@@ -36,7 +36,7 @@ Vibe is a social media web app created using Next.js 14, Neon's serverless drive
    ```
 
 6. Generate `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`, and add them to the `.env.local` file (for push notifications).
-7. Run the queries in the [Database Schema](https://github.com/ammarmbe/vibe#database-schema) in your database.
+7. Run the queries in the [Database Schema](#database-schema) in your database.
 8. Run `pnpm install` then `pnpm dev` in the root directory to start a local development server.
 
 ## Tech Stack
