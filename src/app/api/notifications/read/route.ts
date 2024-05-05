@@ -7,7 +7,7 @@ export async function POST() {
   const { userId } = auth();
 
   if (userId) {
-    await sql("UPDATE notifications SET `read` = true WHERE notified = $1", [
+    await sql(`UPDATE notifications SET "read" = true WHERE notified = $1`, [
       userId,
     ]);
   }
