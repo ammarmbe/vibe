@@ -6,20 +6,21 @@ import PostCard from "./PostCard/PostCard";
 import Spinner from "./Spinner";
 
 export default function Feed({ feed }: { feed: "Home" | "Following" }) {
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ["homeFeed", feed],
-    queryFn: async ({ pageParam = 2147483647 }) => {
-      const res = await fetch(`/api/posts?postid=${pageParam}&feed=${feed}`);
-      return res.json();
-    },
-    getNextPageParam: (lastPage, _pages) => {
-      if (lastPage?.length >= 11) {
-        return lastPage[lastPage.length - 1].postid;
-      }
-      return undefined;
-    },
-    enabled: Boolean(feed),
-  });
+  const { data, fetchNextPage, hasNextPage, isLoading, refetch } =
+    useInfiniteQuery({
+      queryKey: ["homeFeed", feed],
+      queryFn: async ({ pageParam = 2147483647 }) => {
+        const res = await fetch(`/api/posts?postid=${pageParam}&feed=${feed}`);
+        return res.json();
+      },
+      getNextPageParam: (lastPage, _pages) => {
+        if (lastPage?.length >= 11) {
+          return lastPage[lastPage.length - 1].postid;
+        }
+        return undefined;
+      },
+      enabled: Boolean(feed),
+    });
 
   if (isLoading)
     return (
@@ -44,6 +45,17 @@ export default function Feed({ feed }: { feed: "Home" | "Following" }) {
           }
           next={fetchNextPage}
           className="flex flex-col gap-2.5 pb-2.5"
+          refreshFunction={refetch}
+          pullDownToRefresh
+          pullDownToRefreshThreshold={100}
+          pullDownToRefreshContent={
+            <h3 style={{ textAlign: "center" }}>
+              &#8595; Pull down to refresh
+            </h3>
+          }
+          releaseToRefreshContent={
+            <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+          }
         >
           {data.pages.map((page: (Post | Repost)[]) => {
             return page
