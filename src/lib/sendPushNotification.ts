@@ -101,6 +101,7 @@ const sendPushNotification = async (
     subscription.subscription,
     payload,
   );
+
   console.log(result);
 };
 

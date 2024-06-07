@@ -198,7 +198,16 @@ export default function LikeButton({
   return (
     <>
       <HoverCard open={hoverCardOpen} onOpenChange={setHoverCardOpen}>
-        <HoverCardTrigger asChild onClick={(e) => e.preventDefault()}>
+        <HoverCardTrigger
+          asChild
+          onClick={(e) => {
+            e.preventDefault();
+            setHoverCardOpen(false);
+          }}
+          onFocus={(e) => {
+            e.preventDefault();
+          }}
+        >
           <button
             type="button"
             aria-label="like"
