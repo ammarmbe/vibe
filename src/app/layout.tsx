@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import LoadingBar from "@/components/LoadingBar";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClerkProvider } from "@clerk/nextjs";
 import ReactQueryProvider from "../lib/ReactQueryProvider";
 
@@ -42,7 +41,6 @@ export default function RootLayout({
 						<LoadingBar />
 						{children}
 						<Analytics />
-						<SpeedInsights />
 					</body>
 				</ReactQueryProvider>
 			</ClerkProvider>
