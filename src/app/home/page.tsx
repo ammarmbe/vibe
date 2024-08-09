@@ -18,7 +18,7 @@ export default function Home() {
         <section
           className={`min-h-screen flex items-center justify-center flex-col text-center ${styles.hero}`}
         >
-          <p className="md:text-5xl text-3xl font-bold text-primary">
+          <p className="md:text-5xl text-3xl font-semibold text-secondary-foreground">
             Welcome to
           </p>
           <h1
@@ -380,6 +380,10 @@ export default function Home() {
             className="underline hover:text-[#d43232]"
           >
             GitHub
+          </Link>
+          .{" "}
+          <Link href="/privacy" className="underline hover:text-[#d43232]">
+            Privacy policy
           </Link>
           .
         </p>
