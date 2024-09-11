@@ -19,7 +19,7 @@ Vibe is a social media web app created using Next.js 14, Neon's serverless drive
 1. Run the following command to copy the application's code.
 
    ```
-   git clone https://github.com/ammarmbe/vibe/
+   git clone https://github.com/ammarmbe/vibe.git
    ```
 
 2. Create a `.env.local` file in the root directory.
@@ -35,7 +35,12 @@ Vibe is a social media web app created using Next.js 14, Neon's serverless drive
    NEXT_PUBLIC_URL=http://localhost:3000
    ```
 
-6. Generate `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`, and add them to the `.env.local` file (for push notifications).
+6. Run the following command, and add `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` to the `.env.local` file (for push notifications).
+
+   ```
+   web-push generate-vapid-keys --json
+   ```
+
 7. Run the queries in the [Database Schema](#database-schema) in your database.
 8. Run `pnpm install` then `pnpm dev` in the root directory to start a local development server.
 
