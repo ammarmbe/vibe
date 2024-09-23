@@ -4,6 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Vibe",
     short_name: "Vibe",
+    description:
+      "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
     theme_color: "#cf202f",
     background_color: "#cf202f",
     display: "standalone",
@@ -51,12 +53,6 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
-      },
-      {
-        src: "images/badge.png",
-        sizes: "92x92",
-        type: "image/png",
-        purpose: "badge",
       },
     ],
   };
