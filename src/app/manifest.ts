@@ -6,9 +6,10 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Vibe",
     description:
       "Vibe is a social media web app all about connecting with people who share your interests, and it's the perfect place to share your thoughts, photos, and videos.",
-    theme_color: "#cf202f",
-    background_color: "#cf202f",
+    categories: ["social"],
     display: "standalone",
+    background_color: "#cf202f",
+    theme_color: "#cf202f",
     orientation: "portrait",
     scope: "/",
     start_url: "/",
